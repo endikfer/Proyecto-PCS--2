@@ -1,0 +1,39 @@
+# Compilados de Java
+*.class
+
+# Archivos de log
+*.log
+
+# Directorios de compilación
+/bin/
+/build/
+/target/
+
+# Configuración de IDEs
+/.idea/
+/*.iml
+/.classpath
+/.project
+/.settings/
+/.vscode/
+
+# Archivos generados por Maven
+.mvn/
+target/
+dependency-reduced-pom.xml
+release.properties
+
+# Archivos generados por Gradle
+.gradle/
+/build/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de configuración específicos del entorno
+.env
+*.properties
+
+# Librerías externas
+lib/
