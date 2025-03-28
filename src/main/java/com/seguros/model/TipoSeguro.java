@@ -1,6 +1,7 @@
-package main.java.com.seguros.model;
+package com.seguros.model;
 
 import java.util.List;
+
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;

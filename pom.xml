@@ -30,6 +30,28 @@
             <artifactId>spring-boot-starter</artifactId>
             <version>3.1.2</version>
         </dependency>
+
+
+        <!-- Posiblemente quitar   -->
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+
+        <!-- Dependencia para Jakarta Validation -->
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+
+        <!-- Dependencia para Hibernate (implementación de JPA) -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>6.2.6.Final</version>
+        </dependency>
         
     </dependencies>
 
@@ -57,7 +79,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>com.seguros.Main</mainClass>
+                    <mainClass>com.seguros.SegurosApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
@@ -69,3 +91,4 @@
             <url>https://repo.maven.apache.org/maven2</url>
         </repository>
     </repositories>
+</project>

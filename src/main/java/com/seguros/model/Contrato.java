@@ -1,9 +1,7 @@
-package main.java.com.seguros.model;
+package com.seguros.model;
 
 import java.time.LocalDate;
-import java.util.List;
 
-import com.seguros.model.Cliente;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
