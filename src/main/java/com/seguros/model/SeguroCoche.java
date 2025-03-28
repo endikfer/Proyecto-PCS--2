@@ -1,16 +1,29 @@
 package com.seguros.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "seguros_coche")
-public class SeguroCoche extends Seguro {
+public class SeguroCoche{
 
-    private String poliza;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int poliza;
+
+
     private String matricula;
     private String modelo;
     private String marca;
+
+    @ManyToOne
+    @JoinColumn(name = "seguro_id", nullable = false)
+    private Seguro seguro;
 
     // Constructor vacío
     public SeguroCoche() {
@@ -18,21 +31,28 @@ public class SeguroCoche extends Seguro {
     }
 
     // Constructor completo
-    public SeguroCoche(String nombre, String descripcion, TipoSeguro tipoSeguro, Double precio, String poliza, String matricula, String modelo, String marca) {
-        super(nombre, descripcion, tipoSeguro, precio);
-        this.poliza = poliza;
+    public SeguroCoche(Seguro seguro, String matricula, String modelo, String marca) {
         this.matricula = matricula;
+        this.seguro = seguro;
         this.modelo = modelo;
         this.marca = marca;
     }
 
     // Getters y Setters
-    public String getPoliza() {
+    public int getPoliza() {
         return poliza;
     }
 
-    public void setPoliza(String poliza) {
+    public void setPoliza(int poliza) {
         this.poliza = poliza;
+    }
+
+    public Seguro getSeguro() {
+        return seguro;
+    }
+
+    public void setSeguro(Seguro seguro) {
+        this.seguro = seguro;
     }
 
     public String getMatricula() {
