@@ -18,6 +18,10 @@ public class Contrato {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private LocalDate fechaInicio;
+
+    private LocalDate fechaFin;
+
     @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
@@ -25,10 +29,6 @@ public class Contrato {
     @ManyToOne
     @JoinColumn(name = "seguro_id", nullable = false)
     private Seguro seguro;
-
-    private LocalDate fechaInicio;
-
-    private LocalDate fechaFin;
 
     // Constructor vacío
     public Contrato() {
