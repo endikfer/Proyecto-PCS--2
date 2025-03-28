@@ -1,39 +1,33 @@
-# Compilados de Java
-*.class
-
-# Archivos de log
-*.log
-
-# Directorios de compilación
-/bin/
-/build/
-/target/
-
-# Configuración de IDEs
-/.idea/
-/*.iml
-/.classpath
-/.project
-/.settings/
-/.vscode/
-
-# Archivos generados por Maven
-.mvn/
+HELP.md
 target/
-dependency-reduced-pom.xml
-release.properties
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
 
-# Archivos generados por Gradle
-.gradle/
-/build/
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
 
-# Archivos de sistema
-.DS_Store
-Thumbs.db
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
 
-# Archivos de configuración específicos del entorno
-.env
-*.properties
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-# Librerías externas
-lib/
+### VS Code ###
+.vscode/

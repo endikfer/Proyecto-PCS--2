@@ -2,9 +2,13 @@ package com.seguros.model;
 
 import java.time.LocalDate;
 
-
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "contratos")
@@ -22,12 +26,12 @@ public class Contrato {
     @JoinColumn(name = "seguro_id", nullable = false)
     private Seguro seguro;
 
-    @NotNull
+
     private LocalDate fechaInicio;
 
     private LocalDate fechaFin;
 
-    @NotBlank
+
     private String estado;
 
     // Getters y Setters
