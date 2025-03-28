@@ -2,8 +2,16 @@ package com.seguros.model;
 
 import java.util.List;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
 
 @Entity
 @Table(name = "seguros")
@@ -13,20 +21,32 @@ public class Seguro {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "El tipo de seguro es obligatorio")
+
     private TipoSeguro tipoSeguro;
 
-    @NotBlank(message = "El nombre es obligatorio")
-    @Size(min = 2, max = 100, message = "El nombre debe tener entre 2 y 100 caracteres")
     private String nombre;
 
     private String descripcion;
 
-    @NotNull(message = "La prima es obligatoria")
     private Double precio;
 
     @OneToMany(mappedBy = "seguro", cascade = CascadeType.ALL)
     private List<Contrato> contratos;
+
+
+    public Seguro() {
+    }
+
+    // Constructor completo
+    public Seguro(Long id, TipoSeguro tipoSeguro, String nombre, String descripcion, Double precio, List<Contrato> contratos) {
+        this.id = id;
+        this.tipoSeguro = tipoSeguro;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.contratos = contratos;
+    }
+
 
     public Long getId() {
         return id;

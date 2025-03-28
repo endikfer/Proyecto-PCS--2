@@ -26,13 +26,22 @@ public class Contrato {
     @JoinColumn(name = "seguro_id", nullable = false)
     private Seguro seguro;
 
-
     private LocalDate fechaInicio;
 
     private LocalDate fechaFin;
 
+    // Constructor vacío
+    public Contrato() {
+    }
 
-    private String estado;
+    // Constructor completo
+    public Contrato(Long id, Cliente cliente, Seguro seguro, LocalDate fechaInicio, LocalDate fechaFin) {
+        this.id = id;
+        this.cliente = cliente;
+        this.seguro = seguro;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+    }
 
     // Getters y Setters
     public Long getId() {
@@ -65,14 +74,6 @@ public class Contrato {
 
     public void setFechaFin(LocalDate fechaFin) {
         this.fechaFin = fechaFin;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
     }
 
     public Cliente getCliente() {

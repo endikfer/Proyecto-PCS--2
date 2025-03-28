@@ -2,9 +2,13 @@ package com.seguros.model;
 
 import java.util.List;
 
-
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tipos_seguro")
@@ -13,13 +17,24 @@ public class TipoSeguro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
     private String nombre;
 
     private String descripcion;
 
     @OneToMany(mappedBy = "tipoSeguro", cascade = CascadeType.ALL)
     private List<Seguro> seguros;
+
+    // Constructor vacío
+    public TipoSeguro() {
+    }
+
+    // Constructor completo
+    public TipoSeguro(Long id, String nombre, String descripcion, List<Seguro> seguros) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.seguros = seguros;
+    }
 
     // Getters y Setters
     public Long getId() {
