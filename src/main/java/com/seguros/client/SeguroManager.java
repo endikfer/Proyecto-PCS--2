@@ -19,6 +19,11 @@ import javax.swing.SwingConstants;
 public class SeguroManager {
 
     public static void main(String[] args) {
+
+        crearVentanaPrincipal();
+    }
+
+    private static void crearVentanaPrincipal() {
         // Crear el marco (ventana)
         JFrame ventana = new JFrame("Gestión de Seguros");
 
