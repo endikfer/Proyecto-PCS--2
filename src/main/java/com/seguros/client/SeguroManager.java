@@ -29,11 +29,11 @@ public class SeguroManager {
         RegistroVentana registroVentana = new RegistroVentana();
         registroVentana.mostrar();
 
-        //crearVentanaPrincipal();
+        // crearVentanaPrincipal();
     }
 
     @SuppressWarnings("Convert2Lambda")
-    public void crearVentanaPrincipal() {
+    public static void crearVentanaPrincipal() {
         // Crear el marco (ventana)
         JFrame ventana = new JFrame("Gestión de Seguros");
 
