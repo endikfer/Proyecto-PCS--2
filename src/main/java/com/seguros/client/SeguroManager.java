@@ -26,10 +26,10 @@ import com.seguros.model.TipoSeguro;
 public class SeguroManager {
 
     public static void main(String[] args) {
-        RegistroVentana registroVentana = new RegistroVentana();
-        registroVentana.mostrar();
+        //RegistroVentana registroVentana = new RegistroVentana();
+        //registroVentana.mostrar();
 
-        // crearVentanaPrincipal();
+        crearVentanaPrincipal();
     }
 
     @SuppressWarnings("Convert2Lambda")
@@ -92,7 +92,8 @@ public class SeguroManager {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Botón EDITAR presionado");
                 // Aquí puedes agregar la lógica para editar un seguro
-                crearVentanaSeguro();
+                Long idSeguro = Long.parseLong(textFieldSeguro.getText());
+
             }
         });
 
@@ -142,6 +143,7 @@ public class SeguroManager {
                 JOptionPane.showMessageDialog(frame, "Seguro guardado:\nNombre: " + nombre + "\nDescripción: "
                         + descripcion + "\nTipo: " + tipo + "\nPrecio: " + precio);
                 frame.dispose(); // Cerrar la ventana después de guardar
+                System.out.println("El tipo de seguro es "+tipo.toString());
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(frame, "Ingrese un precio válido", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -182,4 +184,85 @@ public class SeguroManager {
         // Mostrar ventana
         frame.setVisible(true);
     }
+
+    public static void mostrarVentanaSeguroConDatos(String nombre, String descripcion, TipoSeguro tipo, double precio) {
+        JFrame frame = new JFrame("Editar Seguro");
+        frame.setSize(400, 350);
+        frame.setLayout(new GridBagLayout());
+        frame.setLocationRelativeTo(null);
+    
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+    
+        JLabel lblNombre = new JLabel("Nombre:");
+        JTextField txtNombre = new JTextField(10);
+        txtNombre.setText(nombre);
+    
+        JLabel lblDescripcion = new JLabel("Descripción:");
+        JTextArea txtDescripcion = new JTextArea(4, 20);
+        txtDescripcion.setText(descripcion);
+        JScrollPane scrollDescripcion = new JScrollPane(txtDescripcion);
+    
+        JLabel lblTipoSeguro = new JLabel("Tipo de Seguro:");
+        JComboBox<TipoSeguro> comboTipoSeguro = new JComboBox<>(TipoSeguro.values());
+        comboTipoSeguro.setSelectedItem(tipo);
+        comboTipoSeguro.setPreferredSize(new Dimension(100, 25));
+    
+        JLabel lblPrecio = new JLabel("Precio:");
+        JTextField txtPrecio = new JTextField(10);
+        txtPrecio.setText(String.valueOf(precio));
+    
+        JButton btnGuardar = new JButton("Guardar");
+        btnGuardar.addActionListener(e -> {
+            String nuevoNombre = txtNombre.getText();
+            String nuevaDescripcion = txtDescripcion.getText();
+            TipoSeguro nuevoTipo = (TipoSeguro) comboTipoSeguro.getSelectedItem();
+    
+            try {
+                double nuevoPrecio = Double.parseDouble(txtPrecio.getText());
+                JOptionPane.showMessageDialog(frame, "Seguro actualizado:\nNombre: " + nuevoNombre + "\nDescripción: "
+                        + nuevaDescripcion + "\nTipo: " + nuevoTipo + "\nPrecio: " + nuevoPrecio);
+                frame.dispose();
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(frame, "Ingrese un precio válido", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+    
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        frame.add(lblNombre, gbc);
+        gbc.gridx = 1;
+        frame.add(txtNombre, gbc);
+    
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        frame.add(lblDescripcion, gbc);
+        gbc.gridx = 1;
+        gbc.gridwidth = 2;
+        frame.add(scrollDescripcion, gbc);
+        gbc.gridwidth = 1;
+    
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        frame.add(lblTipoSeguro, gbc);
+        gbc.gridx = 1;
+        frame.add(comboTipoSeguro, gbc);
+    
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        frame.add(lblPrecio, gbc);
+        gbc.gridx = 1;
+        frame.add(txtPrecio, gbc);
+    
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        frame.add(btnGuardar, gbc);
+    
+        frame.setVisible(true);
+    }
+
+
 }
