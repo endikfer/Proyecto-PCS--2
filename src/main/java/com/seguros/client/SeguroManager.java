@@ -92,7 +92,6 @@ public class SeguroManager {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Botón EDITAR presionado");
                 // Aquí puedes agregar la lógica para editar un seguro
-                Long idSeguro = Long.parseLong(textFieldSeguro.getText());
 
             }
         });

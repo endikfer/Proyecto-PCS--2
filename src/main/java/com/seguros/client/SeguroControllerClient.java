@@ -42,23 +42,6 @@ public class SeguroControllerClient {
         }
     }
 
-    public Seguro obtenerSeguroPorId(Long id) throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/api/seguros/seguro/" + id))
-                .header("Accept", "application/json")
-                .GET()
-                .build();
-
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-        if (response.statusCode() == 200) {
-            ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.readValue(response.body(), Seguro.class);
-        } else {
-            return null;
-        }
-    }
-
     public void editarSeguro(Long id, String nombre, String descripcion, String tipoSeguro, Double precio) {
         try {
             String url = String.format(BASE_URL + "/api/seguros/seguro/editar?id=%d&nombre=%s&descripcion=%s&tipoSeguro=%s&precio=%.2f",
