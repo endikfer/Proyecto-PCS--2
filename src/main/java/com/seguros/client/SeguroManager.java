@@ -26,12 +26,14 @@ import com.seguros.model.TipoSeguro;
 public class SeguroManager {
 
     public static void main(String[] args) {
+        RegistroVentana registroVentana = new RegistroVentana();
+        registroVentana.mostrar();
 
-        crearVentanaPrincipal();
+        //crearVentanaPrincipal();
     }
 
     @SuppressWarnings("Convert2Lambda")
-    private static void crearVentanaPrincipal() {
+    public void crearVentanaPrincipal() {
         // Crear el marco (ventana)
         JFrame ventana = new JFrame("Gestión de Seguros");
 
