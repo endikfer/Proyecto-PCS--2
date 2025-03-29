@@ -1,5 +1,6 @@
 package com.seguros.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,15 +11,19 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "seguros_coche")
-public class SeguroCoche{
+public class SeguroCoche {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int poliza;
 
-
+    @Column(nullable = false)
     private String matricula;
+
+    @Column(nullable = false)
     private String modelo;
+
+    @Column(nullable = false)
     private String marca;
 
     @ManyToOne
@@ -77,5 +82,31 @@ public class SeguroCoche{
 
     public void setMarca(String marca) {
         this.marca = marca;
+    }
+
+    @Override
+    public String toString() {
+        return "SeguroCoche{" +
+                "poliza=" + poliza +
+                ", matricula='" + matricula + '\'' +
+                ", modelo='" + modelo + '\'' +
+                ", marca='" + marca + '\'' +
+                ", seguro=" + (seguro != null ? seguro.getId() : null) +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        SeguroCoche that = (SeguroCoche) o;
+        return poliza == that.poliza;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(poliza);
     }
 }

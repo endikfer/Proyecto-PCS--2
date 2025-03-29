@@ -1,5 +1,6 @@
 package com.seguros.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,8 +21,10 @@ public class SeguroVida {
     @JoinColumn(name = "seguro_id", nullable = false)
     private Seguro seguro;
 
+    @Column(nullable = false)
     private Integer edadAsegurado;
-    
+
+    @Column(nullable = false)
     private String beneficiarios;
 
     // Constructor vacío
@@ -67,5 +70,30 @@ public class SeguroVida {
 
     public void setBeneficiarios(String beneficiarios) {
         this.beneficiarios = beneficiarios;
+    }
+
+    @Override
+    public String toString() {
+        return "SeguroVida{" +
+                "poliza=" + poliza +
+                ", edadAsegurado=" + edadAsegurado +
+                ", beneficiarios='" + beneficiarios + '\'' +
+                ", seguro=" + (seguro != null ? seguro.getId() : null) +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        SeguroVida that = (SeguroVida) o;
+        return poliza == that.poliza;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(poliza);
     }
 }

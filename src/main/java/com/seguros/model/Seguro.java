@@ -1,11 +1,11 @@
 package com.seguros.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
 
 @Entity
 @Table(name = "seguros")
@@ -15,14 +15,17 @@ public class Seguro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String nombre;
 
+    @Column(nullable = false)
     private String descripcion;
 
+    @Column(nullable = false)
     private TipoSeguro tipoSeguro;
 
+    @Column(nullable = false)
     private Double precio;
-
 
     public Seguro() {
     }
@@ -75,4 +78,29 @@ public class Seguro {
         this.precio = precio;
     }
 
+    @Override
+    public String toString() {
+        return "Seguro{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", tipoSeguro=" + tipoSeguro +
+                ", precio=" + precio +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Seguro seguro = (Seguro) o;
+        return id != null && id.equals(seguro.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 }
