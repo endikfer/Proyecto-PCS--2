@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -11,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 public class SeguroManager {
@@ -27,7 +30,27 @@ public class SeguroManager {
         ventana.setLayout(new BorderLayout());
         JLabel etiqueta = new JLabel("Bienvenido a la Gestión de Seguros", SwingConstants.CENTER);
         etiqueta.setFont(new Font("Arial", Font.BOLD, 24));
-        ventana.add(etiqueta, BorderLayout.CENTER);
+        ventana.add(etiqueta, BorderLayout.NORTH);
+
+        // Crear un panel central para el texto y el campo de entrada
+        JPanel panelCentral = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets.set(10, 10, 10, 10);
+
+        JLabel labelSeguro = new JLabel("Seguro a modificar:");
+        labelSeguro.setFont(new Font("Arial", Font.PLAIN, 18));
+        panelCentral.add(labelSeguro, gbc);
+
+        gbc.gridx = 1;
+        JTextField textFieldSeguro = new JTextField();
+        textFieldSeguro.setPreferredSize(new Dimension(300, 30));
+        panelCentral.add(textFieldSeguro, gbc);
+
+        // Añadir el panel central a la ventana
+        ventana.add(panelCentral, BorderLayout.CENTER);
 
         JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.CENTER)); // Centra los botones
         JButton botonCrear = new JButton("CREAR");
