@@ -20,12 +20,12 @@
     <description>Empresa de seguros de Deusto</description>
 
     <properties>
-		<java.version>17</java.version>
-		<server.hostname>127.0.0.1</server.hostname>
-		<server.port>8080</server.port>
+        <java.version>17</java.version>
+        <server.hostname>localhost</server.hostname>
+        <server.port>8080</server.port>
         <maven.compiler.source>23</maven.compiler.source>  
         <maven.compiler.target>23</maven.compiler.target>
-	</properties>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -49,16 +49,16 @@
         </dependency>
 
         <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
             <version>3.1.2</version>
-		</dependency>
+        </dependency>
 
         <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -108,9 +108,9 @@
             </plugin>
 
             <plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -123,6 +123,13 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <mainClass>com.seguros.client.SeguroManager</mainClass>
+                    <arguments>
+                        <argument>${server.hostname}</argument>
+                        <argument>${server.port}</argument>
+                    </arguments>
+                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -19,15 +19,17 @@ public class SeguroController {
         this.seguroService = seguroService;
     }
 
-    @PostMapping("/retos/crear")
-    public ResponseEntity<Void> crearReto(
+    @PostMapping("/seguro/crear")
+    public ResponseEntity<Void> crearSeguro(
             @RequestParam("nombre") String nombre,
             @RequestParam("descripcion") String descripcion,
             @RequestParam("tipoSeguro") String tipoSeguro,
             @RequestParam("precio") Double precio) {
         try {
+            System.out.println("Peticion recivida para crear seguro desde controller\n");
+            seguroService.crearSeguro(nombre, descripcion, tipoSeguro, precio);
 
-            seguroService.crearReto(nombre, descripcion, tipoSeguro, precio);
+            System.out.println("llegue4\n");
 
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {

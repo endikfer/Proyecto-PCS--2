@@ -1,0 +1,8 @@
+DROP USER IF EXISTS 'root'@'%';
+CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY 'root';
+
+DROP SCHEMA IF EXISTS segurosdb;
+CREATE SCHEMA segurosdb;
+
+GRANT ALL ON segurosdb.* TO 'root'@'%';
+FLUSH PRIVILEGES;
