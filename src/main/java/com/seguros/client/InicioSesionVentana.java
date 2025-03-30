@@ -91,6 +91,20 @@ public class InicioSesionVentana {
         btnLogin.addActionListener((ActionEvent e) -> {
             iniciarSesion();
         });
+        
+     // Botón para registrarse
+        JButton btnRegister = new JButton("Registrarse");
+        gbc.gridy = 4;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        panel.add(btnRegister, gbc);
+
+        btnRegister.addActionListener((ActionEvent e) -> {
+            frame.dispose(); // Cierra la ventana actual
+            RegistroVentana registroVentana = new RegistroVentana();
+            registroVentana.mostrar(); // Abre la ventana de registro
+        });
+
 
         frame.add(panel);
     }
