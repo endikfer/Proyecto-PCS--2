@@ -95,9 +95,9 @@ public class SeguroControllerClient {
                     .header("Content-Type", "application/json")
                     .GET()
                     .build();
-
+    
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
+    
             if (response.statusCode() == 200) {
                 return response.body(); // Devuelve la información del seguro en formato JSON
             } else if (response.statusCode() == 404) {

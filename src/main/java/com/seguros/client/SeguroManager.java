@@ -141,7 +141,7 @@ public class SeguroManager {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Botón EDITAR presionado");
-                ventanaCrear.editarSeguro(textFieldSeguro); // Llama al método para editar un seguro
+                ventanaCrear.editarSeguro(textFieldSeguro.toString()); // Llama al método para editar un seguro
             }
         });
 
