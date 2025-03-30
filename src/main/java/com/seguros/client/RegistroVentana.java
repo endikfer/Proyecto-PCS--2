@@ -10,9 +10,10 @@ public class RegistroVentana {
     private JTextField txtNombre;
     private JTextField txtEmail;
     private JPasswordField txtPassword;
-    
-    // Configuración de la base de datos (debe coincidir con tu application.properties)
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/seguros";
+
+    // Configuración de la base de datos (debe coincidir con tu
+    // application.properties)
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/segurosdb";
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "root";
 
@@ -25,7 +26,7 @@ public class RegistroVentana {
         frame.setSize(400, 350);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-        
+
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -41,13 +42,13 @@ public class RegistroVentana {
 
         JLabel lblNombre = new JLabel("Nombre:");
         txtNombre = new JTextField(20);
-        
+
         JLabel lblEmail = new JLabel("Email:");
         txtEmail = new JTextField(20);
-        
+
         JLabel lblPassword = new JLabel("Contraseña:");
         txtPassword = new JPasswordField(20);
-        
+
         JButton btnRegistrar = new JButton("Registrarse");
         btnRegistrar.addActionListener(new ActionListener() {
             @Override
@@ -63,19 +64,19 @@ public class RegistroVentana {
         panel.add(lblNombre, gbc);
         gbc.gridx = 1;
         panel.add(txtNombre, gbc);
-        
+
         gbc.gridy = 2;
         gbc.gridx = 0;
         panel.add(lblEmail, gbc);
         gbc.gridx = 1;
         panel.add(txtEmail, gbc);
-        
+
         gbc.gridy = 3;
         gbc.gridx = 0;
         panel.add(lblPassword, gbc);
         gbc.gridx = 1;
         panel.add(txtPassword, gbc);
-        
+
         gbc.gridy = 4;
         gbc.gridx = 0;
         gbc.gridwidth = 2;
@@ -91,20 +92,20 @@ public class RegistroVentana {
         String password = new String(txtPassword.getPassword());
 
         if (nombre.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, 
-                "Todos los campos son obligatorios", 
-                "Error", 
-                JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame,
+                    "Todos los campos son obligatorios",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             // Verificar si el email ya existe
             if (emailExiste(conn, email)) {
-                JOptionPane.showMessageDialog(frame, 
-                    "El email ya está registrado", 
-                    "Error", 
-                    JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame,
+                        "El email ya está registrado",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -121,10 +122,10 @@ public class RegistroVentana {
                 abrirVentanaPrincipal(); // Abrir ventana principal
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(frame, 
-                "Error al registrar: " + ex.getMessage(), 
-                "Error", 
-                JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame,
+                    "Error al registrar: " + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
         }
     }

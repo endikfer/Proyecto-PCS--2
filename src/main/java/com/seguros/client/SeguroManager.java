@@ -33,10 +33,12 @@ public class SeguroManager {
     }
 
     public static void main(String[] args) {
-        // RegistroVentana registroVentana = new RegistroVentana();
-        // registroVentana.mostrar();
+        //RegistroVentana registroVentana = new RegistroVentana();
+        //registroVentana.mostrar();
 
-        crearVentanaPrincipal();
+        inicioSesionVentana.mostrar();
+
+        //crearVentanaPrincipal();
     }
 
     @SuppressWarnings("Convert2Lambda")

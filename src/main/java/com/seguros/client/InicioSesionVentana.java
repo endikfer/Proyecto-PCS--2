@@ -34,7 +34,7 @@ public class InicioSesionVentana {
 
     // Configuración de la base de datos (debe coincidir con tu
     // application.properties)
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/seguros";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/segurosdb";
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "root";
 
