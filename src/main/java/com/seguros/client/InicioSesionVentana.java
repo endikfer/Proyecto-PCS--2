@@ -1,6 +1,9 @@
 package com.seguros.client;
 
 import javax.swing.*;
+
+import com.seguros.model.Cliente;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
@@ -9,6 +12,8 @@ public class InicioSesionVentana {
     private JFrame frame;
     private JTextField txtEmail;
     private JPasswordField txtPassword;
+    
+    private Cliente clienteLogueado;
     
     // Configuración de la base de datos (debe coincidir con tu application.properties)
     private static final String DB_URL = "jdbc:mysql://localhost:3306/seguros";
@@ -93,7 +98,14 @@ public class InicioSesionVentana {
                 
                 try (ResultSet rs = pstmt.executeQuery()) {
                     if (rs.next()) {
-                        JOptionPane.showMessageDialog(frame, "Inicio de sesión exitoso!");
+                        Long id = rs.getLong("id");
+                        String nombre = rs.getString("nombre");
+                        String emailDB = rs.getString("email");
+                        String passwordDB = rs.getString("password");
+                        
+                        clienteLogueado = new Cliente(nombre, emailDB, passwordDB);
+                    	
+                    	JOptionPane.showMessageDialog(frame, "Inicio de sesión exitoso!");
                         frame.dispose();
                         abrirVentanaPrincipal();
                     } else {
