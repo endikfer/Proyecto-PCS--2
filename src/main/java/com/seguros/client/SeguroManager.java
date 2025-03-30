@@ -162,7 +162,7 @@ public class SeguroManager {
                 JOptionPane.showMessageDialog(frame, "Ingrese un precio válido", "Error", JOptionPane.ERROR_MESSAGE);
             } catch (IllegalArgumentException ex) {
                 // Mostrar el mensaje de error devuelto por el servidor
-                JOptionPane.showMessageDialog(frame, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             } catch (RuntimeException ex) {
                 JOptionPane.showMessageDialog(frame, "Error inesperado: " + ex.getMessage(), "Error",
                         JOptionPane.ERROR_MESSAGE);

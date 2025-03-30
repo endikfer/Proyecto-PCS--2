@@ -38,6 +38,9 @@ public class SeguroController {
             System.out.println("llegue4\n");
 
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+            // Manejar la violación de unicidad
+            return ResponseEntity.badRequest().body("El nombre del seguro ya existe. Por favor, elija otro nombre.");
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
