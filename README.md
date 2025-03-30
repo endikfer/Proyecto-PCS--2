@@ -10,7 +10,7 @@ Para lanzar el servidor ejecutamos el siguiente comando:
 
 Para lanzar el cliente ejecutamos el siguiente comando:
 
-    mvn exec:java -Dexec.mainClass="com.seguros.cer"
+    mvn exec:java
 
 Para acceder a la pagina desde el navegador entramos en:
 
