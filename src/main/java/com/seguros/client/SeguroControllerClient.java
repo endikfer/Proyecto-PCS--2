@@ -88,4 +88,25 @@ public class SeguroControllerClient {
         return Boolean.parseBoolean(response.body());
     }
 
+    public String obtenerSeguroPorNombre(String nombre) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(BASE_URL + "/api/seguros/seguro/obtenerPorNombre?nombre=" + nombre))
+                    .header("Content-Type", "application/json")
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                return response.body(); // Devuelve la información del seguro en formato JSON
+            } else if (response.statusCode() == 404) {
+                throw new RuntimeException("Seguro no encontrado.");
+            } else {
+                throw new RuntimeException("Error al obtener el seguro: " + response.statusCode());
+            }
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException("Error obteniendo el seguro.", e);
+        }
+    }
 }

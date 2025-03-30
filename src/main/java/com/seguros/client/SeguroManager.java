@@ -28,6 +28,9 @@ public class SeguroManager {
     private static final String hostname;
     private static final String port;
     private static final SeguroControllerClient client;
+    
+
+    //componentes de la ventana
 
     static {
         hostname = System.getProperty("hostname", "localhost");
@@ -44,6 +47,7 @@ public class SeguroManager {
 
     @SuppressWarnings("Convert2Lambda")
     public static void crearVentanaPrincipal() {
+        SeguroVentana ventanaCrear = new SeguroVentana();
         // Crear el marco (ventana)
         JFrame ventana = new JFrame("Gestión de Seguros");
 
@@ -86,130 +90,34 @@ public class SeguroManager {
         botonEditar.setPreferredSize(new Dimension(150, 50)); // Tamaño del botón (ancho, alto)
         botonEditar.setFont(new Font("Arial", Font.BOLD, 16));
 
-        // Añadir ActionListener al botón CREAR
-        /*
-         * botonCrear.addActionListener(new ActionListener() {
-         * 
-         * @Override
-         * 
-         * @SuppressWarnings("CallToPrintStackTrace")
-         * public void actionPerformed(ActionEvent e) {
-         * System.out.println("Botón CREAR presionado");
-         * // Aquí puedes agregar la lógica para crear un seguro
-         * 
-         * String username = obtenerUsuarioActual(); // Método para obtener el usuario
-         * que inició sesión
-         * 
-         * try {
-         * // Verificar si el usuario es administrador
-         * boolean esAdmin = client.verificarAdmin(username); // Llamada al servidor
-         * if (!esAdmin) {
-         * JOptionPane.showMessageDialog(null, "No tienes permisos para crear seguros.",
-         * "Acceso denegado",
-         * JOptionPane.ERROR_MESSAGE);
-         * return;
-         * }
-         * 
-         * // Continuar con la funcionalidad normal
-         * crearVentanaSeguro();
-         * } catch (IOException ex) {
-         * // Manejar errores relacionados con la comunicación con el servidor
-         * JOptionPane.showMessageDialog(null,
-         * "Error de conexión con el servidor. Por favor, inténtelo más tarde.",
-         * "Error",
-         * JOptionPane.ERROR_MESSAGE);
-         * ex.printStackTrace(); // Registrar el error en los logs
-         * } catch (IllegalArgumentException ex) {
-         * // Manejar errores específicos del servidor (como permisos denegados)
-         * JOptionPane.showMessageDialog(null, "Permiso denegado: " + ex.getMessage(),
-         * "Acceso denegado",
-         * JOptionPane.WARNING_MESSAGE);
-         * ex.printStackTrace(); // Registrar el error en los logs
-         * } catch (RuntimeException ex) {
-         * // Manejar errores inesperados
-         * JOptionPane.showMessageDialog(null,
-         * "Ocurrió un error inesperado. Por favor, contacte al soporte.",
-         * "Error",
-         * JOptionPane.ERROR_MESSAGE);
-         * ex.printStackTrace(); // Registrar el error en los logs
-         * } catch (InterruptedException ex) {
-         * JOptionPane.showMessageDialog(null,
-         * "La operación fue interrumpida. Por favor, inténtelo nuevamente.", "Error",
-         * JOptionPane.ERROR_MESSAGE);
-         * }
-         * }
-         * });
-         */
-
         botonCrear.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Botón CREAR presionado");
-                // Aquí puedes agregar la lógica para crear un seguro
-                crearVentanaSeguro();
+                
+                ventanaCrear.crearVentanaSeguro(); // Abre la ventana para crear un seguro
             }
         });
-
-        // Añadir ActionListener al botón EDITAR
-        /*
-         * botonEditar.addActionListener(new ActionListener() {
-         * 
-         * @Override
-         * 
-         * @SuppressWarnings("CallToPrintStackTrace")
-         * public void actionPerformed(ActionEvent e) {
-         * System.out.println("Botón EDITAR presionado");
-         * // Aquí puedes agregar la lógica para editar un seguro
-         * String username = obtenerUsuarioActual();
-         * 
-         * try {
-         * // Verificar si el usuario es administrador
-         * boolean esAdmin = client.verificarAdmin(username);
-         * if (!esAdmin) {
-         * JOptionPane.showMessageDialog(null, "No tienes permisos para crear seguros.",
-         * "Acceso denegado",
-         * JOptionPane.ERROR_MESSAGE);
-         * return;
-         * }
-         * 
-         * // Continuar con la funcionalidad normal
-         * crearVentanaSeguro();
-         * } catch (IOException ex) {
-         * // Manejar errores relacionados con la comunicación con el servidor
-         * JOptionPane.showMessageDialog(null,
-         * "Error de conexión con el servidor. Por favor, inténtelo más tarde.",
-         * "Error",
-         * JOptionPane.ERROR_MESSAGE);
-         * ex.printStackTrace(); // Registrar el error en los logs
-         * } catch (IllegalArgumentException ex) {
-         * // Manejar errores específicos del servidor (como permisos denegados)
-         * JOptionPane.showMessageDialog(null, "Permiso denegado: " + ex.getMessage(),
-         * "Acceso denegado",
-         * JOptionPane.WARNING_MESSAGE);
-         * ex.printStackTrace(); // Registrar el error en los logs
-         * } catch (RuntimeException ex) {
-         * // Manejar errores inesperados
-         * JOptionPane.showMessageDialog(null,
-         * "Ocurrió un error inesperado. Por favor, contacte al soporte.",
-         * "Error",
-         * JOptionPane.ERROR_MESSAGE);
-         * ex.printStackTrace(); // Registrar el error en los logs
-         * } catch (InterruptedException ex) {
-         * JOptionPane.showMessageDialog(null,
-         * "La operación fue interrumpida. Por favor, inténtelo nuevamente.", "Error",
-         * JOptionPane.ERROR_MESSAGE);
-         * }
-         * 
-         * }
-         * });
-         */
 
         botonEditar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Botón EDITAR presionado");
-                // Aquí puedes agregar la lógica para editar un seguro
-                crearVentanaSeguro();
+                String nombreSeguro = JOptionPane.showInputDialog("Ingrese el nombre del seguro a editar:");
+
+                if (nombreSeguro == null || nombreSeguro.isBlank()) {
+                    JOptionPane.showMessageDialog(null, "Debe ingresar un nombre válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                try {
+                    String seguroJson = client.obtenerSeguroPorNombre(nombreSeguro);
+                    SeguroVentana ventanaEditar = new SeguroVentana();
+                    ventanaEditar.cargarDatosSeguro(seguroJson); // Carga los datos del seguro en la ventana
+                    ventanaEditar.crearVentanaSeguro(); // Abre la ventana para editar el seguro
+                } catch (RuntimeException ex) {
+                    JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
@@ -222,180 +130,4 @@ public class SeguroManager {
         // Hacer visible la ventana
         ventana.setVisible(true);
     }
-
-    public static void crearVentanaSeguro() {
-        JFrame frame = new JFrame("Ventana de Seguros");
-        frame.setSize(400, 350);
-        frame.setLayout(new GridBagLayout());
-        frame.setLocationRelativeTo(null); // Centrar la ventana
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        // Componentes de la ventana
-        JLabel lblNombre = new JLabel("Nombre:");
-        JTextField txtNombre = new JTextField(10);
-
-        JLabel lblDescripcion = new JLabel("Descripción:");
-        JTextArea txtDescripcion = new JTextArea(4, 20);
-        JScrollPane scrollDescripcion = new JScrollPane(txtDescripcion);
-
-        JLabel lblTipoSeguro = new JLabel("Tipo de Seguro:");
-        JComboBox<TipoSeguro> comboTipoSeguro = new JComboBox<>(TipoSeguro.values());
-        comboTipoSeguro.setPreferredSize(new Dimension(100, 25));
-
-        JLabel lblPrecio = new JLabel("Precio:");
-        JTextField txtPrecio = new JTextField(10);
-
-        JButton btnGuardar = new JButton("Guardar");
-        btnGuardar.addActionListener(e -> {
-            String nombre = txtNombre.getText().trim();
-            String descripcion = txtDescripcion.getText().trim();
-            String precioTexto = txtPrecio.getText().trim();
-            TipoSeguro tipo = (TipoSeguro) comboTipoSeguro.getSelectedItem();
-            System.out.println("El tipo de seguro es " + tipo.toString());
-
-            if (nombre.isEmpty() || descripcion.isEmpty() || precioTexto.isEmpty()) {
-                JOptionPane.showMessageDialog(frame, "Todos los campos son obligatorios.", "Error",
-                        JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            try {
-                double precio = Double.parseDouble(precioTexto);
-
-                client.crearSeguro(nombre, descripcion, tipo.toString(), precio);
-
-                JOptionPane.showMessageDialog(frame, "Seguro guardado:\nNombre: " + nombre + "\nDescripción: "
-                        + descripcion + "\nTipo: " + tipo + "\nPrecio: " + precio);
-
-                frame.dispose(); // Cerrar la ventana después de guardar
-                System.out.println("El tipo de seguro es " + tipo.toString());
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(frame, "Ingrese un precio válido", "Error", JOptionPane.ERROR_MESSAGE);
-            } catch (IllegalArgumentException ex) {
-                // Mostrar el mensaje de error devuelto por el servidor
-                JOptionPane.showMessageDialog(frame, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            } catch (RuntimeException ex) {
-                JOptionPane.showMessageDialog(frame, "Error inesperado: " + ex.getMessage(), "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-        });
-
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        frame.add(lblNombre, gbc);
-        gbc.gridx = 1;
-        frame.add(txtNombre, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        frame.add(lblDescripcion, gbc);
-        gbc.gridx = 1;
-        gbc.gridwidth = 2;
-        frame.add(scrollDescripcion, gbc);
-        gbc.gridwidth = 1;
-
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        frame.add(lblTipoSeguro, gbc);
-        gbc.gridx = 1;
-        frame.add(comboTipoSeguro, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        frame.add(lblPrecio, gbc);
-        gbc.gridx = 1;
-        frame.add(txtPrecio, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
-        frame.add(btnGuardar, gbc);
-
-        // Mostrar ventana
-        frame.setVisible(true);
-    }
-
-    public static void mostrarVentanaSeguroConDatos(String nombre, String descripcion, TipoSeguro tipo, double precio) {
-        JFrame frame = new JFrame("Editar Seguro");
-        frame.setSize(400, 350);
-        frame.setLayout(new GridBagLayout());
-        frame.setLocationRelativeTo(null);
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        JLabel lblNombre = new JLabel("Nombre:");
-        JTextField txtNombre = new JTextField(10);
-        txtNombre.setText(nombre);
-
-        JLabel lblDescripcion = new JLabel("Descripción:");
-        JTextArea txtDescripcion = new JTextArea(4, 20);
-        txtDescripcion.setText(descripcion);
-        JScrollPane scrollDescripcion = new JScrollPane(txtDescripcion);
-
-        JLabel lblTipoSeguro = new JLabel("Tipo de Seguro:");
-        JComboBox<TipoSeguro> comboTipoSeguro = new JComboBox<>(TipoSeguro.values());
-        comboTipoSeguro.setSelectedItem(tipo);
-        comboTipoSeguro.setPreferredSize(new Dimension(100, 25));
-
-        JLabel lblPrecio = new JLabel("Precio:");
-        JTextField txtPrecio = new JTextField(10);
-        txtPrecio.setText(String.valueOf(precio));
-
-        JButton btnGuardar = new JButton("Guardar");
-        btnGuardar.addActionListener(e -> {
-            String nuevoNombre = txtNombre.getText();
-            String nuevaDescripcion = txtDescripcion.getText();
-            TipoSeguro nuevoTipo = (TipoSeguro) comboTipoSeguro.getSelectedItem();
-
-            try {
-                double nuevoPrecio = Double.parseDouble(txtPrecio.getText());
-                JOptionPane.showMessageDialog(frame, "Seguro actualizado:\nNombre: " + nuevoNombre + "\nDescripción: "
-                        + nuevaDescripcion + "\nTipo: " + nuevoTipo + "\nPrecio: " + nuevoPrecio);
-                frame.dispose();
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(frame, "Ingrese un precio válido", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        });
-
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        frame.add(lblNombre, gbc);
-        gbc.gridx = 1;
-        frame.add(txtNombre, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        frame.add(lblDescripcion, gbc);
-        gbc.gridx = 1;
-        gbc.gridwidth = 2;
-        frame.add(scrollDescripcion, gbc);
-        gbc.gridwidth = 1;
-
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        frame.add(lblTipoSeguro, gbc);
-        gbc.gridx = 1;
-        frame.add(comboTipoSeguro, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        frame.add(lblPrecio, gbc);
-        gbc.gridx = 1;
-        frame.add(txtPrecio, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
-        frame.add(btnGuardar, gbc);
-
-        frame.setVisible(true);
-    }
-
 }

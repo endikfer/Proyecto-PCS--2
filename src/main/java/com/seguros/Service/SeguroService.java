@@ -39,4 +39,27 @@ public class SeguroService {
         System.out.println("Seguro guardado en la base de datos");
     }
 
+    public boolean editarSeguro(Long id, String nombre, String descripcion, String tipoSeguro, Double precio) {
+        System.out.println("Petición recibida para editar seguro desde service\n");
+
+        TipoSeguro tipoSeguro1;
+        try {
+            tipoSeguro1 = TipoSeguro.valueOf(tipoSeguro.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(
+                    "El tipo de seguro '" + tipoSeguro + "' no es válido. Los valores permitidos son: "
+                            + Arrays.toString(TipoSeguro.values()));
+        }
+
+        return segurorepo.findById(id).map(seguro -> {
+            seguro.setNombre(nombre);
+            seguro.setDescripcion(descripcion);
+            seguro.setTipoSeguro(tipoSeguro1);
+            seguro.setPrecio(precio);
+            segurorepo.save(seguro);
+            System.out.println("Seguro actualizado en la base de datos");
+            return true;
+        }).orElse(false);
+    }
+
 }

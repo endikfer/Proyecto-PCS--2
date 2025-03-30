@@ -45,4 +45,30 @@ public class SeguroController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping("/seguro/editar")
+    public ResponseEntity<String> editarSeguro(
+            @RequestParam("id") Long id,
+            @RequestParam("nombre") String nombre,
+            @RequestParam("descripcion") String descripcion,
+            @RequestParam("tipoSeguro") String tipoSeguro,
+            @RequestParam("precio") Double precio) {
+        try {
+            if (id == null || id <= 0 || nombre == null || nombre.isBlank() || descripcion == null || descripcion.isBlank()
+                    || precio == null || precio <= 0) {
+                return ResponseEntity.badRequest()
+                        .body("Todos los campos son obligatorios y el precio debe ser mayor a 0.");
+            }
+
+            boolean actualizado = seguroService.editarSeguro(id, nombre, descripcion, tipoSeguro, precio);
+
+            if (actualizado) {
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Seguro no encontrado.");
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
