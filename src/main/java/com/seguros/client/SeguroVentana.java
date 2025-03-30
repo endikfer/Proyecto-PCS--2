@@ -130,8 +130,8 @@ public class SeguroVentana {
         }
     }
 
-    public void editarSeguro(JTextField textFieldSeguro) {
-        String nombreSeguro = textFieldSeguro.getText().trim();
+    public void editarSeguro(String nombreSeguro) {
+        System.out.println("Nombre del seguro a editar: " + nombreSeguro);
 
         if (nombreSeguro.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Debe ingresar un nombre válido.", "Error", JOptionPane.ERROR_MESSAGE);
