@@ -6,6 +6,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seguros.model.Seguro;
+
 public class SeguroControllerClient {
     private final HttpClient httpClient;
     private final String BASE_URL;
@@ -50,18 +53,17 @@ public class SeguroControllerClient {
 
     public void editarSeguro(Long id, String nombre, String descripcion, String tipoSeguro, Double precio) {
         try {
-            String url = String.format(
-                    BASE_URL + "/api/seguros/seguro/editar?id=%d&nombre=%s&descripcion=%s&tipoSeguro=%s&precio=%.2f",
-                    id, nombre, descripcion, tipoSeguro, precio);
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .header("Content-Type", "application/json")
-                    .PUT(HttpRequest.BodyPublishers.noBody())
-                    .build();
-
+            String url = BASE_URL + "/api/seguros/seguro/editar";
+HttpRequest request = HttpRequest.newBuilder()
+        .uri(URI.create(url))
+        .header("Content-Type", "application/x-www-form-urlencoded") // Cambia el tipo de contenido
+        .POST(HttpRequest.BodyPublishers.ofString(
+                "id=" + id + "&nombre=" + nombre.trim() + "&descripcion=" + descripcion.trim() + 
+                "&tipoSeguro=" + tipoSeguro + "&precio=" + precio))
+        .build();
+            System.out.println("URL de la solicitud: " + request.uri()); // Imprimir la URL de la solicitud
             HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
-
+            System.out.println("Código de estado de la respuesta: " + response.statusCode()); // Imprimir el código de estado
             switch (response.statusCode()) {
                 case 200 -> {
                     System.out.println("Seguro editado correctamente");
@@ -88,7 +90,7 @@ public class SeguroControllerClient {
         return Boolean.parseBoolean(response.body());
     }
 
-    public String obtenerSeguroPorNombre(String nombre) {
+    public Seguro obtenerSeguroPorNombre(String nombre) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(BASE_URL + "/api/seguros/seguro/obtenerPorNombre?nombre=" + nombre))
@@ -96,10 +98,16 @@ public class SeguroControllerClient {
                     .GET()
                     .build();
     
+            System.out.println("URL de la solicitud: " + request.uri()); // Imprimir la URL de la solicitud
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            System.out.println("Código de estado de la respuesta: " + response.statusCode()); // Imprimir el código de estado
     
             if (response.statusCode() == 200) {
-                return response.body(); // Devuelve la información del seguro en formato JSON
+                ObjectMapper mapper = new ObjectMapper();
+                System.out.println("Respuesta del servidor: " + response.body()); // Imprimir el cuerpo de la respuesta
+            // Deserializamos el cuerpo de la respuesta en un objeto Seguro
+            return mapper.readValue(response.body(), Seguro.class); // Cambiar response.toString() por response.body()
             } else if (response.statusCode() == 404) {
                 throw new RuntimeException("Seguro no encontrado.");
             } else {

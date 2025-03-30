@@ -108,7 +108,7 @@ public class SeguroManager {
                 //     }
 
                 //     // Continuar con la funcionalidad normal
-                     ventanaCrear.crearVentanaSeguro();
+                     ventanaCrear.crearVentanaSeguro(false);
                 // } catch (IOException ex) {
                 //     // Manejar errores relacionados con la comunicación con el servidor
                 //     JOptionPane.showMessageDialog(null,
@@ -141,7 +141,7 @@ public class SeguroManager {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Botón EDITAR presionado");
-                ventanaCrear.editarSeguro(textFieldSeguro.toString()); // Llama al método para editar un seguro
+                ventanaCrear.editarSeguro(textFieldSeguro.getText()); // Llama al método para editar un seguro
             }
         });
 

@@ -14,6 +14,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import com.seguros.model.Seguro;
 import com.seguros.model.TipoSeguro;
 import org.json.JSONObject;
 
@@ -33,8 +34,11 @@ public class SeguroVentana {
     private JTextArea txtDescripcion;
     private JTextField txtPrecio;
     private JComboBox<TipoSeguro> comboTipoSeguro;
+    private Long idSeguro; // ID del seguro a editar (si es necesario)
 
-    public void crearVentanaSeguro() {
+    JButton btnGuardar;
+
+    public void crearVentanaSeguro(boolean Editar) {
         JFrame frame = new JFrame("Ventana de Seguros");
         frame.setSize(400, 350);
         frame.setLayout(new GridBagLayout());
@@ -59,8 +63,14 @@ public class SeguroVentana {
         JLabel lblPrecio = new JLabel("Precio:");
         txtPrecio = new JTextField(10);
 
-        JButton btnGuardar = new JButton("Guardar");
-        btnGuardar.addActionListener(e -> guardarSeguro(frame));
+        btnGuardar = new JButton("Guardar");
+        btnGuardar.addActionListener(e -> {
+            if (Editar) {
+                guardarSeguroEditado(frame, txtNombre.getText().trim());
+            } else {
+                guardarSeguro(frame);
+            }
+        });
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -131,80 +141,48 @@ public class SeguroVentana {
     }
 
     public void editarSeguro(String nombreSeguro) {
-        System.out.println("Nombre del seguro a editar: " + nombreSeguro);
-
-        if (nombreSeguro.isEmpty()) {
+        if (nombreSeguro == null || nombreSeguro.trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Debe ingresar un nombre válido.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        try {
-            // Obtener los datos del seguro desde el backend
-            String seguroJson = client.obtenerSeguroPorNombre(nombreSeguro);
+        
 
-            // Cargar los datos en los campos de la ventana
-            cargarDatosSeguro(seguroJson);
+        try {
+            
+            // Obtener los datos del seguro desde el backend
+            System.out.println("Obteniendo seguro por nombre: " + nombreSeguro);
+            Seguro seguro = client.obtenerSeguroPorNombre(sustituirEspacios(nombreSeguro)); // Trim para eliminar espacios
+
+            crearVentanaSeguro(true);
+            System.out.println("Seguro obtenido: " + seguro);
+
+            idSeguro = seguro.getId(); // Guardar el ID del seguro para editarlo más tarde
+
+            txtNombre.setText(nombreSeguro);
+            txtDescripcion.setText(seguro.getDescripcion());
+            comboTipoSeguro.setSelectedItem(seguro.getTipoSeguro());
+            txtPrecio.setText(String.valueOf(seguro.getPrecio()));
+           
 
             // Hacer que el campo de nombre no sea editable para evitar cambiar el
             // identificador
-            txtNombre.setEditable(false);
+            //txtNombre.setEditable(false);
 
             // Mostrar la ventana para editar el seguro
-            JFrame frame = new JFrame("Editar Seguro");
-            frame.setSize(400, 350);
-            frame.setLayout(new GridBagLayout());
-            frame.setLocationRelativeTo(null);
-
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.insets = new Insets(5, 5, 5, 5);
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-
-            // Añadir los componentes a la ventana
-            gbc.gridx = 0;
-            gbc.gridy = 0;
-            frame.add(new JLabel("Nombre:"), gbc);
-            gbc.gridx = 1;
-            frame.add(txtNombre, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 1;
-            frame.add(new JLabel("Descripción:"), gbc);
-            gbc.gridx = 1;
-            gbc.gridwidth = 2;
-            frame.add(new JScrollPane(txtDescripcion), gbc);
-            gbc.gridwidth = 1;
-
-            gbc.gridx = 0;
-            gbc.gridy = 2;
-            frame.add(new JLabel("Tipo de Seguro:"), gbc);
-            gbc.gridx = 1;
-            frame.add(comboTipoSeguro, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 3;
-            frame.add(new JLabel("Precio:"), gbc);
-            gbc.gridx = 1;
-            frame.add(txtPrecio, gbc);
-
-            JButton btnGuardar = new JButton("Guardar");
-            btnGuardar.addActionListener(e -> guardarSeguroEditado(frame, nombreSeguro));
-
-            gbc.gridx = 0;
-            gbc.gridy = 4;
-            gbc.gridwidth = 2;
-            gbc.anchor = GridBagConstraints.CENTER;
-            frame.add(btnGuardar, gbc);
-
-            frame.setVisible(true);
-        } catch (RuntimeException ex) {
+        }catch (RuntimeException ex) {
             JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al obtener el seguro: " + e.getMessage(), "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
+        
     }
 
     private void guardarSeguroEditado(JFrame frame, String nombreSeguro) {
         String descripcion = txtDescripcion.getText().trim();
         String precioTexto = txtPrecio.getText().trim();
-        TipoSeguro tipo = (TipoSeguro) comboTipoSeguro.getSelectedItem();
+        String tipo = comboTipoSeguro.getSelectedItem().toString();
 
         if (descripcion.isEmpty() || precioTexto.isEmpty()) {
             JOptionPane.showMessageDialog(frame, "Todos los campos son obligatorios.", "Error",
@@ -216,8 +194,8 @@ public class SeguroVentana {
             double precio = Double.parseDouble(precioTexto);
 
             // Llamar al método editarSeguro del cliente
-            Long id = 1L; // Aquí se debe usar el ID real del seguro obtenido del backend
-            client.editarSeguro(id, nombreSeguro, descripcion, tipo.toString(), precio);
+            
+            client.editarSeguro(idSeguro, nombreSeguro, descripcion.trim(), tipo.toString(), precio);
 
             JOptionPane.showMessageDialog(frame, "Seguro editado correctamente.");
             frame.dispose();
@@ -226,6 +204,14 @@ public class SeguroVentana {
         } catch (RuntimeException ex) {
             JOptionPane.showMessageDialog(frame, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+
+    public static String sustituirEspacios(String texto) {
+        if (texto == null) return null;
+        System.out.println("Texto original: " + texto); // Imprimir el texto original
+        System.out.println("Texto sustituido: " + texto.replace(' ', ';')); // Imprimir el texto sustituido
+        return texto.replace(' ', ';');
     }
 
 }
