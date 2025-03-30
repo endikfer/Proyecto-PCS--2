@@ -254,6 +254,7 @@ public class SeguroManager {
             String descripcion = txtDescripcion.getText().trim();
             String precioTexto = txtPrecio.getText().trim();
             TipoSeguro tipo = (TipoSeguro) comboTipoSeguro.getSelectedItem();
+            System.out.println("El tipo de seguro es " + tipo.toString());
 
             if (nombre.isEmpty() || descripcion.isEmpty() || precioTexto.isEmpty()) {
                 JOptionPane.showMessageDialog(frame, "Todos los campos son obligatorios.", "Error",
