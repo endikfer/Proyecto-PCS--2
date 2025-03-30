@@ -99,6 +99,14 @@ public class RegistroVentana {
             return;
         }
 
+        if (password.length() < 6) {
+            JOptionPane.showMessageDialog(frame,
+                    "La contraseña debe tener al menos 6 caracteres",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             // Verificar si el email ya existe
             if (emailExiste(conn, email)) {

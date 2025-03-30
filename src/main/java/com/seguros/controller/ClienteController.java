@@ -44,6 +44,12 @@ public class ClienteController {
                         .body("Error: El email ya está registrado");
             }
 
+            if (cliente.getPassword().length() < 6) {
+                return ResponseEntity
+                        .badRequest()
+                        .body("Error: La contraseña debe tener al menos 6 caracteres");
+            }
+
             cliente.setPassword(cliente.getPassword());
             // Guarda la contraseña en texto plano
             Cliente clienteGuardado = clienteRepository.save(cliente);
