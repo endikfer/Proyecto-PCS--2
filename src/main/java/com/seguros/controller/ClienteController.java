@@ -1,15 +1,25 @@
 package com.seguros.controller;
 
-import com.seguros.model.Cliente;
-import com.seguros.repository.ClienteRepository;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.seguros.Service.UsuarioService;
+import com.seguros.model.Cliente;
+import com.seguros.repository.ClienteRepository;
 
 import jakarta.validation.Valid;
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/clientes")
@@ -18,6 +28,11 @@ public class ClienteController {
 
     @Autowired
     private ClienteRepository clienteRepository;
+    private final UsuarioService usuarioService;
+
+    public ClienteController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
 
     // Registrar nuevo cliente
     @PostMapping
@@ -25,23 +40,22 @@ public class ClienteController {
         try {
             if (clienteRepository.existsByEmail(cliente.getEmail())) {
                 return ResponseEntity
-                    .badRequest()
-                    .body("Error: El email ya está registrado");
+                        .badRequest()
+                        .body("Error: El email ya está registrado");
             }
-
 
             cliente.setPassword(cliente.getPassword());
             // Guarda la contraseña en texto plano
             Cliente clienteGuardado = clienteRepository.save(cliente);
 
             return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(clienteGuardado);
-            
+                    .status(HttpStatus.CREATED)
+                    .body(clienteGuardado);
+
         } catch (Exception e) {
             return ResponseEntity
-                .internalServerError()
-                .body("Error al registrar: " + e.getMessage());
+                    .internalServerError()
+                    .body("Error al registrar: " + e.getMessage());
         }
     }
 
@@ -55,5 +69,11 @@ public class ClienteController {
     @GetMapping("/{id}")
     public Optional<Cliente> getClienteById(@PathVariable Long id) {
         return clienteRepository.findById(id);
+    }
+
+    @GetMapping("/esAdmin")
+    public ResponseEntity<Boolean> esAdmin(@RequestParam String username) {
+        boolean esAdmin = usuarioService.esAdmin(username);
+        return ResponseEntity.ok(esAdmin);
     }
 }

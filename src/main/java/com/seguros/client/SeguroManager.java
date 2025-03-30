@@ -25,6 +25,16 @@ import com.seguros.model.TipoSeguro;
 
 public class SeguroManager {
 
+    private static final String hostname;
+    private static final String port;
+    private static final SeguroControllerClient client;
+
+    static {
+        hostname = System.getProperty("hostname", "localhost");
+        port = System.getProperty("port", "8080");
+        client = new SeguroControllerClient(hostname, port);
+    }
+
     public static void main(String[] args) {
         // RegistroVentana registroVentana = new RegistroVentana();
         // registroVentana.mostrar();
@@ -77,6 +87,60 @@ public class SeguroManager {
         botonEditar.setFont(new Font("Arial", Font.BOLD, 16));
 
         // Añadir ActionListener al botón CREAR
+        /*
+         * botonCrear.addActionListener(new ActionListener() {
+         * 
+         * @Override
+         * 
+         * @SuppressWarnings("CallToPrintStackTrace")
+         * public void actionPerformed(ActionEvent e) {
+         * System.out.println("Botón CREAR presionado");
+         * // Aquí puedes agregar la lógica para crear un seguro
+         * 
+         * String username = obtenerUsuarioActual(); // Método para obtener el usuario
+         * que inició sesión
+         * 
+         * try {
+         * // Verificar si el usuario es administrador
+         * boolean esAdmin = client.verificarAdmin(username); // Llamada al servidor
+         * if (!esAdmin) {
+         * JOptionPane.showMessageDialog(null, "No tienes permisos para crear seguros.",
+         * "Acceso denegado",
+         * JOptionPane.ERROR_MESSAGE);
+         * return;
+         * }
+         * 
+         * // Continuar con la funcionalidad normal
+         * crearVentanaSeguro();
+         * } catch (IOException ex) {
+         * // Manejar errores relacionados con la comunicación con el servidor
+         * JOptionPane.showMessageDialog(null,
+         * "Error de conexión con el servidor. Por favor, inténtelo más tarde.",
+         * "Error",
+         * JOptionPane.ERROR_MESSAGE);
+         * ex.printStackTrace(); // Registrar el error en los logs
+         * } catch (IllegalArgumentException ex) {
+         * // Manejar errores específicos del servidor (como permisos denegados)
+         * JOptionPane.showMessageDialog(null, "Permiso denegado: " + ex.getMessage(),
+         * "Acceso denegado",
+         * JOptionPane.WARNING_MESSAGE);
+         * ex.printStackTrace(); // Registrar el error en los logs
+         * } catch (RuntimeException ex) {
+         * // Manejar errores inesperados
+         * JOptionPane.showMessageDialog(null,
+         * "Ocurrió un error inesperado. Por favor, contacte al soporte.",
+         * "Error",
+         * JOptionPane.ERROR_MESSAGE);
+         * ex.printStackTrace(); // Registrar el error en los logs
+         * } catch (InterruptedException ex) {
+         * JOptionPane.showMessageDialog(null,
+         * "La operación fue interrumpida. Por favor, inténtelo nuevamente.", "Error",
+         * JOptionPane.ERROR_MESSAGE);
+         * }
+         * }
+         * });
+         */
+
         botonCrear.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -87,12 +151,65 @@ public class SeguroManager {
         });
 
         // Añadir ActionListener al botón EDITAR
+        /*
+         * botonEditar.addActionListener(new ActionListener() {
+         * 
+         * @Override
+         * 
+         * @SuppressWarnings("CallToPrintStackTrace")
+         * public void actionPerformed(ActionEvent e) {
+         * System.out.println("Botón EDITAR presionado");
+         * // Aquí puedes agregar la lógica para editar un seguro
+         * String username = obtenerUsuarioActual();
+         * 
+         * try {
+         * // Verificar si el usuario es administrador
+         * boolean esAdmin = client.verificarAdmin(username);
+         * if (!esAdmin) {
+         * JOptionPane.showMessageDialog(null, "No tienes permisos para crear seguros.",
+         * "Acceso denegado",
+         * JOptionPane.ERROR_MESSAGE);
+         * return;
+         * }
+         * 
+         * // Continuar con la funcionalidad normal
+         * crearVentanaSeguro();
+         * } catch (IOException ex) {
+         * // Manejar errores relacionados con la comunicación con el servidor
+         * JOptionPane.showMessageDialog(null,
+         * "Error de conexión con el servidor. Por favor, inténtelo más tarde.",
+         * "Error",
+         * JOptionPane.ERROR_MESSAGE);
+         * ex.printStackTrace(); // Registrar el error en los logs
+         * } catch (IllegalArgumentException ex) {
+         * // Manejar errores específicos del servidor (como permisos denegados)
+         * JOptionPane.showMessageDialog(null, "Permiso denegado: " + ex.getMessage(),
+         * "Acceso denegado",
+         * JOptionPane.WARNING_MESSAGE);
+         * ex.printStackTrace(); // Registrar el error en los logs
+         * } catch (RuntimeException ex) {
+         * // Manejar errores inesperados
+         * JOptionPane.showMessageDialog(null,
+         * "Ocurrió un error inesperado. Por favor, contacte al soporte.",
+         * "Error",
+         * JOptionPane.ERROR_MESSAGE);
+         * ex.printStackTrace(); // Registrar el error en los logs
+         * } catch (InterruptedException ex) {
+         * JOptionPane.showMessageDialog(null,
+         * "La operación fue interrumpida. Por favor, inténtelo nuevamente.", "Error",
+         * JOptionPane.ERROR_MESSAGE);
+         * }
+         * 
+         * }
+         * });
+         */
+
         botonEditar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Botón EDITAR presionado");
                 // Aquí puedes agregar la lógica para editar un seguro
-
+                crearVentanaSeguro();
             }
         });
 
@@ -107,10 +224,6 @@ public class SeguroManager {
     }
 
     public static void crearVentanaSeguro() {
-        String hostname = System.getProperty("hostname", "localhost");
-        String port = System.getProperty("port", "8080");
-
-        SeguroControllerClient client = new SeguroControllerClient(hostname, port);
         JFrame frame = new JFrame("Ventana de Seguros");
         frame.setSize(400, 350);
         frame.setLayout(new GridBagLayout());

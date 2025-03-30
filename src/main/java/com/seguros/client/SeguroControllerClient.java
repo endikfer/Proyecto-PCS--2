@@ -77,4 +77,15 @@ public class SeguroControllerClient {
         }
     }
 
+    public boolean verificarAdmin(String username) throws IOException, InterruptedException {
+        HttpClient httpClient = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/api/usuarios/esAdmin?username=" + username))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        return Boolean.parseBoolean(response.body());
+    }
+
 }
