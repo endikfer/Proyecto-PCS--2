@@ -17,9 +17,8 @@ import javax.swing.JTextField;
 import com.seguros.model.TipoSeguro;
 import org.json.JSONObject;
 
-
 public class SeguroVentana {
-    
+
     private static final String hostname;
     private static final String port;
     private static final SeguroControllerClient client;
@@ -114,7 +113,8 @@ public class SeguroVentana {
         TipoSeguro tipo = (TipoSeguro) comboTipoSeguro.getSelectedItem();
 
         if (nombre.isEmpty() || descripcion.isEmpty() || precioTexto.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "Todos los campos son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Todos los campos son obligatorios.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -122,7 +122,8 @@ public class SeguroVentana {
             double precio = Double.parseDouble(precioTexto);
             client.crearSeguro(nombre, descripcion, tipo.toString(), precio);
 
-            JOptionPane.showMessageDialog(frame, "Seguro guardado:\nNombre: " + nombre + "\nDescripción: " + descripcion + "\nTipo: " + tipo + "\nPrecio: " + precio);
+            JOptionPane.showMessageDialog(frame, "Seguro guardado:\nNombre: " + nombre + "\nDescripción: " + descripcion
+                    + "\nTipo: " + tipo + "\nPrecio: " + precio);
             frame.dispose();
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(frame, "Ingrese un precio válido", "Error", JOptionPane.ERROR_MESSAGE);
@@ -144,7 +145,8 @@ public class SeguroVentana {
             // Cargar los datos en los campos de la ventana
             cargarDatosSeguro(seguroJson);
 
-            // Hacer que el campo de nombre no sea editable para evitar cambiar el identificador
+            // Hacer que el campo de nombre no sea editable para evitar cambiar el
+            // identificador
             txtNombre.setEditable(false);
 
             // Mostrar la ventana para editar el seguro
@@ -205,7 +207,8 @@ public class SeguroVentana {
         TipoSeguro tipo = (TipoSeguro) comboTipoSeguro.getSelectedItem();
 
         if (descripcion.isEmpty() || precioTexto.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "Todos los campos son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Todos los campos son obligatorios.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -224,5 +227,5 @@ public class SeguroVentana {
             JOptionPane.showMessageDialog(frame, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
 }

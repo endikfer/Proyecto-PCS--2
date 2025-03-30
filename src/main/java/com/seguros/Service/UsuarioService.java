@@ -14,7 +14,7 @@ public class UsuarioService {
     }
 
     public boolean esAdmin(String username) {
-        return administradorRepository.existsByUsername(username);
+        return administradorRepository.existsByEmail(username);
     }
 
 }
