@@ -63,4 +63,8 @@ public class SeguroService {
         }).orElse(false);
     }
 
+    public Seguro obtenerSeguroPorNombre(String nombre) {
+        return segurorepo.findByNombre(nombre);
+    }
+
 }
