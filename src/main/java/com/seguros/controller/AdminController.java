@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import com.seguros.model.Administrador;
 import com.seguros.repository.AdministradorRepository;
 
-@RestController
+@RestController 
 @RequestMapping("/api/admin")
 @CrossOrigin(origins = "*")
 public class AdminController {
