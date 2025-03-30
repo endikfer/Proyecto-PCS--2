@@ -20,13 +20,19 @@ public class SeguroController {
     }
 
     @PostMapping("/seguro/crear")
-    public ResponseEntity<Void> crearSeguro(
+    public ResponseEntity<String> crearSeguro(
             @RequestParam("nombre") String nombre,
             @RequestParam("descripcion") String descripcion,
             @RequestParam("tipoSeguro") String tipoSeguro,
             @RequestParam("precio") Double precio) {
         try {
             System.out.println("Peticion recivida para crear seguro desde controller\n");
+
+            if (nombre == null || nombre.isBlank() || descripcion == null || descripcion.isBlank() || precio == null
+                    || precio <= 0) {
+                return ResponseEntity.badRequest()
+                        .body("Todos los campos son obligatorios y el precio debe ser mayor a 0.");
+            }
             seguroService.crearSeguro(nombre, descripcion, tipoSeguro, precio);
 
             System.out.println("llegue4\n");

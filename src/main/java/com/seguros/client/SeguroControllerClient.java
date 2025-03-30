@@ -6,9 +6,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.seguros.model.Seguro;
-
 public class SeguroControllerClient {
     private final HttpClient httpClient;
     private final String BASE_URL;
@@ -27,24 +24,34 @@ public class SeguroControllerClient {
                     .header("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.noBody())
                     .build();
 
-            HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             switch (response.statusCode()) {
                 case 200 -> {
-                } // Reto creado correctamente
-                case 500 -> throw new RuntimeException("Internal server error");
-                default ->
+                    System.out.println("Seguro creado correctamente.");
+                }
+                case 400 -> {
+                    // Leer el mensaje de error enviado por el servidor
+                    String errorMessage = response.body();
+                    throw new IllegalArgumentException("Error al crear el seguro: " + errorMessage);
+                }
+                case 500 -> {
+                    throw new RuntimeException("Error interno del servidor.");
+                }
+                default -> {
                     throw new RuntimeException(
-                            "Fallo al crear el reto con el codigo de estatus: " + response.statusCode());
+                            "Fallo al crear el seguro con el código de estado: " + response.statusCode());
+                }
             }
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException("Error creando el reto.", e);
+            throw new RuntimeException("Error creando el seguro.", e);
         }
     }
 
     public void editarSeguro(Long id, String nombre, String descripcion, String tipoSeguro, Double precio) {
         try {
-            String url = String.format(BASE_URL + "/api/seguros/seguro/editar?id=%d&nombre=%s&descripcion=%s&tipoSeguro=%s&precio=%.2f",
+            String url = String.format(
+                    BASE_URL + "/api/seguros/seguro/editar?id=%d&nombre=%s&descripcion=%s&tipoSeguro=%s&precio=%.2f",
                     id, nombre, descripcion, tipoSeguro, precio);
 
             HttpRequest request = HttpRequest.newBuilder()
@@ -62,7 +69,8 @@ public class SeguroControllerClient {
                 case 400 -> throw new IllegalArgumentException("Solicitud incorrecta. Verifique los datos ingresados.");
                 case 404 -> throw new RuntimeException("Seguro no encontrado.");
                 case 500 -> throw new RuntimeException("Error interno del servidor.");
-                default -> throw new RuntimeException("Fallo al editar el seguro con código de estado: " + response.statusCode());
+                default -> throw new RuntimeException(
+                        "Fallo al editar el seguro con código de estado: " + response.statusCode());
             }
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException("Error editando el seguro.", e);

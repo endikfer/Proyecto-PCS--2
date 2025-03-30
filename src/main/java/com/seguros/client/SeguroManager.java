@@ -26,8 +26,8 @@ import com.seguros.model.TipoSeguro;
 public class SeguroManager {
 
     public static void main(String[] args) {
-        //RegistroVentana registroVentana = new RegistroVentana();
-        //registroVentana.mostrar();
+        // RegistroVentana registroVentana = new RegistroVentana();
+        // registroVentana.mostrar();
 
         crearVentanaPrincipal();
     }
@@ -107,6 +107,10 @@ public class SeguroManager {
     }
 
     public static void crearVentanaSeguro() {
+        String hostname = System.getProperty("hostname", "localhost");
+        String port = System.getProperty("port", "8080");
+
+        SeguroControllerClient client = new SeguroControllerClient(hostname, port);
         JFrame frame = new JFrame("Ventana de Seguros");
         frame.setSize(400, 350);
         frame.setLayout(new GridBagLayout());
@@ -133,18 +137,35 @@ public class SeguroManager {
 
         JButton btnGuardar = new JButton("Guardar");
         btnGuardar.addActionListener(e -> {
-            String nombre = txtNombre.getText();
-            String descripcion = txtDescripcion.getText();
+            String nombre = txtNombre.getText().trim();
+            String descripcion = txtDescripcion.getText().trim();
+            String precioTexto = txtPrecio.getText().trim();
             TipoSeguro tipo = (TipoSeguro) comboTipoSeguro.getSelectedItem();
 
+            if (nombre.isEmpty() || descripcion.isEmpty() || precioTexto.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "Todos los campos son obligatorios.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             try {
-                double precio = Double.parseDouble(txtPrecio.getText());
+                double precio = Double.parseDouble(precioTexto);
+
+                client.crearSeguro(nombre, descripcion, tipo.toString(), precio);
+
                 JOptionPane.showMessageDialog(frame, "Seguro guardado:\nNombre: " + nombre + "\nDescripción: "
                         + descripcion + "\nTipo: " + tipo + "\nPrecio: " + precio);
+
                 frame.dispose(); // Cerrar la ventana después de guardar
-                System.out.println("El tipo de seguro es "+tipo.toString());
+                System.out.println("El tipo de seguro es " + tipo.toString());
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(frame, "Ingrese un precio válido", "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (IllegalArgumentException ex) {
+                // Mostrar el mensaje de error devuelto por el servidor
+                JOptionPane.showMessageDialog(frame, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (RuntimeException ex) {
+                JOptionPane.showMessageDialog(frame, "Error inesperado: " + ex.getMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -189,35 +210,35 @@ public class SeguroManager {
         frame.setSize(400, 350);
         frame.setLayout(new GridBagLayout());
         frame.setLocationRelativeTo(null);
-    
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-    
+
         JLabel lblNombre = new JLabel("Nombre:");
         JTextField txtNombre = new JTextField(10);
         txtNombre.setText(nombre);
-    
+
         JLabel lblDescripcion = new JLabel("Descripción:");
         JTextArea txtDescripcion = new JTextArea(4, 20);
         txtDescripcion.setText(descripcion);
         JScrollPane scrollDescripcion = new JScrollPane(txtDescripcion);
-    
+
         JLabel lblTipoSeguro = new JLabel("Tipo de Seguro:");
         JComboBox<TipoSeguro> comboTipoSeguro = new JComboBox<>(TipoSeguro.values());
         comboTipoSeguro.setSelectedItem(tipo);
         comboTipoSeguro.setPreferredSize(new Dimension(100, 25));
-    
+
         JLabel lblPrecio = new JLabel("Precio:");
         JTextField txtPrecio = new JTextField(10);
         txtPrecio.setText(String.valueOf(precio));
-    
+
         JButton btnGuardar = new JButton("Guardar");
         btnGuardar.addActionListener(e -> {
             String nuevoNombre = txtNombre.getText();
             String nuevaDescripcion = txtDescripcion.getText();
             TipoSeguro nuevoTipo = (TipoSeguro) comboTipoSeguro.getSelectedItem();
-    
+
             try {
                 double nuevoPrecio = Double.parseDouble(txtPrecio.getText());
                 JOptionPane.showMessageDialog(frame, "Seguro actualizado:\nNombre: " + nuevoNombre + "\nDescripción: "
@@ -227,13 +248,13 @@ public class SeguroManager {
                 JOptionPane.showMessageDialog(frame, "Ingrese un precio válido", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
-    
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         frame.add(lblNombre, gbc);
         gbc.gridx = 1;
         frame.add(txtNombre, gbc);
-    
+
         gbc.gridx = 0;
         gbc.gridy = 1;
         frame.add(lblDescripcion, gbc);
@@ -241,27 +262,26 @@ public class SeguroManager {
         gbc.gridwidth = 2;
         frame.add(scrollDescripcion, gbc);
         gbc.gridwidth = 1;
-    
+
         gbc.gridx = 0;
         gbc.gridy = 2;
         frame.add(lblTipoSeguro, gbc);
         gbc.gridx = 1;
         frame.add(comboTipoSeguro, gbc);
-    
+
         gbc.gridx = 0;
         gbc.gridy = 3;
         frame.add(lblPrecio, gbc);
         gbc.gridx = 1;
         frame.add(txtPrecio, gbc);
-    
+
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         frame.add(btnGuardar, gbc);
-    
+
         frame.setVisible(true);
     }
-
 
 }
