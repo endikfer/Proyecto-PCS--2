@@ -6,4 +6,6 @@ import com.seguros.model.Administrador;
 
 public interface AdministradorRepository extends JpaRepository<Administrador, Long> {
     boolean existsByUsername(String username);
+    
+    Administrador findByEmail(String email);
 }
