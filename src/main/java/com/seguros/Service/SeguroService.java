@@ -21,7 +21,6 @@ public class SeguroService {
         TipoSeguro tipoSeguro1;
         try {
             tipoSeguro1 = TipoSeguro.valueOf(tipoSeguro.toUpperCase());
-            System.out.println("Tipo de seguro: " + tipoSeguro1);
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(
                     "El tipo de seguro '" + tipoSeguro + "' no es válido. Los valores permitidos son: "
@@ -44,6 +43,7 @@ public class SeguroService {
         System.out.println("Petición recibida para editar seguro desde service\n");
 
         TipoSeguro tipoSeguro1;
+        System.out.println("Tipo de seguro recibido: " + tipoSeguro);
         try {
             tipoSeguro1 = TipoSeguro.valueOf(tipoSeguro.toUpperCase());
         } catch (IllegalArgumentException e) {
@@ -52,9 +52,11 @@ public class SeguroService {
                             + Arrays.toString(TipoSeguro.values()));
         }
 
+        System.out.println("Tipo de seguro convertido: " + tipoSeguro1);
+
         return segurorepo.findById(id).map(seguro -> {
-            seguro.setNombre(nombre);
-            seguro.setDescripcion(descripcion);
+            seguro.setNombre(nombre.trim());
+            seguro.setDescripcion(descripcion.trim());
             seguro.setTipoSeguro(tipoSeguro1);
             seguro.setPrecio(precio);
             segurorepo.save(seguro);
@@ -64,7 +66,14 @@ public class SeguroService {
     }
 
     public Seguro obtenerSeguroPorNombre(String nombre) {
-        return segurorepo.findByNombre(nombre);
+        return segurorepo.findByNombre(restaurarEspacios(nombre));
+    }
+
+    public static String restaurarEspacios(String texto) {
+        if (texto == null) return null;
+        System.out.println("Texto original: " + texto);
+        System.out.println("Texto con espacios: " + texto.replace(';', ' '));
+        return texto.replace(';', ' ');
     }
 
 }
