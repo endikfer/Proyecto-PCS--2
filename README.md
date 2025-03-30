@@ -19,4 +19,4 @@ Para acceder a la pagina desde el navegador entramos en:
 Para abrir base de datos (contraseña root):
 
     mysql -u root -p
-    USE seguros;   --> para usar la base de datos seguros
+    USE segurosdb;   --> para usar la base de datos seguros
