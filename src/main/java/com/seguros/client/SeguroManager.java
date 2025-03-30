@@ -141,7 +141,47 @@ public class SeguroManager {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Botón EDITAR presionado");
+                // Aquí puedes agregar la lógica para crear un seguro
+
+                // String username = inicioSesionVentana.emailInicioSesion; // Método para obtener el usuario
+
+                // try {
+                //     // Verificar si el usuario es administrador
+                //     boolean esAdmin = client.verificarAdmin(username); // Llamada al servidor
+                //     if (!esAdmin) {
+                //         JOptionPane.showMessageDialog(null, "No tienes permisos para crear seguros.",
+                //                 "Acceso denegado",
+                //                 JOptionPane.ERROR_MESSAGE);
+                //         return;
+                //     }
+
+                //     // Continuar con la funcionalidad normal
                 ventanaCrear.editarSeguro(textFieldSeguro.getText()); // Llama al método para editar un seguro
+                // } catch (IOException ex) {
+                //     // Manejar errores relacionados con la comunicación con el servidor
+                //     JOptionPane.showMessageDialog(null,
+                //             "Error de conexión con el servidor. Por favor, inténtelo más tarde.",
+                //             "Error",
+                //             JOptionPane.ERROR_MESSAGE);
+                //     ex.printStackTrace(); // Registrar el error en los logs
+                // } catch (IllegalArgumentException ex) {
+                //     // Manejar errores específicos del servidor (como permisos denegados)
+                //     JOptionPane.showMessageDialog(null, "Permiso denegado: " + ex.getMessage(),
+                //             "Acceso denegado",
+                //             JOptionPane.WARNING_MESSAGE);
+                //     ex.printStackTrace(); // Registrar el error en los logs
+                // } catch (RuntimeException ex) {
+                //     // Manejar errores inesperados
+                //     JOptionPane.showMessageDialog(null,
+                //             "Ocurrió un error inesperado. Por favor, contacte al soporte.",
+                //             "Error",
+                //             JOptionPane.ERROR_MESSAGE);
+                //     ex.printStackTrace(); // Registrar el error en los logs
+                // } catch (InterruptedException ex) {
+                //     JOptionPane.showMessageDialog(null,
+                //             "La operación fue interrumpida. Por favor, inténtelo nuevamente.", "Error",
+                //             JOptionPane.ERROR_MESSAGE);
+                // }
             }
         });
 
