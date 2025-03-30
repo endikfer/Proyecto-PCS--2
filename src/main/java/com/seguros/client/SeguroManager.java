@@ -94,8 +94,7 @@ public class SeguroManager {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Botón CREAR presionado");
-                
-                ventanaCrear.crearVentanaSeguro(); // Abre la ventana para crear un seguro
+                ventanaCrear.crearVentanaSeguro(); // Llama al método para crear un seguro
             }
         });
 
@@ -103,21 +102,7 @@ public class SeguroManager {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Botón EDITAR presionado");
-                String nombreSeguro = JOptionPane.showInputDialog("Ingrese el nombre del seguro a editar:");
-
-                if (nombreSeguro == null || nombreSeguro.isBlank()) {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar un nombre válido.", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                try {
-                    String seguroJson = client.obtenerSeguroPorNombre(nombreSeguro);
-                    SeguroVentana ventanaEditar = new SeguroVentana();
-                    ventanaEditar.cargarDatosSeguro(seguroJson); // Carga los datos del seguro en la ventana
-                    ventanaEditar.crearVentanaSeguro(); // Abre la ventana para editar el seguro
-                } catch (RuntimeException ex) {
-                    JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                }
+                ventanaCrear.editarSeguro(textFieldSeguro); // Llama al método para editar un seguro
             }
         });
 
