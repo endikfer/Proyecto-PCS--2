@@ -21,6 +21,7 @@ public class SeguroService {
         TipoSeguro tipoSeguro1;
         try {
             tipoSeguro1 = TipoSeguro.valueOf(tipoSeguro.toUpperCase());
+            System.out.println("Tipo de seguro: " + tipoSeguro1);
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(
                     "El tipo de seguro '" + tipoSeguro + "' no es válido. Los valores permitidos son: "
