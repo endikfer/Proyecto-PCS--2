@@ -36,9 +36,9 @@ public class SeguroManager {
         //RegistroVentana registroVentana = new RegistroVentana();
         //registroVentana.mostrar();
 
-        //inicioSesionVentana.mostrar();
+        inicioSesionVentana.mostrar();
 
-        crearVentanaPrincipal();
+        //crearVentanaPrincipal();
     }
 
     @SuppressWarnings("Convert2Lambda")
