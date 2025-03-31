@@ -20,3 +20,11 @@ Para abrir base de datos (contraseña root):
 
     mysql -u root -p
     USE segurosdb;   --> para usar la base de datos seguros
+
+El usuario por defecto es:
+
+    user@gmail.com
+
+La contraseña por defecto para el usuario base es:
+
+    user01
