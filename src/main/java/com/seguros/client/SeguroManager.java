@@ -33,31 +33,22 @@ public class SeguroManager {
     }
 
     public static void main(String[] args) {
-        //RegistroVentana registroVentana = new RegistroVentana();
-        //registroVentana.mostrar();
-
         inicioSesionVentana.mostrar();
-
-        //crearVentanaPrincipal();
     }
 
-    @SuppressWarnings("Convert2Lambda")
     public static void crearVentanaPrincipal() {
         SeguroVentana ventanaCrear = new SeguroVentana();
-        // Crear el marco (ventana)
         JFrame ventana = new JFrame("Gestión de Seguros");
-
-        // Configurar la ventana para que ocupe toda la pantalla
-        ventana.setExtendedState(JFrame.MAXIMIZED_BOTH); // Maximiza la ventana
-        ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Cierra la aplicación al cerrar la ventana
-
-        // Opcional: Establecer un diseño o contenido
+        ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ventana.setLayout(new BorderLayout());
-        JLabel etiqueta = new JLabel("Bienvenido a la Gestión de Seguros", SwingConstants.CENTER);
+
+        // Mostrar email del cliente logueado
+        String email = inicioSesionVentana.emailInicioSesion;
+        JLabel etiqueta = new JLabel("Bienvenido, " + email + " - Gestión de Seguros", SwingConstants.CENTER);
         etiqueta.setFont(new Font("Arial", Font.BOLD, 24));
         ventana.add(etiqueta, BorderLayout.NORTH);
 
-        // Crear un panel central para el texto y el campo de entrada
         JPanel panelCentral = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -74,124 +65,58 @@ public class SeguroManager {
         textFieldSeguro.setPreferredSize(new Dimension(300, 30));
         panelCentral.add(textFieldSeguro, gbc);
 
-        // Añadir el panel central a la ventana
         ventana.add(panelCentral, BorderLayout.CENTER);
 
-        JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.CENTER)); // Centra los botones
+        JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton botonCrear = new JButton("CREAR");
-        botonCrear.setPreferredSize(new Dimension(150, 50)); // Tamaño del botón (ancho, alto)
+        botonCrear.setPreferredSize(new Dimension(150, 50));
         botonCrear.setFont(new Font("Arial", Font.BOLD, 16));
 
         JButton botonEditar = new JButton("EDITAR");
-        botonEditar.setPreferredSize(new Dimension(150, 50)); // Tamaño del botón (ancho, alto)
+        botonEditar.setPreferredSize(new Dimension(150, 50));
         botonEditar.setFont(new Font("Arial", Font.BOLD, 16));
 
-        botonCrear.addActionListener(new ActionListener() {
+        JButton botonCerrarSesion = new JButton("CERRAR SESIÓN");
+        botonCerrarSesion.setPreferredSize(new Dimension(200, 50));
+        botonCerrarSesion.setFont(new Font("Arial", Font.BOLD, 16));
 
-            @Override
+        botonCrear.addActionListener(e -> ventanaCrear.crearVentanaSeguro(false));
 
-            @SuppressWarnings("CallToPrintStackTrace")
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Botón CREAR presionado");
-                // Aquí puedes agregar la lógica para crear un seguro
+        botonEditar.addActionListener(e -> ventanaCrear.editarSeguro(textFieldSeguro.getText()));
 
-                // String username = inicioSesionVentana.emailInicioSesion; // Método para obtener el usuario
-
-                // try {
-                //     // Verificar si el usuario es administrador
-                //     boolean esAdmin = client.verificarAdmin(username); // Llamada al servidor
-                //     if (!esAdmin) {
-                //         JOptionPane.showMessageDialog(null, "No tienes permisos para crear seguros.",
-                //                 "Acceso denegado",
-                //                 JOptionPane.ERROR_MESSAGE);
-                //         return;
-                //     }
-
-                //     // Continuar con la funcionalidad normal
-                     ventanaCrear.crearVentanaSeguro(false);
-                // } catch (IOException ex) {
-                //     // Manejar errores relacionados con la comunicación con el servidor
-                //     JOptionPane.showMessageDialog(null,
-                //             "Error de conexión con el servidor. Por favor, inténtelo más tarde.",
-                //             "Error",
-                //             JOptionPane.ERROR_MESSAGE);
-                //     ex.printStackTrace(); // Registrar el error en los logs
-                // } catch (IllegalArgumentException ex) {
-                //     // Manejar errores específicos del servidor (como permisos denegados)
-                //     JOptionPane.showMessageDialog(null, "Permiso denegado: " + ex.getMessage(),
-                //             "Acceso denegado",
-                //             JOptionPane.WARNING_MESSAGE);
-                //     ex.printStackTrace(); // Registrar el error en los logs
-                // } catch (RuntimeException ex) {
-                //     // Manejar errores inesperados
-                //     JOptionPane.showMessageDialog(null,
-                //             "Ocurrió un error inesperado. Por favor, contacte al soporte.",
-                //             "Error",
-                //             JOptionPane.ERROR_MESSAGE);
-                //     ex.printStackTrace(); // Registrar el error en los logs
-                // } catch (InterruptedException ex) {
-                //     JOptionPane.showMessageDialog(null,
-                //             "La operación fue interrumpida. Por favor, inténtelo nuevamente.", "Error",
-                //             JOptionPane.ERROR_MESSAGE);
-                // }
-            }
-        });
-
-        botonEditar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Botón EDITAR presionado");
-                // Aquí puedes agregar la lógica para crear un seguro
-
-                // String username = inicioSesionVentana.emailInicioSesion; // Método para obtener el usuario
-
-                // try {
-                //     // Verificar si el usuario es administrador
-                //     boolean esAdmin = client.verificarAdmin(username); // Llamada al servidor
-                //     if (!esAdmin) {
-                //         JOptionPane.showMessageDialog(null, "No tienes permisos para crear seguros.",
-                //                 "Acceso denegado",
-                //                 JOptionPane.ERROR_MESSAGE);
-                //         return;
-                //     }
-
-                //     // Continuar con la funcionalidad normal
-                ventanaCrear.editarSeguro(textFieldSeguro.getText()); // Llama al método para editar un seguro
-                // } catch (IOException ex) {
-                //     // Manejar errores relacionados con la comunicación con el servidor
-                //     JOptionPane.showMessageDialog(null,
-                //             "Error de conexión con el servidor. Por favor, inténtelo más tarde.",
-                //             "Error",
-                //             JOptionPane.ERROR_MESSAGE);
-                //     ex.printStackTrace(); // Registrar el error en los logs
-                // } catch (IllegalArgumentException ex) {
-                //     // Manejar errores específicos del servidor (como permisos denegados)
-                //     JOptionPane.showMessageDialog(null, "Permiso denegado: " + ex.getMessage(),
-                //             "Acceso denegado",
-                //             JOptionPane.WARNING_MESSAGE);
-                //     ex.printStackTrace(); // Registrar el error en los logs
-                // } catch (RuntimeException ex) {
-                //     // Manejar errores inesperados
-                //     JOptionPane.showMessageDialog(null,
-                //             "Ocurrió un error inesperado. Por favor, contacte al soporte.",
-                //             "Error",
-                //             JOptionPane.ERROR_MESSAGE);
-                //     ex.printStackTrace(); // Registrar el error en los logs
-                // } catch (InterruptedException ex) {
-                //     JOptionPane.showMessageDialog(null,
-                //             "La operación fue interrumpida. Por favor, inténtelo nuevamente.", "Error",
-                //             JOptionPane.ERROR_MESSAGE);
-                // }
-            }
-        });
+        botonCerrarSesion.addActionListener(e -> llamarLogoutClienteAPI(ventana));
 
         panelInferior.add(botonCrear);
         panelInferior.add(botonEditar);
+        panelInferior.add(botonCerrarSesion);
 
-        // Añadir el panel inferior a la ventana
         ventana.add(panelInferior, BorderLayout.SOUTH);
-
-        // Hacer visible la ventana
         ventana.setVisible(true);
+    }
+
+    private static void llamarLogoutClienteAPI(JFrame ventana) {
+        try {
+            String urlCompleta = "http://" + hostname + ":" + port + "/api/clientes/logout";
+            java.net.URL url = new java.net.URL(urlCompleta);
+            java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode == java.net.HttpURLConnection.HTTP_OK) {
+                JOptionPane.showMessageDialog(null, "Sesión cerrada correctamente.");
+                ventana.dispose();
+                inicioSesionVentana.mostrar();
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Error al cerrar sesión. Código: " + responseCode,
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null,
+                    "Error al conectar con la API: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

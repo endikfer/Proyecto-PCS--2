@@ -27,4 +27,10 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
         }
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout() {
+        // Aquí podrías invalidar tokens, sesiones, etc. si tuvieras.
+        return ResponseEntity.ok("Sesión cerrada exitosamente.");
+    }
 }

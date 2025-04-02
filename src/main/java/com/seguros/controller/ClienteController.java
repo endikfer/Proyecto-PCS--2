@@ -82,4 +82,9 @@ public class ClienteController {
         boolean esAdmin = usuarioService.esAdmin(username);
         return ResponseEntity.ok(esAdmin);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout() {
+        return ResponseEntity.ok("Sesión de cliente cerrada correctamente");
+    }
 }
