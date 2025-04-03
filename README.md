@@ -28,3 +28,11 @@ El usuario por defecto es:
 La contraseña por defecto para el usuario base es:
 
     user01
+
+El usuario por defecto admin  es:
+
+    admin1234
+
+El contraseña por defecto admin  es:
+
+    1234
