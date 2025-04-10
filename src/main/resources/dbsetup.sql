@@ -1,8 +1,10 @@
-DROP USER IF EXISTS 'root'@'%';
-CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY 'root';
+CREATE USER IF NOT EXISTS 'g2'@'%' IDENTIFIED BY 'g2';
 
-DROP SCHEMA IF EXISTS segurosdb;
-CREATE SCHEMA segurosdb;
-
-GRANT ALL ON segurosdb.* TO 'root'@'%';
+GRANT ALL ON segurosdb.* TO 'g2'@'%';
 FLUSH PRIVILEGES;
+
+USE segurosdb;
+
+insert into administrador (email, nombre, password) values ('admin@gmail.com', 'admin1234', '1234');
+
+select * from administrador;
