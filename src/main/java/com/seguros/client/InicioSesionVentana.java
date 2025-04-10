@@ -11,7 +11,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import com.seguros.model.Cliente;
 
@@ -77,7 +86,7 @@ public class InicioSesionVentana {
         gbc.gridx = 0;
         panel.add(new JLabel("Tipo de usuario:"), gbc);
 
-        rolCombo = new JComboBox<>(new String[]{"Cliente", "Administrador"});
+        rolCombo = new JComboBox<>(new String[] { "Cliente", "Administrador" });
         gbc.gridx = 1;
         panel.add(rolCombo, gbc);
 
@@ -123,7 +132,7 @@ public class InicioSesionVentana {
 
         // Si es Administrador (validación sencilla hardcoded)
         if ("Administrador".equals(rolSeleccionado)) {
-            if (email.equals("admin1234") && password.equals("1234")) {
+            if (email.equals("admin@gmail.com") && password.equals("1234")) {
                 JOptionPane.showMessageDialog(frame, "Inicio de sesión como administrador exitoso!");
                 frame.dispose();
                 abrirVentanaAdmin();
