@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
@@ -119,9 +120,52 @@ public class AdminVentana {
     }
 
     private void mostrarContenidoSeguros() {
-        JLabel lblSeguros = new JLabel("Contenido de la opción 1: Seguros", SwingConstants.CENTER);
-        lblSeguros.setFont(new Font("Arial", Font.BOLD, 16)); // Mismo estilo que el original
-        panelCentral.add(lblSeguros);
+        // Configurar el layout del panel central
+        panelCentral.setLayout(new BorderLayout());
+
+        // Asegurarse de que el subpanel superior (botón "Cerrar sesión") esté presente
+        panelCentral.add(panelSuperiorCentral, BorderLayout.NORTH);
+
+        // Zona central: JLabel y JTextField
+        JPanel panelCentro = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new java.awt.Insets(10, 10, 10, 10); // Espaciado entre componentes
+        gbc.anchor = GridBagConstraints.WEST;
+
+        // Agregar JLabel a la izquierda
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        JLabel labelSeguro = new JLabel("Seguro a modificar:");
+        labelSeguro.setFont(new Font("Arial", Font.PLAIN, 18));
+        panelCentro.add(labelSeguro, gbc);
+
+        // Agregar JTextField a la derecha del JLabel
+        gbc.gridx = 1;
+        JTextField textFieldSeguro = new JTextField();
+        textFieldSeguro.setPreferredSize(new java.awt.Dimension(300, 30));
+        panelCentro.add(textFieldSeguro, gbc);
+
+        // Zona inferior: Botones "CREAR" y "EDITAR"
+        JPanel panelInferior = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER));
+        JButton botonCrear = new JButton("CREAR");
+        botonCrear.setPreferredSize(new java.awt.Dimension(150, 50));
+        botonCrear.setFont(new Font("Arial", Font.BOLD, 16));
+
+        JButton botonEditar = new JButton("EDITAR");
+        botonEditar.setPreferredSize(new java.awt.Dimension(150, 50));
+        botonEditar.setFont(new Font("Arial", Font.BOLD, 16));
+
+        // Listeners para los botones
+        SeguroVentana ventanaCrear = new SeguroVentana(); // Instancia de SeguroVentana
+        botonCrear.addActionListener(e -> ventanaCrear.crearVentanaSeguro(false));
+        botonEditar.addActionListener(e -> ventanaCrear.editarSeguro(textFieldSeguro.getText()));
+
+        panelInferior.add(botonCrear);
+        panelInferior.add(botonEditar);
+
+        // Agregar los subpaneles al panel central
+        panelCentral.add(panelCentro, BorderLayout.CENTER);
+        panelCentral.add(panelInferior, BorderLayout.SOUTH);
     }
 
     private void mostrarContenidoSegurosCliente() {
