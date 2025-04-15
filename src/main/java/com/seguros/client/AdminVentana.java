@@ -20,6 +20,7 @@ import javax.swing.SwingUtilities;
 public class AdminVentana {
     private final JFrame frame;
     private final JPanel panelCentral;
+    private final JPanel panelSuperiorCentral;
 
     public AdminVentana() {
         frame = new JFrame("Panel de Administrador");
@@ -28,16 +29,9 @@ public class AdminVentana {
         frame.setLocationRelativeTo(null);
         frame.setLayout(new BorderLayout());
 
-        // Panel superior con el botón "Cerrar sesión"
-        JPanel panelSuperior = new JPanel(new BorderLayout());
-        JButton btnCerrarSesion = new JButton("Cerrar sesión");
-        btnCerrarSesion.addActionListener((ActionEvent e) -> llamarLogoutAPI());
-        panelSuperior.add(btnCerrarSesion, BorderLayout.EAST); // Botón alineado a la derecha
-
         // Panel izquierdo con botones
         JPanel panelIzquierdo = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        // gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.BOTH; // Los botones ocuparán todo el espacio disponible
         gbc.weightx = 1.0; // Expandir horizontalmente
         gbc.weighty = 1.0; // Expandir verticalmente
@@ -47,7 +41,7 @@ public class AdminVentana {
         for (int i = 0; i < nombresBotones.length; i++) {
             JButton boton = new JButton(nombresBotones[i]);
             gbc.gridy = i; // Posición vertical
-            gbc.gridx = 0;
+            gbc.gridx = 0; // Asegurar que los botones estén en la primera columna
             panelIzquierdo.add(boton, gbc);
 
             // Agregar acción al botón
@@ -56,11 +50,19 @@ public class AdminVentana {
         }
 
         // Panel central inicial
-        panelCentral = new JPanel(new GridBagLayout());
-        mostrarContenidoSeguros(); // Mostrar contenido inicial (primer botón)
+        panelCentral = new JPanel(new BorderLayout());
+
+        // Subpanel superior dentro del panel central
+        panelSuperiorCentral = new JPanel(new BorderLayout());
+        JButton btnCerrarSesion = new JButton("Cerrar sesión");
+        btnCerrarSesion.addActionListener((ActionEvent e) -> llamarLogoutAPI());
+        panelSuperiorCentral.add(btnCerrarSesion, BorderLayout.EAST); // Botón alineado a la derecha
+        panelCentral.add(panelSuperiorCentral, BorderLayout.NORTH); // Subpanel superior fijo
+
+        // Mostrar contenido inicial
+        mostrarContenidoSeguros();
 
         // Agregar paneles al frame
-        frame.add(panelSuperior, BorderLayout.NORTH); // Panel superior fijo
         frame.add(panelIzquierdo, BorderLayout.WEST); // Panel izquierdo fijo
         frame.add(panelCentral, BorderLayout.CENTER); // Panel central dinámico
     }
@@ -99,6 +101,7 @@ public class AdminVentana {
     private void cambiarContenido(int opcion) {
         // Limpiar el panel central
         panelCentral.removeAll();
+        panelCentral.add(panelSuperiorCentral, BorderLayout.NORTH);
 
         // Llamar al método correspondiente según la opción seleccionada
         switch (opcion) {
