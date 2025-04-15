@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -19,8 +18,8 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 public class AdminVentana {
-    private JFrame frame;
-    private JPanel panelCentral;
+    private final JFrame frame;
+    private final JPanel panelCentral;
 
     public AdminVentana() {
         frame = new JFrame("Panel de Administrador");
@@ -38,7 +37,7 @@ public class AdminVentana {
         // Panel izquierdo con botones
         JPanel panelIzquierdo = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
+        // gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.BOTH; // Los botones ocuparán todo el espacio disponible
         gbc.weightx = 1.0; // Expandir horizontalmente
         gbc.weighty = 1.0; // Expandir verticalmente
@@ -48,6 +47,7 @@ public class AdminVentana {
         for (int i = 0; i < nombresBotones.length; i++) {
             JButton boton = new JButton(nombresBotones[i]);
             gbc.gridy = i; // Posición vertical
+            gbc.gridx = 0;
             panelIzquierdo.add(boton, gbc);
 
             // Agregar acción al botón
@@ -68,6 +68,7 @@ public class AdminVentana {
     private void llamarLogoutAPI() {
         SwingUtilities.invokeLater(() -> {
             try {
+                @SuppressWarnings("deprecation")
                 URL url = new URL("http://localhost:8080/api/admin/logout");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
@@ -91,7 +92,6 @@ public class AdminVentana {
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(frame, "Error de conexión: " + ex.getMessage(),
                         "Error", JOptionPane.ERROR_MESSAGE);
-                ex.printStackTrace(); // Esto imprime en consola detalles del error
             }
         });
     }
@@ -102,24 +102,12 @@ public class AdminVentana {
 
         // Llamar al método correspondiente según la opción seleccionada
         switch (opcion) {
-            case 1:
-                mostrarContenidoSeguros();
-                break;
-            case 2:
-                mostrarContenidoSegurosCliente();
-                break;
-            case 3:
-                mostrarContenidoClientesPorSeguro();
-                break;
-            case 4:
-                mostrarContenidoClientes();
-                break;
-            case 5:
-                mostrarContenidoDudas();
-                break;
-            default:
-                mostrarContenidoInvalido();
-                break;
+            case 1 -> mostrarContenidoSeguros();
+            case 2 -> mostrarContenidoSegurosCliente();
+            case 3 -> mostrarContenidoClientesPorSeguro();
+            case 4 -> mostrarContenidoClientes();
+            case 5 -> mostrarContenidoDudas();
+            default -> mostrarContenidoInvalido();
         }
 
         // Actualizar la vista
