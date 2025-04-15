@@ -31,7 +31,7 @@ La contraseña por defecto para el usuario base es:
 
 El usuario por defecto admin  es:
 
-    admin1234
+    admin@gmail.com
 
 El contraseña por defecto admin  es:
 
