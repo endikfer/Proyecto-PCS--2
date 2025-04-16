@@ -40,9 +40,40 @@ public class SeguroVidaVentana {
     }
 
     private void contratarSeguro() {
-        // Lógica para contratar el seguro de vida
-        JOptionPane.showMessageDialog(frame, "Seguro de vida contratado exitosamente!");
-        frame.dispose();
+        String edadTexto = txtEdad.getText().trim();
+        String beneficiarios = txtBeneficiarios.getText().trim();
+
+        if (edadTexto.isEmpty() || beneficiarios.isEmpty()) {
+            JOptionPane.showMessageDialog(frame,
+                    "Todos los campos son obligatorios.",
+                    "Campos incompletos",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            int edad = Integer.parseInt(edadTexto);
+            if (edad <= 0) {
+                throw new NumberFormatException("La edad debe ser un número positivo");
+            }
+
+            JOptionPane.showMessageDialog(frame, 
+                    "Seguro de vida contratado exitosamente!\n" +
+                    "Seguro: " + seguro.getNombre() + "\n" +
+                    "Edad: " + edad + "\n" +
+                    "Beneficiarios: " + beneficiarios);
+            frame.dispose();
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(frame,
+                    "La edad debe ser un número válido.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(frame,
+                    "Error al contratar el seguro: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public void mostrar() {

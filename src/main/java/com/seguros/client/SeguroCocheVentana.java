@@ -45,9 +45,32 @@ public class SeguroCocheVentana {
     }
 
     private void contratarSeguro() {
-        // Lógica para contratar el seguro de coche
-        JOptionPane.showMessageDialog(frame, "Seguro de coche contratado exitosamente!");
-        frame.dispose();
+        String matricula = txtMatricula.getText().trim();
+        String modelo = txtModelo.getText().trim();
+        String marca = txtMarca.getText().trim();
+
+        if (matricula.isEmpty() || modelo.isEmpty() || marca.isEmpty()) {
+            JOptionPane.showMessageDialog(frame,
+                    "Todos los campos son obligatorios.",
+                    "Campos incompletos",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            JOptionPane.showMessageDialog(frame, 
+                    "Seguro de coche contratado exitosamente!\n" +
+                    "Seguro: " + seguro.getNombre() + "\n" +
+                    "Matrícula: " + matricula + "\n" +
+                    "Modelo: " + modelo + "\n" +
+                    "Marca: " + marca);
+            frame.dispose();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(frame,
+                    "Error al contratar el seguro: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public void mostrar() {
