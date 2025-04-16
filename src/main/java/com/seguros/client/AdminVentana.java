@@ -153,7 +153,19 @@ public class AdminVentana {
 
         // Agregar JList con 5 ejemplos
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 0; // Posición en la primera fila
+        gbc.gridwidth = 2; // Ocupa dos columnas
+        gbc.weightx = 0; // No expandir horizontalmente
+        gbc.weighty = 0; // No expandir verticalmente
+        gbc.fill = GridBagConstraints.NONE; // No expandir el componente
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        JLabel cabecera = new JLabel("Seguros disponibles");
+        cabecera.setFont(new Font("Arial", Font.BOLD, 24)); // Fuente grande y negrita
+        panelCentro.add(cabecera, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1; // Mover la lista a la fila siguiente
         gbc.gridwidth = 2; // La lista ocupará dos columnas
         gbc.weightx = 1.0; // Expandir horizontalmente
         gbc.weighty = 1.0; // Expandir verticalmente
@@ -169,7 +181,6 @@ public class AdminVentana {
 
         JList<String> listaSeguros = new JList<>(modeloLista);
         listaSeguros.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Selección única
-        // listaSeguros.setVisibleRowCount(5); // Mostrar 5 filas visibles
         listaSeguros.setFont(new Font("Arial", Font.PLAIN, 18));
 
         JScrollPane scrollPane = new JScrollPane(listaSeguros); // Envolver en JScrollPane para scroll
