@@ -1,6 +1,7 @@
 package com.seguros.client;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -9,12 +10,15 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
@@ -133,17 +137,44 @@ public class AdminVentana {
         gbc.anchor = GridBagConstraints.WEST;
 
         // Agregar JLabel a la izquierda
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        JLabel labelSeguro = new JLabel("Seguro a modificar:");
-        labelSeguro.setFont(new Font("Arial", Font.PLAIN, 18));
-        panelCentro.add(labelSeguro, gbc);
+        /*
+         * gbc.gridx = 0;
+         * gbc.gridy = 0;
+         * JLabel labelSeguro = new JLabel("Seguro a modificar:");
+         * labelSeguro.setFont(new Font("Arial", Font.PLAIN, 18));
+         * panelCentro.add(labelSeguro, gbc);
+         * 
+         * // Agregar JTextField a la derecha del JLabel
+         * gbc.gridx = 1;
+         * JTextField textFieldSeguro = new JTextField();
+         * textFieldSeguro.setPreferredSize(new java.awt.Dimension(300, 30));
+         * panelCentro.add(textFieldSeguro, gbc);
+         */
 
-        // Agregar JTextField a la derecha del JLabel
-        gbc.gridx = 1;
-        JTextField textFieldSeguro = new JTextField();
-        textFieldSeguro.setPreferredSize(new java.awt.Dimension(300, 30));
-        panelCentro.add(textFieldSeguro, gbc);
+        // Agregar JList con 5 ejemplos
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2; // La lista ocupará dos columnas
+        gbc.weightx = 1.0; // Expandir horizontalmente
+        gbc.weighty = 1.0; // Expandir verticalmente
+        gbc.fill = GridBagConstraints.BOTH;
+
+        DefaultListModel<String> modeloLista = new DefaultListModel<>();
+        modeloLista.addElement("Seguro 1");
+        modeloLista.addElement("Seguro 2");
+        modeloLista.addElement("Seguro 3");
+        modeloLista.addElement("Seguro 4");
+        modeloLista.addElement("Seguro 5");
+        modeloLista.addElement("Seguro 6");
+
+        JList<String> listaSeguros = new JList<>(modeloLista);
+        listaSeguros.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Selección única
+        // listaSeguros.setVisibleRowCount(5); // Mostrar 5 filas visibles
+        listaSeguros.setFont(new Font("Arial", Font.PLAIN, 18));
+
+        JScrollPane scrollPane = new JScrollPane(listaSeguros); // Envolver en JScrollPane para scroll
+        scrollPane.setPreferredSize(new Dimension(300, 200));
+        panelCentro.add(scrollPane, gbc);
 
         // Zona inferior: Botones "CREAR" y "EDITAR"
         JPanel panelInferior = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER));
@@ -158,7 +189,8 @@ public class AdminVentana {
         // Listeners para los botones
         SeguroVentana ventanaCrear = new SeguroVentana(); // Instancia de SeguroVentana
         botonCrear.addActionListener(e -> ventanaCrear.crearVentanaSeguro(false));
-        botonEditar.addActionListener(e -> ventanaCrear.editarSeguro(textFieldSeguro.getText()));
+        // botonEditar.addActionListener(e ->
+        // ventanaCrear.editarSeguro(textFieldSeguro.getText()));
 
         panelInferior.add(botonCrear);
         panelInferior.add(botonEditar);
