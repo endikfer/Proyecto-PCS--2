@@ -197,6 +197,10 @@ public class AdminVentana {
         botonEditar.setPreferredSize(new java.awt.Dimension(150, 50));
         botonEditar.setFont(new Font("Arial", Font.BOLD, 16));
 
+        JButton botonEliminar = new JButton("ELIMINAR");
+        botonEliminar.setPreferredSize(new java.awt.Dimension(150, 50));
+        botonEliminar.setFont(new Font("Arial", Font.BOLD, 16));
+
         // Listeners para los botones
         SeguroVentana ventanaCrear = new SeguroVentana(); // Instancia de SeguroVentana
         botonCrear.addActionListener(e -> ventanaCrear.crearVentanaSeguro(false));
@@ -205,6 +209,7 @@ public class AdminVentana {
 
         panelInferior.add(botonCrear);
         panelInferior.add(botonEditar);
+        panelInferior.add(botonEliminar);
 
         // Agregar los subpaneles al panel central
         panelCentral.add(panelCentro, BorderLayout.CENTER);

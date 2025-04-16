@@ -40,10 +40,8 @@ public class SeguroService {
     }
 
     public boolean editarSeguro(Long id, String nombre, String descripcion, String tipoSeguro, Double precio) {
-        System.out.println("Petición recibida para editar seguro desde service\n");
 
         TipoSeguro tipoSeguro1;
-        System.out.println("Tipo de seguro recibido: " + tipoSeguro);
         try {
             tipoSeguro1 = TipoSeguro.valueOf(tipoSeguro.toUpperCase());
         } catch (IllegalArgumentException e) {
@@ -52,7 +50,6 @@ public class SeguroService {
                             + Arrays.toString(TipoSeguro.values()));
         }
 
-        System.out.println("Tipo de seguro convertido: " + tipoSeguro1);
 
         return segurorepo.findById(id).map(seguro -> {
             seguro.setNombre(nombre.trim());
@@ -60,7 +57,6 @@ public class SeguroService {
             seguro.setTipoSeguro(tipoSeguro1);
             seguro.setPrecio(precio);
             segurorepo.save(seguro);
-            System.out.println("Seguro actualizado en la base de datos");
             return true;
         }).orElse(false);
     }
@@ -74,6 +70,13 @@ public class SeguroService {
         System.out.println("Texto original: " + texto);
         System.out.println("Texto con espacios: " + texto.replace(';', ' '));
         return texto.replace(';', ' ');
+    }
+
+    public boolean eliminarSeguro(Long id) {
+        return segurorepo.findById(id).map(seguro -> {
+            segurorepo.delete(seguro);
+            return true;
+        }).orElse(false);
     }
 
 }

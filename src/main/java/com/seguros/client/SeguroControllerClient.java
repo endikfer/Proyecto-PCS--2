@@ -117,4 +117,30 @@ HttpRequest request = HttpRequest.newBuilder()
             throw new RuntimeException("Error obteniendo el seguro.", e);
         }
     }
+
+    public void eliminarSeguro(Long id) {
+        try {
+            String url = BASE_URL + "/api/seguros/seguro/eliminar?id=" + id;
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .DELETE()
+                    .build();
+    
+            System.out.println("URL de la solicitud: " + request.uri());
+            HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
+    
+            System.out.println("Código de estado de la respuesta: " + response.statusCode());
+    
+            switch (response.statusCode()) {
+                case 200 -> System.out.println("Seguro eliminado correctamente.");
+                case 400 -> throw new IllegalArgumentException("ID inválido.");
+                case 404 -> throw new RuntimeException("Seguro no encontrado.");
+                case 500 -> throw new RuntimeException("Error interno del servidor.");
+                default -> throw new RuntimeException(
+                        "Fallo al eliminar el seguro con código de estado: " + response.statusCode());
+            }
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException("Error eliminando el seguro.", e);
+        }
+    }
 }
