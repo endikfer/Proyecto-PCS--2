@@ -23,6 +23,11 @@ public class SeguroVentana {
     private static final String hostname;
     private static final String port;
     private static final SeguroControllerClient client;
+    private AdminVentana adminVentana;
+
+    public SeguroVentana(AdminVentana adminVentana) {
+        this.adminVentana = adminVentana; // Guardar la instancia de AdminVentana
+    }
 
     static {
         hostname = System.getProperty("hostname", "localhost");
@@ -69,7 +74,6 @@ public class SeguroVentana {
                 guardarSeguroEditado(frame, txtNombre.getText().trim());
             } else {
                 guardarSeguro(frame);
-                AdminVentana adminVentana = new AdminVentana(); // Asegúrate de tener acceso a la instancia correcta
                 adminVentana.actualizarListaSeguros();
             }
         });

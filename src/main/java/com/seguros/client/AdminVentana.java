@@ -5,11 +5,11 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.util.List;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -200,7 +200,7 @@ public class AdminVentana {
         botonEliminar.setFont(new Font("Arial", Font.BOLD, 16));
 
         // Listeners para los botones
-        SeguroVentana ventanaCrear = new SeguroVentana(); // Instancia de SeguroVentana
+        SeguroVentana ventanaCrear = new SeguroVentana(this); // Instancia de SeguroVentana
         botonCrear.addActionListener(e -> {
             ventanaCrear.crearVentanaSeguro(false); // Crear un nuevo seguro
         });
@@ -252,6 +252,7 @@ public class AdminVentana {
     }
 
     public void actualizarListaSeguros() {
+        System.out.println("Actualizando la lista de seguros...");
         modeloLista.clear(); // Limpiar el modelo antes de cargar nuevos datos
         try {
             SeguroControllerAdmin seguroControllerAdmin = new SeguroControllerAdmin("localhost", "8080");
