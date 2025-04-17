@@ -217,6 +217,20 @@ public class AdminVentana {
             }
         });
 
+        botonEliminar.addActionListener(e -> {
+            String seguroSeleccionado = listaSeguros.getSelectedValue(); // Obtener el valor seleccionado
+            if (seguroSeleccionado == null || seguroSeleccionado.equals("No hay seguros creados")) {
+                // Mostrar mensaje si no hay selección o si la lista contiene "No hay seguros creados"
+                JOptionPane.showMessageDialog(frame, "No hay ninguna fila seleccionada.", 
+                        "Advertencia", JOptionPane.WARNING_MESSAGE);
+            } else {
+                // Llamar al método para eliminar el seguro seleccionado
+                ventanaCrear.eliminarSeguro(seguroSeleccionado);
+                // Actualizar la lista después de eliminar
+                actualizarListaSeguros();
+            }
+        });
+
         panelInferior.add(botonCrear);
         panelInferior.add(botonEditar);
         panelInferior.add(botonEliminar);

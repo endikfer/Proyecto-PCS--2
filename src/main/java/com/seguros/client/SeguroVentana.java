@@ -221,4 +221,36 @@ public class SeguroVentana {
         return texto.replace(' ', ';');
     }
 
+    public void eliminarSeguro(String nombreSeguro) {
+        if (nombreSeguro == null || nombreSeguro.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar un nombre válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        try {
+            // Obtener el seguro desde el backend
+            System.out.println("Buscando seguro por nombre: " + nombreSeguro);
+            Seguro seguro = admin.obtenerSeguroPorNombre(sustituirEspacios(nombreSeguro));
+    
+            if (seguro == null) {
+                JOptionPane.showMessageDialog(null, "No se encontró ningún seguro con ese nombre.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+    
+            // Confirmar eliminación
+            int confirm = JOptionPane.showConfirmDialog(null, "¿Está seguro de que desea eliminar el seguro \"" + nombreSeguro + "\"?",
+                                                        "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+    
+            if (confirm == JOptionPane.YES_OPTION) {
+                admin.eliminarSeguro(seguro.getId()); // Método que deberías tener en tu backend
+                JOptionPane.showMessageDialog(null, "Seguro eliminado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            }
+    
+        } catch (RuntimeException ex) {
+            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al eliminar el seguro: " + e.getMessage(), "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
 }
