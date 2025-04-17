@@ -59,7 +59,6 @@ public class SeguroController {
         try {
             if (id == null || id <= 0 || nombre == null || nombre.isBlank() || descripcion == null || descripcion.isBlank()
                     || precio == null || precio <= 0) {
-                        System.out.println("llegue2\n");
                 return ResponseEntity.badRequest()
                         .body("Todos los campos son obligatorios y el precio debe ser mayor a 0.");
             }
@@ -69,6 +68,10 @@ public class SeguroController {
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Seguro no encontrado.");
             }
+        } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+            // Manejar la violación de unicidad
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Seguro existente con el mismo nombre. Por favor, elija otro nombre.");
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

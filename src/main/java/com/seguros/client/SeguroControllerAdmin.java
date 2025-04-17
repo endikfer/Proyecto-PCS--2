@@ -104,6 +104,11 @@ public class SeguroControllerAdmin {
                 }
                 case 400 -> throw new IllegalArgumentException("Solicitud incorrecta. Verifique los datos ingresados.");
                 case 404 -> throw new RuntimeException("Seguro no encontrado.");
+                case 409 -> {
+                    String mensaje = "Seguro existente con el mismo nombre. Por favor, elija otro nombre.";
+                    //JOptionPane.showMessageDialog(null, mensaje, "Conflicto", JOptionPane.WARNING_MESSAGE);
+                    throw new RuntimeException(mensaje);
+                }
                 case 500 -> throw new RuntimeException("Error interno del servidor.");
                 default -> throw new RuntimeException(
                         "Fallo al editar el seguro con código de estado: " + response.statusCode());

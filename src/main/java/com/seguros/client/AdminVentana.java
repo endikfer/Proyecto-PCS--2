@@ -204,8 +204,18 @@ public class AdminVentana {
         botonCrear.addActionListener(e -> {
             ventanaCrear.crearVentanaSeguro(false); // Crear un nuevo seguro
         });
-        // botonEditar.addActionListener(e ->
-        // ventanaCrear.editarSeguro(textFieldSeguro.getText()));
+
+        botonEditar.addActionListener(e -> {
+            String seguroSeleccionado = listaSeguros.getSelectedValue(); // Obtener el valor seleccionado
+            if (seguroSeleccionado == null || seguroSeleccionado.equals("No hay seguros creados")) {
+                // Mostrar mensaje si no hay selección o si la lista contiene "No hay seguros creados"
+                JOptionPane.showMessageDialog(frame, "No hay ninguna fila seleccionada.", 
+                        "Advertencia", JOptionPane.WARNING_MESSAGE);
+            } else {
+                // Llamar al método para editar el seguro seleccionado
+                ventanaCrear.editarSeguro(seguroSeleccionado);
+            }
+        });
 
         panelInferior.add(botonCrear);
         panelInferior.add(botonEditar);
