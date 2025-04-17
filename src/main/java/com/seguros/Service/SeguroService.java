@@ -29,7 +29,7 @@ public class SeguroService {
                             + Arrays.toString(TipoSeguro.values()));
         }
 
-        Seguro seguro = new Seguro(nombre, descripcion, tipoSeguro1, precio);
+        Seguro seguro = new Seguro(restaurarEspacios(nombre), restaurarEspacios(descripcion), tipoSeguro1, precio);
         System.out.println("Seguro creado: " + seguro);
 
         if (segurorepo == null) {

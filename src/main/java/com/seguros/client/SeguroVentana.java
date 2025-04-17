@@ -22,7 +22,7 @@ public class SeguroVentana {
 
     private static final String hostname;
     private static final String port;
-    private static final SeguroControllerClient client;
+    private static final SeguroControllerAdmin admin;
     private AdminVentana adminVentana;
 
     public SeguroVentana(AdminVentana adminVentana) {
@@ -32,7 +32,7 @@ public class SeguroVentana {
     static {
         hostname = System.getProperty("hostname", "localhost");
         port = System.getProperty("port", "8080");
-        client = new SeguroControllerClient(hostname, port);
+        admin = new SeguroControllerAdmin(hostname, port);
     }
 
     private JTextField txtNombre;
@@ -74,8 +74,8 @@ public class SeguroVentana {
                 guardarSeguroEditado(frame, txtNombre.getText().trim());
             } else {
                 guardarSeguro(frame);
-                adminVentana.actualizarListaSeguros();
             }
+            adminVentana.actualizarListaSeguros();
         });
 
         gbc.gridx = 0;
@@ -125,6 +125,10 @@ public class SeguroVentana {
     private void guardarSeguro(JFrame frame) {
         String nombre = txtNombre.getText().trim();
         String descripcion = txtDescripcion.getText().trim();
+
+        String nombre_final = sustituirEspacios(nombre);
+        String descripcion_final = sustituirEspacios(descripcion);
+        
         String precioTexto = txtPrecio.getText().trim();
         TipoSeguro tipo = (TipoSeguro) comboTipoSeguro.getSelectedItem();
 
@@ -136,7 +140,7 @@ public class SeguroVentana {
 
         try {
             double precio = Double.parseDouble(precioTexto);
-            client.crearSeguro(nombre, descripcion, tipo.toString(), precio);
+            admin.crearSeguro(nombre_final, descripcion_final, tipo.toString(), precio);
 
             JOptionPane.showMessageDialog(frame, "Seguro guardado:\nNombre: " + nombre + "\nDescripción: " + descripcion
                     + "\nTipo: " + tipo + "\nPrecio: " + precio);
@@ -151,14 +155,11 @@ public class SeguroVentana {
             JOptionPane.showMessageDialog(null, "Debe ingresar un nombre válido.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
-        
-
         try {
             
             // Obtener los datos del seguro desde el backend
             System.out.println("Obteniendo seguro por nombre: " + nombreSeguro);
-            Seguro seguro = client.obtenerSeguroPorNombre(sustituirEspacios(nombreSeguro)); // Trim para eliminar espacios
+            Seguro seguro = admin.obtenerSeguroPorNombre(sustituirEspacios(nombreSeguro)); // Trim para eliminar espacios
 
             crearVentanaSeguro(true);
             System.out.println("Seguro obtenido: " + seguro);
@@ -201,7 +202,7 @@ public class SeguroVentana {
 
             // Llamar al método editarSeguro del cliente
             
-            client.editarSeguro(idSeguro, nombreSeguro, descripcion.trim(), tipo.toString(), precio);
+            admin.editarSeguro(idSeguro, nombreSeguro, descripcion.trim(), tipo.toString(), precio);
 
             JOptionPane.showMessageDialog(frame, "Seguro editado correctamente.");
             frame.dispose();
