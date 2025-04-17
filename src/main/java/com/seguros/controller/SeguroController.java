@@ -1,5 +1,7 @@
 package com.seguros.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -100,6 +102,23 @@ public class SeguroController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Seguro no encontrado.");
             }
         } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/seguro/obtenerTodos")
+    public ResponseEntity<List<String>> obtenerTodosSeguros() {
+        try {
+            System.out.println("Petición recibida para obtener todos los seguros desde el controller\n");
+            List<String> seguros = seguroService.obtenerTodosSeguros();
+            if (seguros == null || seguros.isEmpty()) {
+                System.out.println("No se encontraron seguros en la base de datos. Añadiendo 'vacio' a la lista.");
+                seguros.add("vacio"); // Añadir "vacio" si la lista está vacía
+            }
+            System.out.println("Seguros obtenidos: " + seguros);
+            return new ResponseEntity<>(seguros, HttpStatus.OK);
+        } catch (Exception e) {
+            System.err.println("Error al obtener todos los seguros: " + e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -171,16 +172,43 @@ public class AdminVentana {
         gbc.weighty = 1.0; // Expandir verticalmente
         gbc.fill = GridBagConstraints.BOTH;
 
-        DefaultListModel<String> modeloLista = new DefaultListModel<>();
+        /*DefaultListModel<String> modeloLista = new DefaultListModel<>();
         modeloLista.addElement("Seguro 1");
         modeloLista.addElement("Seguro 2");
         modeloLista.addElement("Seguro 3");
         modeloLista.addElement("Seguro 4");
         modeloLista.addElement("Seguro 5");
-        modeloLista.addElement("Seguro 6");
+        modeloLista.addElement("Seguro 6");*/
+
+        DefaultListModel<String> modeloLista = new DefaultListModel<>();
+        try {
+            SeguroControllerAdmin seguroControllerAdmin = new SeguroControllerAdmin("localhost", "8080");
+            List<String> nombresSeguros = seguroControllerAdmin.listaNombreSeguros();
+            if (nombresSeguros != null && !nombresSeguros.isEmpty()) {
+                if (nombresSeguros.size() == 1 && "vacio".equalsIgnoreCase(nombresSeguros.get(0))) {
+                    // Si el servidor devuelve "vacio", mostrar "No hay seguros creados"
+                    modeloLista.addElement("No hay seguros creados");
+                } else {
+                    // Agregar los nombres de los seguros al modelo
+                    for (String nombre : nombresSeguros) {
+                        modeloLista.addElement(nombre);
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(frame, "No se encontraron seguros en la base de datos.", 
+                        "Información", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (RuntimeException e) {
+            JOptionPane.showMessageDialog(frame, "Error al obtener los seguros: " + e.getMessage(), 
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
 
         JList<String> listaSeguros = new JList<>(modeloLista);
-        listaSeguros.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Selección única
+        if (modeloLista.size() == 1 && modeloLista.getElementAt(0).equals("No hay seguros creados")) {
+            listaSeguros.setEnabled(false); // Desactivar selección si no hay seguros
+        } else {
+            listaSeguros.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Selección única
+        }
         listaSeguros.setFont(new Font("Arial", Font.PLAIN, 18));
 
         JScrollPane scrollPane = new JScrollPane(listaSeguros); // Envolver en JScrollPane para scroll
