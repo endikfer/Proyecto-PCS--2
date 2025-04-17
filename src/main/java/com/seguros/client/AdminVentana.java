@@ -19,7 +19,6 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
@@ -27,6 +26,9 @@ public class AdminVentana {
     private final JFrame frame;
     private final JPanel panelCentral;
     private final JPanel panelSuperiorCentral;
+
+    private DefaultListModel<String> modeloLista;
+    private JList<String> listaSeguros;
 
     public AdminVentana() {
         frame = new JFrame("Panel de Administrador");
@@ -172,48 +174,16 @@ public class AdminVentana {
         gbc.weighty = 1.0; // Expandir verticalmente
         gbc.fill = GridBagConstraints.BOTH;
 
-        /*DefaultListModel<String> modeloLista = new DefaultListModel<>();
-        modeloLista.addElement("Seguro 1");
-        modeloLista.addElement("Seguro 2");
-        modeloLista.addElement("Seguro 3");
-        modeloLista.addElement("Seguro 4");
-        modeloLista.addElement("Seguro 5");
-        modeloLista.addElement("Seguro 6");*/
-
-        DefaultListModel<String> modeloLista = new DefaultListModel<>();
-        try {
-            SeguroControllerAdmin seguroControllerAdmin = new SeguroControllerAdmin("localhost", "8080");
-            List<String> nombresSeguros = seguroControllerAdmin.listaNombreSeguros();
-            if (nombresSeguros != null && !nombresSeguros.isEmpty()) {
-                if (nombresSeguros.size() == 1 && "vacio".equalsIgnoreCase(nombresSeguros.get(0))) {
-                    // Si el servidor devuelve "vacio", mostrar "No hay seguros creados"
-                    modeloLista.addElement("No hay seguros creados");
-                } else {
-                    // Agregar los nombres de los seguros al modelo
-                    for (String nombre : nombresSeguros) {
-                        modeloLista.addElement(nombre);
-                    }
-                }
-            } else {
-                JOptionPane.showMessageDialog(frame, "No se encontraron seguros en la base de datos.", 
-                        "Información", JOptionPane.INFORMATION_MESSAGE);
-            }
-        } catch (RuntimeException e) {
-            JOptionPane.showMessageDialog(frame, "Error al obtener los seguros: " + e.getMessage(), 
-                    "Error", JOptionPane.ERROR_MESSAGE);
-        }
-
-        JList<String> listaSeguros = new JList<>(modeloLista);
-        if (modeloLista.size() == 1 && modeloLista.getElementAt(0).equals("No hay seguros creados")) {
-            listaSeguros.setEnabled(false); // Desactivar selección si no hay seguros
-        } else {
-            listaSeguros.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Selección única
-        }
+        // Inicializar el modelo y la lista
+        modeloLista = new DefaultListModel<>();
+        listaSeguros = new JList<>(modeloLista);
         listaSeguros.setFont(new Font("Arial", Font.PLAIN, 18));
-
         JScrollPane scrollPane = new JScrollPane(listaSeguros); // Envolver en JScrollPane para scroll
         scrollPane.setPreferredSize(new Dimension(300, 200));
         panelCentro.add(scrollPane, gbc);
+
+        // Llamar al método para cargar los datos en el JList
+        actualizarListaSeguros();
 
         // Zona inferior: Botones "CREAR" y "EDITAR"
         JPanel panelInferior = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER));
@@ -231,7 +201,9 @@ public class AdminVentana {
 
         // Listeners para los botones
         SeguroVentana ventanaCrear = new SeguroVentana(); // Instancia de SeguroVentana
-        botonCrear.addActionListener(e -> ventanaCrear.crearVentanaSeguro(false));
+        botonCrear.addActionListener(e -> {
+            ventanaCrear.crearVentanaSeguro(false); // Crear un nuevo seguro
+        });
         // botonEditar.addActionListener(e ->
         // ventanaCrear.editarSeguro(textFieldSeguro.getText()));
 
@@ -277,5 +249,34 @@ public class AdminVentana {
 
     public void mostrar() {
         frame.setVisible(true);
+    }
+
+    public void actualizarListaSeguros() {
+        modeloLista.clear(); // Limpiar el modelo antes de cargar nuevos datos
+        try {
+            SeguroControllerAdmin seguroControllerAdmin = new SeguroControllerAdmin("localhost", "8080");
+            List<String> nombresSeguros = seguroControllerAdmin.listaNombreSeguros();
+            if (nombresSeguros != null && !nombresSeguros.isEmpty()) {
+                if (nombresSeguros.size() == 1 && "vacio".equalsIgnoreCase(nombresSeguros.get(0))) {
+                    // Si el servidor devuelve "vacio", mostrar "No hay seguros creados"
+                    modeloLista.addElement("No hay seguros creados");
+                    listaSeguros.setEnabled(false); // Desactivar selección
+                } else {
+                    // Agregar los nombres de los seguros al modelo
+                    for (String nombre : nombresSeguros) {
+                        modeloLista.addElement(nombre);
+                    }
+                    listaSeguros.setEnabled(true); // Activar selección
+                }
+                listaSeguros.revalidate();
+                listaSeguros.repaint();
+            } else {
+                JOptionPane.showMessageDialog(frame, "No se encontraron seguros en la base de datos.", 
+                        "Información", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (RuntimeException e) {
+            JOptionPane.showMessageDialog(frame, "Error al obtener los seguros: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

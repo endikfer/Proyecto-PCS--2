@@ -69,6 +69,8 @@ public class SeguroVentana {
                 guardarSeguroEditado(frame, txtNombre.getText().trim());
             } else {
                 guardarSeguro(frame);
+                AdminVentana adminVentana = new AdminVentana(); // Asegúrate de tener acceso a la instancia correcta
+                adminVentana.actualizarListaSeguros();
             }
         });
 
