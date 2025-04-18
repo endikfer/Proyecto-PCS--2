@@ -120,4 +120,22 @@ public class SeguroController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/seguro/obtenerPorTipo")
+    public ResponseEntity<List<Seguro>> obtenerSegurosPorTipo(@RequestParam("tipoSeguro") String tipoSeguro) {
+        System.out.println("Petición recibida para obtener seguros por tipo con tipo: " + tipoSeguro);
+        try {
+            List<Seguro> seguros = seguroService.obtenerSegurosPorTipo(tipoSeguro);
+            if (seguros != null && !seguros.isEmpty()) {
+                System.out.println("Seguros encontrados: " + seguros.size());
+                return new ResponseEntity<>(seguros, HttpStatus.OK);
+            } else {
+                System.out.println("No se encontraron seguros para el tipo: " + tipoSeguro);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);  // Devuelve 404 si no se encuentran seguros
+            }
+        } catch (Exception e) {
+            System.out.println("Error al obtener seguros por tipo: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
