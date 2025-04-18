@@ -79,9 +79,7 @@ public class SeguroController {
 
     @GetMapping("/seguro/obtenerPorNombre")
         public ResponseEntity<Seguro> obtenerSeguroPorNombre(@RequestParam("nombre") String nombre) {
-        System.out.println("Peticion recibida para obtener seguro por nombre desde controller\n");
         Seguro seguro = seguroService.obtenerSeguroPorNombre(nombre);
-        System.out.println("Seguro obtenido: " + seguro);
         if (seguro != null) {
             return new ResponseEntity<>(seguro, HttpStatus.OK);
         } else {
