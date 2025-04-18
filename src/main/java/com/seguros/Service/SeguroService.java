@@ -95,4 +95,15 @@ public class SeguroService {
     return nombresSeguros; // Devuelve la lista de nombres de seguros
 }
 
+    public List<Seguro> obtenerSegurosPorTipo(String tipoSeguro) {
+        TipoSeguro tipoSeguroEnum;
+        try {
+            tipoSeguroEnum = TipoSeguro.valueOf(tipoSeguro.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("El tipo de seguro '" + tipoSeguro + "' no es válido. Los valores permitidos son: "
+                    + Arrays.toString(TipoSeguro.values()));
+        }
+        return segurorepo.findByTipoSeguro(tipoSeguroEnum);
+    }
+
 }
