@@ -60,9 +60,4 @@ public class Cliente {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public void setId(Long id2) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setId'");
-    }
 }
