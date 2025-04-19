@@ -1,8 +1,12 @@
 package com.seguros.client;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
 import java.sql.*;
+
 import javax.swing.*;
 
 import com.seguros.model.Cliente;
@@ -14,6 +18,7 @@ public class InicioSesionVentana {
     private JComboBox<String> rolCombo;
 
     private Cliente clienteLogueado;
+    public String emailInicioSesion;
 
     private static final String DB_URL = "jdbc:mysql://localhost:3306/segurosdb";
     private static final String DB_USER = "root";
@@ -96,6 +101,7 @@ public class InicioSesionVentana {
         String email = txtEmail.getText();
         String password = new String(txtPassword.getPassword());
         String rolSeleccionado = (String) rolCombo.getSelectedItem();
+        emailInicioSesion = email;
 
         if (email.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(frame, "Todos los campos son obligatorios", "Error",
@@ -130,10 +136,11 @@ public class InicioSesionVentana {
                         String passwordDB = rs.getString("password");
 
                         clienteLogueado = new Cliente(nombre, emailDB, passwordDB);
+                        clienteLogueado.setId(id); // ¡Asegurate que Cliente.java tenga este método!
 
                         JOptionPane.showMessageDialog(frame, "Inicio de sesión exitoso!");
                         frame.dispose();
-                        abrirVentanaPrincipal(clienteLogueado);
+                        SeguroManager.crearVentanaPrincipal(clienteLogueado);
                     } else {
                         JOptionPane.showMessageDialog(frame, "Email o contraseña incorrectos", "Error",
                                 JOptionPane.ERROR_MESSAGE);
@@ -144,11 +151,6 @@ public class InicioSesionVentana {
             JOptionPane.showMessageDialog(frame, "Error de conexión: " + ex.getMessage(), "Error",
                     JOptionPane.ERROR_MESSAGE);
         }
-    }
-
-    private void abrirVentanaPrincipal(Cliente cliente) {
-        SeguroManager seguroManager = new SeguroManager();
-        seguroManager.crearVentanaPrincipal(cliente);
     }
 
     private void abrirVentanaAdmin() {
@@ -165,4 +167,4 @@ public class InicioSesionVentana {
             new InicioSesionVentana().mostrar();
         });
     }
-} 
+}
