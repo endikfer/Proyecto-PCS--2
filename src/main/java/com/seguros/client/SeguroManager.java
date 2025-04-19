@@ -90,8 +90,37 @@ public class SeguroManager {
         // Panel para mostrar todos los seguros
         JPanel panelTodos = crearPanelTodosSeguros();
         tabbedPane.addTab("Todos los Seguros", panelTodos);
+
+        // Envolver el JTabbedPane en un JPanel con márgenes
+        JPanel panelCentral = new JPanel(new BorderLayout());
+        panelCentral.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20)); // Márgenes izquierdo y derecho
+        panelCentral.add(tabbedPane, BorderLayout.CENTER);
     
-        ventana.add(tabbedPane, BorderLayout.CENTER);
+        ventana.add(panelCentral, BorderLayout.CENTER);
+
+        // Panel inferior con el botón "Seleccionar Seguro"
+        JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton btnSeleccionar = new JButton("Seleccionar Seguro");
+        btnSeleccionar.setPreferredSize(new Dimension(200, 40));
+        btnSeleccionar.setFont(new Font("Arial", Font.BOLD, 14));
+        btnSeleccionar.addActionListener(e -> {
+            // Obtener la pestaña seleccionada
+            int selectedIndex = tabbedPane.getSelectedIndex();
+            if (selectedIndex != -1) {
+                JPanel selectedPanel = (JPanel) tabbedPane.getComponentAt(selectedIndex);
+                @SuppressWarnings("unchecked")
+                JList<Seguro> listaSeguros = (JList<Seguro>) ((JScrollPane) selectedPanel.getComponent(0)).getViewport().getView();
+                Seguro seguroSeleccionado = listaSeguros.getSelectedValue();
+                if (seguroSeleccionado != null) {
+                    abrirVentanaSeguro(seguroSeleccionado);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Por favor seleccione un seguro", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+        panelInferior.add(btnSeleccionar);
+
+        ventana.add(panelInferior, BorderLayout.SOUTH);
     
         ventana.setVisible(true);
     }
@@ -113,20 +142,7 @@ private static JPanel crearPanelSeguros(TipoSeguro tipo) {
             listaSeguros.setCellRenderer(new SeguroListCellRenderer());
             
             JScrollPane scrollPane = new JScrollPane(listaSeguros);
-            panel.add(scrollPane, BorderLayout.CENTER);
-            
-            JButton btnSeleccionar = new JButton("Seleccionar Seguro");
-            btnSeleccionar.addActionListener(e -> {
-                Seguro seguroSeleccionado = listaSeguros.getSelectedValue();
-                if (seguroSeleccionado != null) {
-                    abrirVentanaSeguro(seguroSeleccionado);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Por favor seleccione un seguro", "Advertencia", JOptionPane.WARNING_MESSAGE);
-                }
-            });
-            
-            panel.add(btnSeleccionar, BorderLayout.SOUTH);
-            
+            panel.add(scrollPane, BorderLayout.CENTER);            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al cargar los seguros: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
