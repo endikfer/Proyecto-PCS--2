@@ -9,6 +9,7 @@ import java.awt.GridBagLayout;
 import java.io.IOException;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -51,47 +52,47 @@ public class SeguroManager {
         ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ventana.setLayout(new BorderLayout());
-
+    
+        // Panel superior con etiqueta de bienvenida y botón de cerrar sesión
+        JPanel panelSuperior = new JPanel(new BorderLayout());
+    
         // Mostrar email del cliente logueado
         String email = inicioSesionVentana.emailInicioSesion;
         JLabel etiqueta = new JLabel("Bienvenido, " + email + " - Gestión de Seguros", SwingConstants.CENTER);
         etiqueta.setFont(new Font("Arial", Font.BOLD, 24));
-        ventana.add(etiqueta, BorderLayout.NORTH);
+        panelSuperior.add(etiqueta, BorderLayout.CENTER);
+    
+        // Botón de cerrar sesión
+        JButton botonCerrarSesion = new JButton("Cerrar Sesión");
+        botonCerrarSesion.setPreferredSize(new Dimension(150, 40));
+        botonCerrarSesion.setFont(new Font("Arial", Font.BOLD, 14));
+        botonCerrarSesion.setFocusPainted(false);
+        botonCerrarSesion.addActionListener(e -> llamarLogoutClienteAPI(ventana));
 
+        // Panel para posicionar el botón con separación
+        JPanel panelBoton = new JPanel(new BorderLayout());
+        panelBoton.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 10));
+        panelBoton.add(botonCerrarSesion, BorderLayout.EAST);
+
+        panelSuperior.add(panelBoton, BorderLayout.EAST);
+    
+        ventana.add(panelSuperior, BorderLayout.NORTH);
+    
         // Panel de pestañas para los tipos de seguros
         JTabbedPane tabbedPane = new JTabbedPane();
-        
+    
         // Crear pestañas para cada tipo de seguro
         for (TipoSeguro tipo : TipoSeguro.values()) {
             JPanel panelSeguros = crearPanelSeguros(tipo);
             tabbedPane.addTab(tipo.toString(), panelSeguros);
         }
-
+    
         // Panel para mostrar todos los seguros
         JPanel panelTodos = crearPanelTodosSeguros();
         tabbedPane.addTab("Todos los Seguros", panelTodos);
-
+    
         ventana.add(tabbedPane, BorderLayout.CENTER);
-
-        /*JPanel panelCentral = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets.set(10, 10, 10, 10);
-
-        ventana.add(panelCentral, BorderLayout.CENTER);*/
-
-        JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.CENTER));
-
-        JButton botonCerrarSesion = new JButton("CERRAR SESIÓN");
-        botonCerrarSesion.setPreferredSize(new Dimension(200, 50));
-        botonCerrarSesion.setFont(new Font("Arial", Font.BOLD, 16));
-
-        botonCerrarSesion.addActionListener(e -> llamarLogoutClienteAPI(ventana));
-        panelInferior.add(botonCerrarSesion);
-
-        ventana.add(panelInferior, BorderLayout.SOUTH);
+    
         ventana.setVisible(true);
     }
 
