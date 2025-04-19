@@ -1,93 +1,55 @@
 package com.seguros.client;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.*;
 import java.io.IOException;
 import java.util.List;
-
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
-
-import com.seguros.model.Seguro;
-import com.seguros.model.TipoSeguro;
+import javax.swing.*;
+import com.seguros.model.*;
 import com.seguros.client.ui.SeguroListCellRenderer;
-
-
 
 public class SeguroManager {
 
     private static final String HOSTNAME = System.getProperty("hostname", "localhost");
     private static final String PORT = System.getProperty("port", "8080");
-    private static final InicioSesionVentana inicioSesionVentana = new InicioSesionVentana();
     private static final SeguroControllerClient seguroClient = new SeguroControllerClient(HOSTNAME, PORT);
 
-
-
-    /*static {
-        HOSTNAME = System.getProperty("hostname", "localhost");
-        PORT = System.getProperty("port", "8080");
-        inicioSesionVentana = new InicioSesionVentana();
-    }*/
-
     public static void main(String[] args) {
-        inicioSesionVentana.mostrar();
+        new InicioSesionVentana().mostrar(); // O redirige directamente al login
     }
 
-    public static void crearVentanaPrincipal() {
+    public static void crearVentanaPrincipal(Cliente cliente) {
         JFrame ventana = new JFrame("Gestión de Seguros");
         ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ventana.setLayout(new BorderLayout());
 
-        // Mostrar email del cliente logueado
-        String email = inicioSesionVentana.emailInicioSesion;
-        JLabel etiqueta = new JLabel("Bienvenido, " + email + " - Gestión de Seguros", SwingConstants.CENTER);
+        JLabel etiqueta = new JLabel("Bienvenido, " + cliente.getEmail() + " - Gestión de Seguros", SwingConstants.CENTER);
         etiqueta.setFont(new Font("Arial", Font.BOLD, 24));
         ventana.add(etiqueta, BorderLayout.NORTH);
 
-        // Panel de pestañas para los tipos de seguros
         JTabbedPane tabbedPane = new JTabbedPane();
-        
-        // Crear pestañas para cada tipo de seguro
+
         for (TipoSeguro tipo : TipoSeguro.values()) {
             JPanel panelSeguros = crearPanelSeguros(tipo);
             tabbedPane.addTab(tipo.toString(), panelSeguros);
         }
 
-        // Panel para mostrar todos los seguros
         JPanel panelTodos = crearPanelTodosSeguros();
         tabbedPane.addTab("Todos los Seguros", panelTodos);
 
         ventana.add(tabbedPane, BorderLayout.CENTER);
 
-        /*JPanel panelCentral = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets.set(10, 10, 10, 10);
-
-        ventana.add(panelCentral, BorderLayout.CENTER);*/
-
         JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        JButton botonPerfil = new JButton("PERFIL");
+        botonPerfil.setPreferredSize(new Dimension(200, 50));
+        botonPerfil.setFont(new Font("Arial", Font.BOLD, 16));
+        botonPerfil.addActionListener(e -> new PerfilVentana(cliente).mostrar());
+        panelInferior.add(botonPerfil);
 
         JButton botonCerrarSesion = new JButton("CERRAR SESIÓN");
         botonCerrarSesion.setPreferredSize(new Dimension(200, 50));
         botonCerrarSesion.setFont(new Font("Arial", Font.BOLD, 16));
-
         botonCerrarSesion.addActionListener(e -> llamarLogoutClienteAPI(ventana));
         panelInferior.add(botonCerrarSesion);
 
@@ -95,25 +57,21 @@ public class SeguroManager {
         ventana.setVisible(true);
     }
 
-private static JPanel crearPanelSeguros(TipoSeguro tipo) {
+    private static JPanel crearPanelSeguros(TipoSeguro tipo) {
         JPanel panel = new JPanel(new BorderLayout());
-        
+
         try {
-            // Obtener seguros por tipo desde el backend
             List<Seguro> seguros = seguroClient.obtenerSegurosPorTipo(tipo.toString());
-            
             DefaultListModel<Seguro> modeloLista = new DefaultListModel<>();
             for (Seguro seguro : seguros) {
                 modeloLista.addElement(seguro);
             }
-            
             JList<Seguro> listaSeguros = new JList<>(modeloLista);
             listaSeguros.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             listaSeguros.setCellRenderer(new SeguroListCellRenderer());
-            
             JScrollPane scrollPane = new JScrollPane(listaSeguros);
             panel.add(scrollPane, BorderLayout.CENTER);
-            
+
             JButton btnSeleccionar = new JButton("Seleccionar Seguro");
             btnSeleccionar.addActionListener(e -> {
                 Seguro seguroSeleccionado = listaSeguros.getSelectedValue();
@@ -123,35 +81,30 @@ private static JPanel crearPanelSeguros(TipoSeguro tipo) {
                     JOptionPane.showMessageDialog(null, "Por favor seleccione un seguro", "Advertencia", JOptionPane.WARNING_MESSAGE);
                 }
             });
-            
             panel.add(btnSeleccionar, BorderLayout.SOUTH);
-            
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al cargar los seguros: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
+
         return panel;
     }
 
     private static JPanel crearPanelTodosSeguros() {
         JPanel panel = new JPanel(new BorderLayout());
-        
+
         try {
-            // Obtener todos los seguros desde el backend
             List<Seguro> seguros = seguroClient.obtenerTodosSeguros();
-            
             DefaultListModel<Seguro> modeloLista = new DefaultListModel<>();
             for (Seguro seguro : seguros) {
                 modeloLista.addElement(seguro);
             }
-            
             JList<Seguro> listaSeguros = new JList<>(modeloLista);
             listaSeguros.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             listaSeguros.setCellRenderer(new SeguroListCellRenderer());
-            
             JScrollPane scrollPane = new JScrollPane(listaSeguros);
             panel.add(scrollPane, BorderLayout.CENTER);
-            
+
             JButton btnSeleccionar = new JButton("Seleccionar Seguro");
             btnSeleccionar.addActionListener(e -> {
                 Seguro seguroSeleccionado = listaSeguros.getSelectedValue();
@@ -161,13 +114,12 @@ private static JPanel crearPanelSeguros(TipoSeguro tipo) {
                     JOptionPane.showMessageDialog(null, "Por favor seleccione un seguro", "Advertencia", JOptionPane.WARNING_MESSAGE);
                 }
             });
-            
             panel.add(btnSeleccionar, BorderLayout.SOUTH);
-            
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al cargar los seguros: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
+
         return panel;
     }
 
@@ -190,7 +142,6 @@ private static JPanel crearPanelSeguros(TipoSeguro tipo) {
     private static void llamarLogoutClienteAPI(JFrame ventana) {
         try {
             String urlCompleta = "http://" + HOSTNAME + ":" + PORT + "/api/clientes/logout";
-            @SuppressWarnings("deprecation")
             java.net.URL url = new java.net.URL(urlCompleta);
             java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
@@ -201,7 +152,7 @@ private static JPanel crearPanelSeguros(TipoSeguro tipo) {
             if (responseCode == java.net.HttpURLConnection.HTTP_OK) {
                 JOptionPane.showMessageDialog(null, "Sesión cerrada correctamente.");
                 ventana.dispose();
-                inicioSesionVentana.mostrar();
+                new InicioSesionVentana().mostrar();
             } else {
                 JOptionPane.showMessageDialog(null,
                         "Error al cerrar sesión. Código: " + responseCode,

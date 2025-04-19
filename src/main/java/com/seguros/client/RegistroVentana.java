@@ -5,6 +5,8 @@ import java.awt.event.*;
 import java.sql.*;
 import javax.swing.*;
 
+import com.seguros.model.Cliente;
+
 public class RegistroVentana {
     private JFrame frame;
     private JTextField txtNombre;
@@ -127,7 +129,8 @@ public class RegistroVentana {
 
                 JOptionPane.showMessageDialog(frame, "Registro exitoso!");
                 frame.dispose(); // Cerrar ventana de registro
-                abrirVentanaPrincipal(); // Abrir ventana principal
+                Cliente nuevoCliente = new Cliente(nombre, email, password);
+                abrirVentanaPrincipal(nuevoCliente); // Abrir ventana principal
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(frame,
@@ -151,9 +154,9 @@ public class RegistroVentana {
         return false;
     }
 
-    private void abrirVentanaPrincipal() {
+    private void abrirVentanaPrincipal(Cliente cliente) {
         SeguroManager seguroManager = new SeguroManager();
-        seguroManager.crearVentanaPrincipal();
+        seguroManager.crearVentanaPrincipal(cliente);
     }
 
     public void mostrar() {

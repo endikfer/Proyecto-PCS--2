@@ -1,26 +1,9 @@
 package com.seguros.client;
 
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
+import java.awt.*;
+import java.awt.event.*;
+import java.sql.*;
+import javax.swing.*;
 
 import com.seguros.model.Cliente;
 
@@ -32,9 +15,6 @@ public class InicioSesionVentana {
 
     private Cliente clienteLogueado;
 
-    public String emailInicioSesion;
-
-    // Configuración de la base de datos
     private static final String DB_URL = "jdbc:mysql://localhost:3306/segurosdb";
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "root";
@@ -54,7 +34,6 @@ public class InicioSesionVentana {
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Título
         JLabel lblTitulo = new JLabel("Iniciar Sesión", SwingConstants.CENTER);
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
         gbc.gridx = 0;
@@ -62,7 +41,6 @@ public class InicioSesionVentana {
         gbc.gridwidth = 2;
         panel.add(lblTitulo, gbc);
 
-        // Email
         gbc.gridwidth = 1;
         gbc.gridy = 1;
         gbc.gridx = 0;
@@ -72,7 +50,6 @@ public class InicioSesionVentana {
         gbc.gridx = 1;
         panel.add(txtEmail, gbc);
 
-        // Contraseña
         gbc.gridy = 2;
         gbc.gridx = 0;
         panel.add(new JLabel("Contraseña:"), gbc);
@@ -81,7 +58,6 @@ public class InicioSesionVentana {
         gbc.gridx = 1;
         panel.add(txtPassword, gbc);
 
-        // Tipo de usuario (JComboBox)
         gbc.gridy = 3;
         gbc.gridx = 0;
         panel.add(new JLabel("Tipo de usuario:"), gbc);
@@ -90,7 +66,6 @@ public class InicioSesionVentana {
         gbc.gridx = 1;
         panel.add(rolCombo, gbc);
 
-        // Botón de login
         JButton btnLogin = new JButton("Iniciar Sesión");
         gbc.gridy = 4;
         gbc.gridx = 0;
@@ -102,7 +77,6 @@ public class InicioSesionVentana {
             iniciarSesion();
         });
 
-        // Botón de registro
         JButton btnRegister = new JButton("Registrarse");
         gbc.gridy = 5;
         gbc.gridx = 0;
@@ -122,7 +96,6 @@ public class InicioSesionVentana {
         String email = txtEmail.getText();
         String password = new String(txtPassword.getPassword());
         String rolSeleccionado = (String) rolCombo.getSelectedItem();
-        emailInicioSesion = email;
 
         if (email.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(frame, "Todos los campos son obligatorios", "Error",
@@ -130,7 +103,6 @@ public class InicioSesionVentana {
             return;
         }
 
-        // Si es Administrador (validación sencilla hardcoded)
         if ("Administrador".equals(rolSeleccionado)) {
             if (email.equals("admin@gmail.com") && password.equals("1234")) {
                 JOptionPane.showMessageDialog(frame, "Inicio de sesión como administrador exitoso!");
@@ -144,7 +116,6 @@ public class InicioSesionVentana {
             }
         }
 
-        // Cliente normal: Validar contra base de datos
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             String sql = "SELECT * FROM clientes WHERE email = ? AND password = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -162,7 +133,7 @@ public class InicioSesionVentana {
 
                         JOptionPane.showMessageDialog(frame, "Inicio de sesión exitoso!");
                         frame.dispose();
-                        abrirVentanaPrincipal();
+                        abrirVentanaPrincipal(clienteLogueado);
                     } else {
                         JOptionPane.showMessageDialog(frame, "Email o contraseña incorrectos", "Error",
                                 JOptionPane.ERROR_MESSAGE);
@@ -175,9 +146,9 @@ public class InicioSesionVentana {
         }
     }
 
-    private void abrirVentanaPrincipal() {
+    private void abrirVentanaPrincipal(Cliente cliente) {
         SeguroManager seguroManager = new SeguroManager();
-        seguroManager.crearVentanaPrincipal();
+        seguroManager.crearVentanaPrincipal(cliente);
     }
 
     private void abrirVentanaAdmin() {
@@ -194,4 +165,4 @@ public class InicioSesionVentana {
             new InicioSesionVentana().mostrar();
         });
     }
-}
+} 
