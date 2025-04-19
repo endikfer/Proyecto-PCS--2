@@ -3,8 +3,21 @@ package com.seguros.client;
 import java.awt.*;
 import java.io.IOException;
 import java.util.List;
-import javax.swing.*;
-import com.seguros.model.*;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+
+import com.seguros.model.Seguro;
+import com.seguros.model.TipoSeguro;
 import com.seguros.client.ui.SeguroListCellRenderer;
 
 public class SeguroManager {
@@ -23,33 +36,42 @@ public class SeguroManager {
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ventana.setLayout(new BorderLayout());
 
-        JLabel etiqueta = new JLabel("Bienvenido, " + cliente.getEmail() + " - Gestión de Seguros", SwingConstants.CENTER);
+        // Mostrar email del cliente logueado
+        String email = inicioSesionVentana.emailInicioSesion;
+        JLabel etiqueta = new JLabel("Bienvenido, " + email + " - Gestión de Seguros", SwingConstants.CENTER);
         etiqueta.setFont(new Font("Arial", Font.BOLD, 24));
         ventana.add(etiqueta, BorderLayout.NORTH);
 
+        // Panel de pestañas para los tipos de seguros
         JTabbedPane tabbedPane = new JTabbedPane();
-
+        
+        // Crear pestañas para cada tipo de seguro
         for (TipoSeguro tipo : TipoSeguro.values()) {
             JPanel panelSeguros = crearPanelSeguros(tipo);
             tabbedPane.addTab(tipo.toString(), panelSeguros);
         }
 
+        // Panel para mostrar todos los seguros
         JPanel panelTodos = crearPanelTodosSeguros();
         tabbedPane.addTab("Todos los Seguros", panelTodos);
-
+    
         ventana.add(tabbedPane, BorderLayout.CENTER);
 
-        JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        /*JPanel panelCentral = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets.set(10, 10, 10, 10);
 
-        JButton botonPerfil = new JButton("PERFIL");
-        botonPerfil.setPreferredSize(new Dimension(200, 50));
-        botonPerfil.setFont(new Font("Arial", Font.BOLD, 16));
-        botonPerfil.addActionListener(e -> new PerfilVentana(cliente).mostrar());
-        panelInferior.add(botonPerfil);
+        ventana.add(panelCentral, BorderLayout.CENTER);*/
+
+        JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         JButton botonCerrarSesion = new JButton("CERRAR SESIÓN");
         botonCerrarSesion.setPreferredSize(new Dimension(200, 50));
         botonCerrarSesion.setFont(new Font("Arial", Font.BOLD, 16));
+
         botonCerrarSesion.addActionListener(e -> llamarLogoutClienteAPI(ventana));
         panelInferior.add(botonCerrarSesion);
 
