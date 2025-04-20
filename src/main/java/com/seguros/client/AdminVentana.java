@@ -206,7 +206,7 @@ public class AdminVentana {
         // Listeners para los botones
         SeguroVentana ventanaCrear = new SeguroVentana(this); // Instancia de SeguroVentana
         botonCrear.addActionListener(e -> {
-            ventanaCrear.crearVentanaSeguro(false); // Crear un nuevo seguro
+            ventanaCrear.crearVentanaSeguro(1); // Crear un nuevo seguro
         });
 
         botonEditar.addActionListener(e -> {
@@ -244,6 +244,7 @@ public class AdminVentana {
             } else {
                 // Llamar al método para mostrar información del seguro seleccionado
                 System.out.println("Viendo informacion del seguro: " + seguroSeleccionado);
+                ventanaCrear.informacionSeguro(seguroSeleccionado);
             }
         });
 

@@ -43,7 +43,7 @@ public class SeguroVentana {
 
     JButton btnGuardar;
 
-    public void crearVentanaSeguro(boolean Editar) {
+    public void crearVentanaSeguro(int Editar) {
         JFrame frame = new JFrame("Ventana de Seguros");
         frame.setSize(400, 350);
         frame.setLayout(new GridBagLayout());
@@ -70,10 +70,13 @@ public class SeguroVentana {
 
         btnGuardar = new JButton("Guardar");
         btnGuardar.addActionListener(e -> {
-            if (Editar) {
+            if (Editar == 0) {
                 guardarSeguroEditado(frame, txtNombre.getText().trim());
-            } else {
+            } else if (Editar == 1) {
                 guardarSeguro(frame);
+            } else{
+                btnGuardar.setText("Salir");
+                frame.dispose();
             }
             adminVentana.actualizarListaSeguros();
         });
@@ -161,7 +164,7 @@ public class SeguroVentana {
             System.out.println("Obteniendo seguro por nombre: " + nombreSeguro);
             Seguro seguro = admin.obtenerSeguroPorNombre(sustituirEspacios(nombreSeguro)); // Trim para eliminar espacios
 
-            crearVentanaSeguro(true);
+            crearVentanaSeguro(0);
             System.out.println("Seguro obtenido: " + seguro);
 
             idSeguro = seguro.getId(); // Guardar el ID del seguro para editarlo más tarde
@@ -251,6 +254,41 @@ public class SeguroVentana {
             JOptionPane.showMessageDialog(null, "Error al eliminar el seguro: " + e.getMessage(), "Error",
                     JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+
+    public void informacionSeguro(String nombreSeguro) {
+        if (nombreSeguro == null || nombreSeguro.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar un nombre válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        try {
+            
+            // Obtener los datos del seguro desde el backend
+            System.out.println("Obteniendo seguro por nombre: " + nombreSeguro);
+            Seguro seguro = admin.obtenerSeguroPorNombre(sustituirEspacios(nombreSeguro)); // Trim para eliminar espacios
+
+            crearVentanaSeguro(2);
+            System.out.println("Seguro obtenido: " + seguro);
+
+            txtNombre.setText(nombreSeguro);
+            txtDescripcion.setText(seguro.getDescripcion());
+            comboTipoSeguro.setSelectedItem(seguro.getTipoSeguro());
+            txtPrecio.setText(String.valueOf(seguro.getPrecio()));
+            
+            txtNombre.setEditable(false); // Hacer que el campo de nombre no sea editable para evitar cambiar el identificador
+            txtDescripcion.setEditable(false); // Hacer que el campo de descripción no sea editable
+            txtPrecio.setEditable(false); // Hacer que el campo de precio no sea editable
+            comboTipoSeguro.setEnabled(false); // Hacer que el combo de tipo de seguro no sea editable
+
+            // Mostrar la ventana para editar el seguro
+        }catch (RuntimeException ex) {
+            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al obtener el seguro: " + e.getMessage(), "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        
     }
 
 }
