@@ -177,7 +177,7 @@ public class SeguroVentana {
             // Hacer que el campo de nombre no sea editable para evitar cambiar el
             // identificador
             //txtNombre.setEditable(false);
-            frame.dispose();
+            
 
             // Mostrar la ventana para editar el seguro
         }catch (RuntimeException ex) {
