@@ -1,5 +1,6 @@
 package com.seguros.controller;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -109,10 +110,12 @@ public class SeguroController {
         try {
             System.out.println("Petición recibida para obtener todos los seguros desde el controller\n");
             List<String> seguros = seguroService.obtenerTodosSeguros();
+
             if (seguros == null || seguros.isEmpty()) {
                 System.out.println("No se encontraron seguros en la base de datos. Añadiendo 'vacio' a la lista.");
-                seguros.add("vacio"); // Añadir "vacio" si la lista está vacía
+                seguros = Collections.singletonList("vacio");
             }
+
             System.out.println("Seguros obtenidos: " + seguros);
             return new ResponseEntity<>(seguros, HttpStatus.OK);
         } catch (Exception e) {
