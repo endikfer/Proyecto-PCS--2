@@ -56,7 +56,8 @@ public class SeguroManager {
         // Botón de perfil
         JButton btnPerfil = new JButton("Ver Perfil");
         btnPerfil.addActionListener(e -> {
-            new PerfilVentana(cliente).mostrar();
+            Cliente clienteActualizado = seguroClient.obtenerDatosCliente(cliente.getEmail());
+            new PerfilVentana(clienteActualizado).mostrar();
         });
         panelSuperior.add(btnPerfil, BorderLayout.WEST);
     

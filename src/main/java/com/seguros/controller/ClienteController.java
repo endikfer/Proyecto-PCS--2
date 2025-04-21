@@ -77,6 +77,15 @@ public class ClienteController {
         return clienteRepository.findById(id);
     }
 
+    @GetMapping("/perfil")
+    public ResponseEntity<?> obtenerClientePorEmail(@RequestParam String email) {
+        Cliente cliente = clienteRepository.findByEmail(email);
+        if (cliente == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente no encontrado");
+        }
+        return ResponseEntity.ok(cliente);
+    }
+
     @GetMapping("/esAdmin")
     public ResponseEntity<Boolean> esAdmin(@RequestParam String username) {
         boolean esAdmin = usuarioService.esAdmin(username);

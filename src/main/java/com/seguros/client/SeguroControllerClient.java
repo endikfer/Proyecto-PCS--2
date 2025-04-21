@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.seguros.model.Cliente;
 import com.seguros.model.Seguro;
 
 public class SeguroControllerClient {
@@ -165,5 +166,28 @@ HttpRequest request = HttpRequest.newBuilder()
             throw new RuntimeException("Error obteniendo seguros por tipo.", e);
         }
     }
+
+    public Cliente obtenerDatosCliente(String email) {
+    try {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/api/clientes/perfil?email=" + email))
+                .header("Content-Type", "application/json")
+                .GET()
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200) {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(response.body(), Cliente.class);
+        } else if (response.statusCode() == 404) {
+            throw new RuntimeException("Cliente no encontrado.");
+        } else {
+            throw new RuntimeException("Error al obtener datos del cliente: " + response.statusCode());
+        }
+    } catch (IOException | InterruptedException e) {
+        throw new RuntimeException("Error obteniendo datos del cliente.", e);
+    }
+}
 
 }
