@@ -14,8 +14,8 @@ import javax.swing.ListCellRenderer;
 import com.seguros.model.Seguro;
 
 public class SeguroListCellRenderer extends JPanel implements ListCellRenderer<Seguro> {
-    private final JLabel lblNombre;
-    private final JLabel lblTipo;
+    public final JLabel lblNombre;
+    public final JLabel lblTipo;
 
     public SeguroListCellRenderer() {
         setLayout(new GridBagLayout());
@@ -62,11 +62,12 @@ public class SeguroListCellRenderer extends JPanel implements ListCellRenderer<S
             switch (value.getTipoSeguro().toString().toLowerCase()) {
                 case "vida" -> lblTipo.setBackground(new Color(208, 232, 255));
                 case "coche" -> lblTipo.setBackground(new Color(223, 245, 216));
-                case "hogar" -> lblTipo.setBackground(new Color(255, 228, 217));
-                /*case "vida" -> lblTipo.setBackground(new Color(144, 238, 144));
-                case "coche" -> lblTipo.setBackground(new Color(173, 216, 230));
-                case "hogar" -> lblTipo.setBackground(new Color(255, 228, 181));*/
-                default -> lblTipo.setBackground(new Color(200, 200, 255));
+                case "casa" -> lblTipo.setBackground(new Color(255, 228, 217));
+                /*
+                 * case "vida" -> lblTipo.setBackground(new Color(144, 238, 144));
+                 * case "coche" -> lblTipo.setBackground(new Color(173, 216, 230));
+                 * case "hogar" -> lblTipo.setBackground(new Color(255, 228, 181));
+                 */
             }
         }
 
@@ -77,15 +78,13 @@ public class SeguroListCellRenderer extends JPanel implements ListCellRenderer<S
             lblTipo.setBackground(lblTipo.getBackground().darker());
             lblTipo.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createLineBorder(list.getSelectionBackground().darker(), 1),
-                    BorderFactory.createEmptyBorder(2, 8, 2, 8)
-            ));
+                    BorderFactory.createEmptyBorder(2, 8, 2, 8)));
         } else {
             setBackground(list.getBackground());
             lblNombre.setForeground(list.getForeground());
             lblTipo.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createLineBorder(new Color(150, 150, 200), 1),
-                    BorderFactory.createEmptyBorder(2, 8, 2, 8)
-            ));
+                    BorderFactory.createEmptyBorder(2, 8, 2, 8)));
         }
 
         setOpaque(true);
