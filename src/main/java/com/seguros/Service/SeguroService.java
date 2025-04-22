@@ -52,7 +52,6 @@ public class SeguroService {
                             + Arrays.toString(TipoSeguro.values()));
         }
 
-
         return segurorepo.findById(id).map(seguro -> {
             seguro.setNombre(nombre.trim());
             seguro.setDescripcion(descripcion.trim());
@@ -68,7 +67,8 @@ public class SeguroService {
     }
 
     public static String restaurarEspacios(String texto) {
-        if (texto == null) return null;
+        if (texto == null)
+            return null;
         System.out.println("Texto original: " + texto);
         System.out.println("Texto con espacios: " + texto.replace(';', ' '));
         return texto.replace(';', ' ');
@@ -92,16 +92,17 @@ public class SeguroService {
                 }
             }
         }
-    return nombresSeguros; // Devuelve la lista de nombres de seguros
-}
+        return nombresSeguros; // Devuelve la lista de nombres de seguros
+    }
 
     public List<Seguro> obtenerSegurosPorTipo(String tipoSeguro) {
         TipoSeguro tipoSeguroEnum;
         try {
             tipoSeguroEnum = TipoSeguro.valueOf(tipoSeguro.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("El tipo de seguro '" + tipoSeguro + "' no es válido. Los valores permitidos son: "
-                    + Arrays.toString(TipoSeguro.values()));
+            throw new IllegalArgumentException(
+                    "El tipo de seguro '" + tipoSeguro + "' no es válido. Los valores permitidos son: "
+                            + Arrays.toString(TipoSeguro.values()));
         }
         return segurorepo.findByTipoSeguro(tipoSeguroEnum);
     }
