@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.*;
@@ -283,5 +284,115 @@ class SeguroControllerTest {
         // Verificaciones
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         verify(seguroService, times(1)).obtenerSegurosPorTipo("VIDA");
+    }
+
+    // ----------------- TESTS PARA editarSeguro -----------------
+
+    @Test
+    public void testEditarSeguro_Exitoso() {
+        when(seguroService.editarSeguro(1L, "Seguro A", "Descripción A", "TIPO", 120.0)).thenReturn(true);
+        ResponseEntity<String> response = seguroController.editarSeguro(1L, "Seguro A", "Descripción A", "TIPO", 120.0);
+        assertEquals(OK, response.getStatusCode());
+    }
+
+    @Test
+    public void testEditarSeguro_IdInvalido() {
+        ResponseEntity<String> response = seguroController.editarSeguro(-1L, "Seguro", "Desc", "TIPO", 120.0);
+        assertEquals(BAD_REQUEST, response.getStatusCode());
+        verify(seguroService, never()).editarSeguro(anyLong(), anyString(), anyString(), anyString(), anyDouble());
+    }
+
+    @Test
+    public void testEditarSeguro_NombreNulo() {
+        ResponseEntity<String> response = seguroController.editarSeguro(1L, null, "Desc", "TIPO", 120.0);
+        assertEquals(BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    public void testEditarSeguro_DescripcionVacia() {
+        ResponseEntity<String> response = seguroController.editarSeguro(1L, "Nombre", "", "TIPO", 120.0);
+        assertEquals(BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    public void testEditarSeguro_PrecioInvalido() {
+        ResponseEntity<String> response = seguroController.editarSeguro(1L, "Nombre", "Desc", "TIPO", -10.0);
+        assertEquals(BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    public void testEditarSeguro_SeguroNoEncontrado() {
+        when(seguroService.editarSeguro(anyLong(), anyString(), anyString(), anyString(), anyDouble()))
+            .thenReturn(false);
+        ResponseEntity<String> response = seguroController.editarSeguro(999L, "Seguro", "Desc", "TIPO", 100.0);
+        assertEquals(NOT_FOUND, response.getStatusCode());
+        assertEquals("Seguro no encontrado.", response.getBody());
+    }
+
+    @Test
+    public void testEditarSeguro_ConflictoDuplicado() {
+        when(seguroService.editarSeguro(anyLong(), anyString(), anyString(), anyString(), anyDouble()))
+            .thenThrow(new org.springframework.dao.DataIntegrityViolationException("Duplicado"));
+        ResponseEntity<String> response = seguroController.editarSeguro(2L, "Seguro", "Desc", "TIPO", 100.0);
+        assertEquals(CONFLICT, response.getStatusCode());
+        assertEquals("Seguro existente con el mismo nombre. Por favor, elija otro nombre.", response.getBody());
+    }
+
+    @Test
+    public void testEditarSeguro_ErrorInterno() {
+        when(seguroService.editarSeguro(anyLong(), anyString(), anyString(), anyString(), anyDouble()))
+            .thenThrow(new RuntimeException("Error inesperado"));
+        ResponseEntity<String> response = seguroController.editarSeguro(3L, "Seguro", "Desc", "TIPO", 150.0);
+        assertEquals(INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
+    // ----------------- TESTS PARA obtenerSeguroPorNombre -----------------
+
+    @Test
+    public void testObtenerSeguroPorNombre_Encontrado() {
+        Seguro seguro = new Seguro("Auto", "Seguro de auto", TipoSeguro.COCHE, 200.0);
+        when(seguroService.obtenerSeguroPorNombre("Auto")).thenReturn(seguro);
+        ResponseEntity<Seguro> response = seguroController.obtenerSeguroPorNombre("Auto");
+        assertEquals(OK, response.getStatusCode());
+        assertEquals(seguro, response.getBody());
+    }
+
+    @Test
+    public void testObtenerSeguroPorNombre_NoEncontrado() {
+        when(seguroService.obtenerSeguroPorNombre("Inexistente")).thenReturn(null);
+        ResponseEntity<Seguro> response = seguroController.obtenerSeguroPorNombre("Inexistente");
+        assertEquals(NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+
+    // ----------------- TESTS PARA eliminarSeguro -----------------
+
+    @Test
+    public void testEliminarSeguro_Exitoso() {
+        when(seguroService.eliminarSeguro(1L)).thenReturn(true);
+        ResponseEntity<String> response = seguroController.eliminarSeguro(1L);
+        assertEquals(OK, response.getStatusCode());
+    }
+
+    @Test
+    public void testEliminarSeguro_IdInvalido() {
+        ResponseEntity<String> response = seguroController.eliminarSeguro(0L);
+        assertEquals(BAD_REQUEST, response.getStatusCode());
+        assertEquals("ID inválido.", response.getBody());
+    }
+
+    @Test
+    public void testEliminarSeguro_SeguroNoEncontrado() {
+        when(seguroService.eliminarSeguro(999L)).thenReturn(false);
+        ResponseEntity<String> response = seguroController.eliminarSeguro(999L);
+        assertEquals(NOT_FOUND, response.getStatusCode());
+        assertEquals("Seguro no encontrado.", response.getBody());
+    }
+
+    @Test
+    public void testEliminarSeguro_ErrorInterno() {
+        when(seguroService.eliminarSeguro(1L)).thenThrow(new RuntimeException("Error inesperado"));
+        ResponseEntity<String> response = seguroController.eliminarSeguro(1L);
+        assertEquals(INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
 }
