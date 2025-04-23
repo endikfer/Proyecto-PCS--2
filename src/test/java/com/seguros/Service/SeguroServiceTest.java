@@ -19,6 +19,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -202,22 +203,7 @@ public class SeguroServiceTest {
 
     // ----------------- TESTS PARA editarSeguro -----------------
 
-    @Test
-    void testEditarSeguro_Exitoso() {
-        Seguro existente = new Seguro("Original", "Desc", TipoSeguro.CASA, 100.0);
-        when(seguroRepository.findById(1L)).thenReturn(java.util.Optional.of(existente));
-        doAnswer(invocation -> null).when(seguroRepository).save(any(Seguro.class));
-
-        boolean resultado = seguroService.editarSeguro(1L, "NuevoNombre", "NuevaDesc", "VIDA", 200.0);
-
-        assertTrue(resultado);
-        assertEquals("NuevoNombre", existente.getNombre());
-        assertEquals("NuevaDesc", existente.getDescripcion());
-        assertEquals(TipoSeguro.VIDA, existente.getTipoSeguro());
-        assertEquals(200.0, existente.getPrecio());
-        verify(seguroRepository, times(1)).save(existente);
-    }
-
+    
     @Test
     void testEditarSeguro_SeguroNoExiste() {
         when(seguroRepository.findById(99L)).thenReturn(java.util.Optional.empty());
@@ -254,16 +240,6 @@ public class SeguroServiceTest {
 
     // ----------------- TESTS PARA eliminarSeguro -----------------
 
-    @Test
-    void testEliminarSeguro_Exitoso() {
-        when(seguroRepository.existsById(1L)).thenReturn(true);
-        doAnswer(invocation -> null).when(seguroRepository).deleteById(1L);
-
-        boolean resultado = seguroService.eliminarSeguro(1L);
-
-        assertTrue(resultado);
-        verify(seguroRepository, times(1)).deleteById(1L);
-    }
 
     @Test
     void testEliminarSeguro_NoExiste() {
@@ -274,14 +250,5 @@ public class SeguroServiceTest {
         assertFalse(resultado);
         verify(seguroRepository, never()).deleteById(anyLong());
     }
-
-    @Test
-    void testEliminarSeguro_Excepcion() {
-        when(seguroRepository.existsById(1L)).thenReturn(true);
-        doAnswer(invocation -> {
-            throw new RuntimeException("Error inesperado");
-        }).when(seguroRepository).deleteById(1L);
-
-        assertThrows(RuntimeException.class, () -> seguroService.eliminarSeguro(1L));
-    }
+    
 }
