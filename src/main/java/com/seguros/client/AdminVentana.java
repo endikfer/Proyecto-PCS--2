@@ -139,21 +139,6 @@ public class AdminVentana {
         gbc.insets = new java.awt.Insets(10, 10, 10, 10); // Espaciado entre componentes
         gbc.anchor = GridBagConstraints.WEST;
 
-        // Agregar JLabel a la izquierda
-        /*
-         * gbc.gridx = 0;
-         * gbc.gridy = 0;
-         * JLabel labelSeguro = new JLabel("Seguro a modificar:");
-         * labelSeguro.setFont(new Font("Arial", Font.PLAIN, 18));
-         * panelCentro.add(labelSeguro, gbc);
-         * 
-         * // Agregar JTextField a la derecha del JLabel
-         * gbc.gridx = 1;
-         * JTextField textFieldSeguro = new JTextField();
-         * textFieldSeguro.setPreferredSize(new java.awt.Dimension(300, 30));
-         * panelCentro.add(textFieldSeguro, gbc);
-         */
-
         // Agregar JList con 5 ejemplos
         gbc.gridx = 0;
         gbc.gridy = 0; // Posición en la primera fila
@@ -212,8 +197,9 @@ public class AdminVentana {
         botonEditar.addActionListener(e -> {
             String seguroSeleccionado = listaSeguros.getSelectedValue(); // Obtener el valor seleccionado
             if (seguroSeleccionado == null || seguroSeleccionado.equals("No hay seguros creados")) {
-                // Mostrar mensaje si no hay selección o si la lista contiene "No hay seguros creados"
-                JOptionPane.showMessageDialog(frame, "No hay ningun seguro seleccionada.", 
+                // Mostrar mensaje si no hay selección o si la lista contiene "No hay seguros
+                // creados"
+                JOptionPane.showMessageDialog(frame, "No hay ningun seguro seleccionada.",
                         "Advertencia", JOptionPane.WARNING_MESSAGE);
             } else {
                 // Llamar al método para editar el seguro seleccionado
@@ -224,8 +210,9 @@ public class AdminVentana {
         botonEliminar.addActionListener(e -> {
             String seguroSeleccionado = listaSeguros.getSelectedValue(); // Obtener el valor seleccionado
             if (seguroSeleccionado == null || seguroSeleccionado.equals("No hay seguros creados")) {
-                // Mostrar mensaje si no hay selección o si la lista contiene "No hay seguros creados"
-                JOptionPane.showMessageDialog(frame, "No hay ningun seguro seleccionada.", 
+                // Mostrar mensaje si no hay selección o si la lista contiene "No hay seguros
+                // creados"
+                JOptionPane.showMessageDialog(frame, "No hay ningun seguro seleccionada.",
                         "Advertencia", JOptionPane.WARNING_MESSAGE);
             } else {
                 // Llamar al método para eliminar el seguro seleccionado
@@ -238,8 +225,9 @@ public class AdminVentana {
         botonInfomracion.addActionListener(e -> {
             String seguroSeleccionado = listaSeguros.getSelectedValue(); // Obtener el valor seleccionado
             if (seguroSeleccionado == null || seguroSeleccionado.equals("No hay seguros creados")) {
-                // Mostrar mensaje si no hay selección o si la lista contiene "No hay seguros creados"
-                JOptionPane.showMessageDialog(frame, "No hay ningun seguro seleccionada.", 
+                // Mostrar mensaje si no hay selección o si la lista contiene "No hay seguros
+                // creados"
+                JOptionPane.showMessageDialog(frame, "No hay ningun seguro seleccionada.",
                         "Advertencia", JOptionPane.WARNING_MESSAGE);
             } else {
                 // Llamar al método para mostrar información del seguro seleccionado
@@ -314,7 +302,7 @@ public class AdminVentana {
                 listaSeguros.revalidate();
                 listaSeguros.repaint();
             } else {
-                JOptionPane.showMessageDialog(frame, "No se encontraron seguros en la base de datos.", 
+                JOptionPane.showMessageDialog(frame, "No se encontraron seguros en la base de datos.",
                         "Información", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (RuntimeException e) {

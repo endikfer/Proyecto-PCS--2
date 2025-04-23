@@ -58,7 +58,8 @@ public class SeguroController {
             @RequestParam("tipoSeguro") String tipoSeguro,
             @RequestParam("precio") Double precio) {
         try {
-            if (id == null || id <= 0 || nombre == null || nombre.isBlank() || descripcion == null || descripcion.isBlank()
+            if (id == null || id <= 0 || nombre == null || nombre.isBlank() || descripcion == null
+                    || descripcion.isBlank()
                     || precio == null || precio <= 0) {
                 return ResponseEntity.badRequest()
                         .body("Todos los campos son obligatorios y el precio debe ser mayor a 0.");
@@ -79,7 +80,7 @@ public class SeguroController {
     }
 
     @GetMapping("/seguro/obtenerPorNombre")
-        public ResponseEntity<Seguro> obtenerSeguroPorNombre(@RequestParam("nombre") String nombre) {
+    public ResponseEntity<Seguro> obtenerSeguroPorNombre(@RequestParam("nombre") String nombre) {
         Seguro seguro = seguroService.obtenerSeguroPorNombre(nombre);
         if (seguro != null) {
             return new ResponseEntity<>(seguro, HttpStatus.OK);
@@ -129,13 +130,16 @@ public class SeguroController {
         System.out.println("Petición recibida para obtener seguros por tipo con tipo: " + tipoSeguro);
         try {
             List<Seguro> seguros = seguroService.obtenerSegurosPorTipo(tipoSeguro);
-            if (seguros != null && !seguros.isEmpty()) {
-                System.out.println("Seguros encontrados: " + seguros.size());
-                return new ResponseEntity<>(seguros, HttpStatus.OK);
-            } else {
-                System.out.println("No se encontraron seguros para el tipo: " + tipoSeguro);
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);  // Devuelve 404 si no se encuentran seguros
+            if (seguros == null || seguros.isEmpty()) {
+                System.out.println(
+                        "No se encontraron seguros para el tipo: " + tipoSeguro + ". Añadiendo 'vacio' a la lista.");
+                Seguro seguroVacio = new Seguro();
+                seguroVacio.setNombre("vacio");
+                seguros = Collections.singletonList(seguroVacio);
             }
+
+            System.out.println("Seguros encontrados: " + seguros.size());
+            return new ResponseEntity<>(seguros, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println("Error al obtener seguros por tipo: " + e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

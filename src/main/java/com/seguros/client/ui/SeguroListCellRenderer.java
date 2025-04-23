@@ -63,11 +63,6 @@ public class SeguroListCellRenderer extends JPanel implements ListCellRenderer<S
                 case "vida" -> lblTipo.setBackground(new Color(208, 232, 255));
                 case "coche" -> lblTipo.setBackground(new Color(223, 245, 216));
                 case "casa" -> lblTipo.setBackground(new Color(255, 228, 217));
-                /*
-                 * case "vida" -> lblTipo.setBackground(new Color(144, 238, 144));
-                 * case "coche" -> lblTipo.setBackground(new Color(173, 216, 230));
-                 * case "hogar" -> lblTipo.setBackground(new Color(255, 228, 181));
-                 */
             }
         }
 

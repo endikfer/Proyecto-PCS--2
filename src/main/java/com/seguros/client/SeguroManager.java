@@ -32,14 +32,6 @@ public class SeguroManager {
     private static final InicioSesionVentana inicioSesionVentana = new InicioSesionVentana();
     private static final SeguroControllerClient seguroClient = new SeguroControllerClient(HOSTNAME, PORT);
 
-
-
-    /*static {
-        HOSTNAME = System.getProperty("hostname", "localhost");
-        PORT = System.getProperty("port", "8080");
-        inicioSesionVentana = new InicioSesionVentana();
-    }*/
-
     public static void main(String[] args) {
         inicioSesionVentana.mostrar();
     }
@@ -49,7 +41,7 @@ public class SeguroManager {
         ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ventana.setLayout(new BorderLayout());
-    
+
         // Panel superior con etiqueta de bienvenida y botón de cerrar sesión
         JPanel panelSuperior = new JPanel(new BorderLayout());
 
@@ -60,13 +52,13 @@ public class SeguroManager {
             new PerfilVentana(clienteActualizado).mostrar();
         });
         panelSuperior.add(btnPerfil, BorderLayout.WEST);
-    
+
         // Mostrar email del cliente logueado
         String email = inicioSesionVentana.emailInicioSesion;
         JLabel etiqueta = new JLabel("Bienvenido, " + email + " - Gestión de Seguros", SwingConstants.CENTER);
         etiqueta.setFont(new Font("Arial", Font.BOLD, 24));
         panelSuperior.add(etiqueta, BorderLayout.CENTER);
-    
+
         // Botón de cerrar sesión
         JButton botonCerrarSesion = new JButton("Cerrar Sesión");
         botonCerrarSesion.setPreferredSize(new Dimension(150, 40));
@@ -80,18 +72,18 @@ public class SeguroManager {
         panelBoton.add(botonCerrarSesion, BorderLayout.EAST);
 
         panelSuperior.add(panelBoton, BorderLayout.EAST);
-    
+
         ventana.add(panelSuperior, BorderLayout.NORTH);
-    
+
         // Panel de pestañas para los tipos de seguros
         JTabbedPane tabbedPane = new JTabbedPane();
-    
+
         // Crear pestañas para cada tipo de seguro
         for (TipoSeguro tipo : TipoSeguro.values()) {
             JPanel panelSeguros = crearPanelSeguros(tipo);
             tabbedPane.addTab(tipo.toString(), panelSeguros);
         }
-    
+
         // Panel para mostrar todos los seguros
         JPanel panelTodos = crearPanelTodosSeguros();
         tabbedPane.addTab("Todos los Seguros", panelTodos);
@@ -100,7 +92,7 @@ public class SeguroManager {
         JPanel panelCentral = new JPanel(new BorderLayout());
         panelCentral.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20)); // Márgenes izquierdo y derecho
         panelCentral.add(tabbedPane, BorderLayout.CENTER);
-    
+
         ventana.add(panelCentral, BorderLayout.CENTER);
 
         // Panel inferior con el botón "Seleccionar Seguro"
@@ -114,82 +106,95 @@ public class SeguroManager {
             if (selectedIndex != -1) {
                 JPanel selectedPanel = (JPanel) tabbedPane.getComponentAt(selectedIndex);
                 @SuppressWarnings("unchecked")
-                JList<Seguro> listaSeguros = (JList<Seguro>) ((JScrollPane) selectedPanel.getComponent(0)).getViewport().getView();
+                JList<Seguro> listaSeguros = (JList<Seguro>) ((JScrollPane) selectedPanel.getComponent(0)).getViewport()
+                        .getView();
                 Seguro seguroSeleccionado = listaSeguros.getSelectedValue();
                 if (seguroSeleccionado != null) {
                     abrirVentanaSeguro(seguroSeleccionado);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Por favor seleccione un seguro", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Por favor seleccione un seguro", "Advertencia",
+                            JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
         panelInferior.add(btnSeleccionar);
 
         ventana.add(panelInferior, BorderLayout.SOUTH);
-    
+
         ventana.setVisible(true);
     }
 
-private static JPanel crearPanelSeguros(TipoSeguro tipo) {
+    private static JPanel crearPanelSeguros(TipoSeguro tipo) {
         JPanel panel = new JPanel(new BorderLayout());
-        
+
         try {
             // Obtener seguros por tipo desde el backend
             List<Seguro> seguros = seguroClient.obtenerSegurosPorTipo(tipo.toString());
-            
+
             DefaultListModel<Seguro> modeloLista = new DefaultListModel<>();
-            for (Seguro seguro : seguros) {
-                modeloLista.addElement(seguro);
+            if (seguros.size() == 1 && "vacio".equalsIgnoreCase(seguros.get(0).getNombre())) {
+                // Si la lista contiene solo un seguro con nombre "vacio", mostrar mensaje
+                JLabel mensaje = new JLabel("No hay seguros de este tipo disponibles.", SwingConstants.CENTER);
+                mensaje.setFont(new Font("Arial", Font.BOLD, 16));
+                panel.add(mensaje, BorderLayout.CENTER);
+            } else {
+                // Añadir los seguros al modelo de la lista
+                for (Seguro seguro : seguros) {
+                    modeloLista.addElement(seguro);
+                }
+
+                JList<Seguro> listaSeguros = new JList<>(modeloLista);
+                listaSeguros.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                listaSeguros.setCellRenderer(new SeguroListCellRenderer());
+
+                JScrollPane scrollPane = new JScrollPane(listaSeguros);
+                panel.add(scrollPane, BorderLayout.CENTER);
             }
-            
-            JList<Seguro> listaSeguros = new JList<>(modeloLista);
-            listaSeguros.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-            listaSeguros.setCellRenderer(new SeguroListCellRenderer());
-            
-            JScrollPane scrollPane = new JScrollPane(listaSeguros);
-            panel.add(scrollPane, BorderLayout.CENTER);            
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al cargar los seguros: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error al cargar los seguros: " + e.getMessage(), "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
-        
+
         return panel;
     }
 
     private static JPanel crearPanelTodosSeguros() {
         JPanel panel = new JPanel(new BorderLayout());
-        
+
         try {
             // Obtener todos los seguros desde el backend
             List<Seguro> seguros = seguroClient.obtenerTodosSeguros();
-            
+
             DefaultListModel<Seguro> modeloLista = new DefaultListModel<>();
             for (Seguro seguro : seguros) {
                 modeloLista.addElement(seguro);
             }
-            
+
             JList<Seguro> listaSeguros = new JList<>(modeloLista);
             listaSeguros.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             listaSeguros.setCellRenderer(new SeguroListCellRenderer());
-            
+
             JScrollPane scrollPane = new JScrollPane(listaSeguros);
             panel.add(scrollPane, BorderLayout.CENTER);
-            
+
             JButton btnSeleccionar = new JButton("Seleccionar Seguro");
             btnSeleccionar.addActionListener(e -> {
                 Seguro seguroSeleccionado = listaSeguros.getSelectedValue();
                 if (seguroSeleccionado != null) {
                     abrirVentanaSeguro(seguroSeleccionado);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Por favor seleccione un seguro", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Por favor seleccione un seguro", "Advertencia",
+                            JOptionPane.WARNING_MESSAGE);
                 }
             });
-            
+
             panel.add(btnSeleccionar, BorderLayout.SOUTH);
-            
+
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al cargar los seguros: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error al cargar los seguros: " + e.getMessage(), "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
-        
+
         return panel;
     }
 
@@ -198,7 +203,8 @@ private static JPanel crearPanelSeguros(TipoSeguro tipo) {
             case COCHE -> new SeguroCocheVentana(seguro).mostrar();
             case VIDA -> new SeguroVidaVentana(seguro).mostrar();
             case CASA -> new SeguroCasaVentana(seguro).mostrar();
-            default -> JOptionPane.showMessageDialog(null, "Tipo de seguro no reconocido", "Error", JOptionPane.ERROR_MESSAGE);
+            default ->
+                JOptionPane.showMessageDialog(null, "Tipo de seguro no reconocido", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -229,7 +235,3 @@ private static JPanel crearPanelSeguros(TipoSeguro tipo) {
         }
     }
 }
-
-
-
-
