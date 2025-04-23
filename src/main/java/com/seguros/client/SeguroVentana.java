@@ -28,6 +28,8 @@ public class SeguroVentana {
     public SeguroVentana(AdminVentana adminVentana) {
         this.adminVentana = adminVentana; // Guardar la instancia de AdminVentana
     }
+    public SeguroVentana(){// Inicializar adminVentana como null
+    }
 
     static {
         hostname = System.getProperty("hostname", "localhost");
@@ -68,14 +70,18 @@ public class SeguroVentana {
         JLabel lblPrecio = new JLabel("Precio:");
         txtPrecio = new JTextField(10);
 
-        btnGuardar = new JButton("Guardar");
+        if(Editar == 2){
+            btnGuardar = new JButton("Salir");
+        }else{
+            btnGuardar = new JButton("Guardar");
+        }
         btnGuardar.addActionListener(e -> {
             if (Editar == 0) {
                 guardarSeguroEditado(frame, txtNombre.getText().trim());
             } else if (Editar == 1) {
                 guardarSeguro(frame);
             } else{
-                btnGuardar.setText("Salir");
+                frame.dispose();
             }
             adminVentana.actualizarListaSeguros();
         });

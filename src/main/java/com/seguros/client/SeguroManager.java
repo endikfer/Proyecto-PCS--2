@@ -100,6 +100,13 @@ public class SeguroManager {
         JButton btnSeleccionar = new JButton("Seleccionar Seguro");
         btnSeleccionar.setPreferredSize(new Dimension(200, 40));
         btnSeleccionar.setFont(new Font("Arial", Font.BOLD, 14));
+
+        JButton botonInfomracion = new JButton("INFORMACION");
+        botonInfomracion.setPreferredSize(new java.awt.Dimension(150, 50));
+        botonInfomracion.setFont(new Font("Arial", Font.BOLD, 16));
+
+        SeguroVentana ventanaCrear = new SeguroVentana(); 
+
         btnSeleccionar.addActionListener(e -> {
             // Obtener la pestaña seleccionada
             int selectedIndex = tabbedPane.getSelectedIndex();
@@ -117,7 +124,29 @@ public class SeguroManager {
                 }
             }
         });
+
+        botonInfomracion.addActionListener(e -> {
+            int selectedIndex = tabbedPane.getSelectedIndex();
+            if (selectedIndex != -1) {
+                JPanel selectedPanel = (JPanel) tabbedPane.getComponentAt(selectedIndex);
+                @SuppressWarnings("unchecked")
+                JList<Seguro> listaSeguros = (JList<Seguro>) ((JScrollPane) selectedPanel.getComponent(0)).getViewport()
+                        .getView();
+                Seguro seguroSeleccionado = listaSeguros.getSelectedValue();
+                if (seguroSeleccionado != null) {
+
+                    ventanaCrear.informacionSeguro(seguroSeleccionado.getNombre());
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Por favor seleccione un seguro", "Advertencia",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+            }
+                
+        });
+
         panelInferior.add(btnSeleccionar);
+        panelInferior.add(botonInfomracion);
 
         ventana.add(panelInferior, BorderLayout.SOUTH);
 
