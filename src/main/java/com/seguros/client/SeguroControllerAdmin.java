@@ -15,33 +15,37 @@ import com.seguros.model.Seguro;
 public class SeguroControllerAdmin {
     private final HttpClient httpClient;
     private final String BASE_URL;
-    
+
     public SeguroControllerAdmin(String hostname, String port) {
         this.httpClient = HttpClient.newHttpClient();
         this.BASE_URL = String.format("http://%s:%s", hostname, port);
     }
 
-    public List<String> listaNombreSeguros() {
+    public List<Seguro> listaNombreSeguros() {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(BASE_URL + "/api/seguros/seguro/obtenerTodos"))
                     .header("Content-Type", "application/json")
                     .GET()
                     .build();
-    
+
             System.out.println("URL de la solicitud: " + request.uri()); // Imprimir la URL de la solicitud
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-    
-            System.out.println("Código de estado de la respuesta: " + response.statusCode()); // Imprimir el código de estado
+
+            System.out.println("Código de estado de la respuesta: " + response.statusCode()); // Imprimir el código de
+                                                                                              // estado
             switch (response.statusCode()) {
                 case 200 -> {
                     ObjectMapper mapper = new ObjectMapper();
-                    System.out.println("Respuesta del servidor: " + response.body()); // Imprimir el cuerpo de la respuesta
-                    // Deserializamos el cuerpo de la respuesta en una lista de Strings
-                    return mapper.readValue(response.body(), mapper.getTypeFactory().constructCollectionType(List.class, String.class));
+                    System.out.println("Respuesta del servidor: " + response.body()); // Imprimir el cuerpo de la
+                                                                                      // respuesta
+                    // Deserializamos el cuerpo de la respuesta en una lista de objetos Seguro
+                    return mapper.readValue(response.body(),
+                            mapper.getTypeFactory().constructCollectionType(List.class, Seguro.class));
                 }
                 case 404 -> throw new RuntimeException("No se encontraron seguros en el servidor.");
-                default -> throw new RuntimeException("Error al obtener los seguros: Código de estado " + response.statusCode());
+                default -> throw new RuntimeException(
+                        "Error al obtener los seguros: Código de estado " + response.statusCode());
             }
         } catch (IOException e) {
             throw new RuntimeException("Error de entrada/salida al obtener los seguros.", e);
@@ -89,15 +93,16 @@ public class SeguroControllerAdmin {
         try {
             String url = BASE_URL + "/api/seguros/seguro/editar";
             HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .header("Content-Type", "application/x-www-form-urlencoded") // Cambia el tipo de contenido
-                .POST(HttpRequest.BodyPublishers.ofString(
-                    "id=" + id + "&nombre=" + nombre.trim() + "&descripcion=" + descripcion.trim() + 
-                    "&tipoSeguro=" + tipoSeguro + "&precio=" + precio))
-                .build();
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/x-www-form-urlencoded") // Cambia el tipo de contenido
+                    .POST(HttpRequest.BodyPublishers.ofString(
+                            "id=" + id + "&nombre=" + nombre.trim() + "&descripcion=" + descripcion.trim() +
+                                    "&tipoSeguro=" + tipoSeguro + "&precio=" + precio))
+                    .build();
             System.out.println("URL de la solicitud: " + request.uri()); // Imprimir la URL de la solicitud
             HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
-            System.out.println("Código de estado de la respuesta: " + response.statusCode()); // Imprimir el código de estado
+            System.out.println("Código de estado de la respuesta: " + response.statusCode()); // Imprimir el código de
+                                                                                              // estado
             switch (response.statusCode()) {
                 case 200 -> {
                     System.out.println("Seguro editado correctamente");
@@ -106,7 +111,8 @@ public class SeguroControllerAdmin {
                 case 404 -> throw new RuntimeException("Seguro no encontrado.");
                 case 409 -> {
                     String mensaje = "Seguro existente con el mismo nombre. Por favor, elija otro nombre.";
-                    //JOptionPane.showMessageDialog(null, mensaje, "Conflicto", JOptionPane.WARNING_MESSAGE);
+                    // JOptionPane.showMessageDialog(null, mensaje, "Conflicto",
+                    // JOptionPane.WARNING_MESSAGE);
                     throw new RuntimeException(mensaje);
                 }
                 case 500 -> throw new RuntimeException("Error interno del servidor.");
@@ -125,17 +131,19 @@ public class SeguroControllerAdmin {
                     .header("Content-Type", "application/json")
                     .GET()
                     .build();
-    
+
             System.out.println("URL de la solicitud: " + request.uri()); // Imprimir la URL de la solicitud
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-            System.out.println("Código de estado de la respuesta: " + response.statusCode()); // Imprimir el código de estado
-    
+            System.out.println("Código de estado de la respuesta: " + response.statusCode()); // Imprimir el código de
+                                                                                              // estado
+
             if (response.statusCode() == 200) {
                 ObjectMapper mapper = new ObjectMapper();
                 System.out.println("Respuesta del servidor: " + response.body()); // Imprimir el cuerpo de la respuesta
-            // Deserializamos el cuerpo de la respuesta en un objeto Seguro
-            return mapper.readValue(response.body(), Seguro.class); // Cambiar response.toString() por response.body()
+                // Deserializamos el cuerpo de la respuesta en un objeto Seguro
+                return mapper.readValue(response.body(), Seguro.class); // Cambiar response.toString() por
+                                                                        // response.body()
             } else if (response.statusCode() == 404) {
                 throw new RuntimeException("Seguro no encontrado.");
             } else {
@@ -153,12 +161,12 @@ public class SeguroControllerAdmin {
                     .uri(URI.create(url))
                     .DELETE()
                     .build();
-    
+
             System.out.println("URL de la solicitud: " + request.uri());
             HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
-    
+
             System.out.println("Código de estado de la respuesta: " + response.statusCode());
-    
+
             switch (response.statusCode()) {
                 case 200 -> System.out.println("Seguro eliminado correctamente.");
                 case 400 -> throw new IllegalArgumentException("ID inválido.");
@@ -171,5 +179,5 @@ public class SeguroControllerAdmin {
             throw new RuntimeException("Error eliminando el seguro.", e);
         }
     }
-    
+
 }

@@ -81,18 +81,15 @@ public class SeguroService {
         }).orElse(false);
     }
 
-    public List<String> obtenerTodosSeguros() {
+    public List<Seguro> obtenerTodosSeguros() {
         List<Seguro> seguros = segurorepo.findAll(); // Obtiene todos los seguros de la base de datos
-        List<String> nombresSeguros = new ArrayList<>();
 
-        if (seguros != null && !seguros.isEmpty()) {
-            for (Seguro seguro : seguros) {
-                if (seguro.getNombre() != null && !seguro.getNombre().isBlank()) {
-                    nombresSeguros.add(seguro.getNombre());
-                }
-            }
+        if (seguros == null || seguros.isEmpty()) {
+            System.out.println("No se encontraron seguros en la base de datos.");
+            return new ArrayList<>(); // Devuelve una lista vacía si no hay seguros
         }
-        return nombresSeguros; // Devuelve la lista de nombres de seguros
+
+        return seguros; // Devuelve la lista de seguros
     }
 
     public List<Seguro> obtenerSegurosPorTipo(String tipoSeguro) {

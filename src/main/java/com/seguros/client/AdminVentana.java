@@ -22,6 +22,8 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import com.seguros.model.Seguro;
+
 public class AdminVentana {
     private final JFrame frame;
     private final JPanel panelCentral;
@@ -286,16 +288,17 @@ public class AdminVentana {
         modeloLista.clear(); // Limpiar el modelo antes de cargar nuevos datos
         try {
             SeguroControllerAdmin seguroControllerAdmin = new SeguroControllerAdmin("localhost", "8080");
-            List<String> nombresSeguros = seguroControllerAdmin.listaNombreSeguros();
-            if (nombresSeguros != null && !nombresSeguros.isEmpty()) {
-                if (nombresSeguros.size() == 1 && "vacio".equalsIgnoreCase(nombresSeguros.get(0))) {
-                    // Si el servidor devuelve "vacio", mostrar "No hay seguros creados"
+            List<Seguro> seguros = seguroControllerAdmin.listaNombreSeguros(); // Obtener lista de objetos Seguro
+            if (seguros != null && !seguros.isEmpty()) {
+                if (seguros.size() == 1 && "vacio".equalsIgnoreCase(seguros.get(0).getNombre())) {
+                    // Si la lista contiene solo un seguro con nombre "vacio", mostrar "No hay
+                    // seguros creados"
                     modeloLista.addElement("No hay seguros creados");
                     listaSeguros.setEnabled(false); // Desactivar selección
                 } else {
                     // Agregar los nombres de los seguros al modelo
-                    for (String nombre : nombresSeguros) {
-                        modeloLista.addElement(nombre);
+                    for (Seguro seguro : seguros) {
+                        modeloLista.addElement(seguro.getNombre()); // Añadir solo el nombre del seguro
                     }
                     listaSeguros.setEnabled(true); // Activar selección
                 }

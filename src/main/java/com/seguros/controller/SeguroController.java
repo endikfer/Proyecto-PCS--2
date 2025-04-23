@@ -107,17 +107,19 @@ public class SeguroController {
     }
 
     @GetMapping("/seguro/obtenerTodos")
-    public ResponseEntity<List<String>> obtenerTodosSeguros() {
+    public ResponseEntity<List<Seguro>> obtenerTodosSeguros() {
         try {
             System.out.println("Petición recibida para obtener todos los seguros desde el controller\n");
-            List<String> seguros = seguroService.obtenerTodosSeguros();
+            List<Seguro> seguros = seguroService.obtenerTodosSeguros();
 
             if (seguros == null || seguros.isEmpty()) {
                 System.out.println("No se encontraron seguros en la base de datos. Añadiendo 'vacio' a la lista.");
-                seguros = Collections.singletonList("vacio");
+                Seguro seguroVacio = new Seguro();
+                seguroVacio.setNombre("vacio");
+                seguros = Collections.singletonList(seguroVacio);
             }
 
-            System.out.println("Seguros obtenidos: " + seguros);
+            System.out.println("Seguros obtenidos: " + seguros.size());
             return new ResponseEntity<>(seguros, HttpStatus.OK);
         } catch (Exception e) {
             System.err.println("Error al obtener todos los seguros: " + e.getMessage());

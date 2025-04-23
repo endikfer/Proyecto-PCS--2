@@ -177,19 +177,6 @@ public class SeguroManager {
             JScrollPane scrollPane = new JScrollPane(listaSeguros);
             panel.add(scrollPane, BorderLayout.CENTER);
 
-            JButton btnSeleccionar = new JButton("Seleccionar Seguro");
-            btnSeleccionar.addActionListener(e -> {
-                Seguro seguroSeleccionado = listaSeguros.getSelectedValue();
-                if (seguroSeleccionado != null) {
-                    abrirVentanaSeguro(seguroSeleccionado);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Por favor seleccione un seguro", "Advertencia",
-                            JOptionPane.WARNING_MESSAGE);
-                }
-            });
-
-            panel.add(btnSeleccionar, BorderLayout.SOUTH);
-
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al cargar los seguros: " + e.getMessage(), "Error",
                     JOptionPane.ERROR_MESSAGE);
