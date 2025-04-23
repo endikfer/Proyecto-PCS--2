@@ -101,9 +101,9 @@ public class SeguroManager {
         btnSeleccionar.setPreferredSize(new Dimension(200, 40));
         btnSeleccionar.setFont(new Font("Arial", Font.BOLD, 14));
 
-        JButton botonInfomracion = new JButton("INFORMACION");
-        botonInfomracion.setPreferredSize(new java.awt.Dimension(150, 50));
-        botonInfomracion.setFont(new Font("Arial", Font.BOLD, 16));
+        JButton botonInfomracion = new JButton("Información del Seguro");
+        botonInfomracion.setPreferredSize(new Dimension(200, 40));
+        botonInfomracion.setFont(new Font("Arial", Font.BOLD, 14));
 
         SeguroVentana ventanaCrear = new SeguroVentana(); 
 
