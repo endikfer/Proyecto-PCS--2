@@ -1,12 +1,15 @@
 package com.seguros.controller;
 
 import com.seguros.Service.SeguroService;
+import com.seguros.model.Seguro;
+import com.seguros.model.TipoSeguro;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Arrays;
@@ -14,6 +17,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -141,67 +146,142 @@ class SeguroControllerTest {
         verify(seguroService, times(1)).crearSeguro("Seguro1", "Descripción1", "Tipo1", 100.0);
     }
 
-    /*
-     * @Test
-     * void testObtenerTodosSeguros_ConSeguros() {
-     * // Simula el comportamiento del servicio
-     * List<String> segurosMock = Arrays.asList("Seguro1", "Seguro2");
-     * when(seguroService.obtenerTodosSeguros()).thenReturn(segurosMock);
-     * 
-     * // Llama al método del controlador
-     * ResponseEntity<List<String>> response =
-     * seguroController.obtenerTodosSeguros();
-     * 
-     * // Verifica el resultado
-     * assertEquals(OK, response.getStatusCode());
-     * assertEquals(segurosMock, response.getBody());
-     * verify(seguroService, times(1)).obtenerTodosSeguros();
-     * }
-     * 
-     * @Test
-     * void testObtenerTodosSeguros_ConSegurosNulos() {
-     * // Simula el comportamiento del servicio cuando la lista de seguros es null
-     * when(seguroService.obtenerTodosSeguros()).thenReturn(null);
-     * 
-     * // Llama al método del controlador
-     * ResponseEntity<List<String>> response =
-     * seguroController.obtenerTodosSeguros();
-     * 
-     * // Verifica el resultado
-     * assertEquals(OK, response.getStatusCode());
-     * assertEquals(Collections.singletonList("vacio"), response.getBody());
-     * verify(seguroService, times(1)).obtenerTodosSeguros();
-     * }
-     * 
-     * @Test
-     * void testObtenerTodosSeguros_SinSeguros() {
-     * // Simula el comportamiento del servicio cuando no hay seguros
-     * when(seguroService.obtenerTodosSeguros()).thenReturn(Collections.emptyList())
-     * ;
-     * 
-     * // Llama al método del controlador
-     * ResponseEntity<List<String>> response =
-     * seguroController.obtenerTodosSeguros();
-     * 
-     * // Verifica el resultado
-     * assertEquals(OK, response.getStatusCode());
-     * assertEquals(Collections.singletonList("vacio"), response.getBody());
-     * verify(seguroService, times(1)).obtenerTodosSeguros();
-     * }
-     * 
-     * @Test
-     * void testObtenerTodosSeguros_ConError() {
-     * // Simula un error en el servicio
-     * when(seguroService.obtenerTodosSeguros()).thenThrow(new
-     * RuntimeException("Error simulado"));
-     * 
-     * // Llama al método del controlador
-     * ResponseEntity<List<String>> response =
-     * seguroController.obtenerTodosSeguros();
-     * 
-     * // Verifica el resultado
-     * assertEquals(500, response.getStatusCodeValue()); // HTTP 500
-     * verify(seguroService, times(1)).obtenerTodosSeguros();
-     * }
-     */
+    @Test
+    void testObtenerTodosSeguros_SegurosDisponibles() {
+        // Mock del servicio
+        Seguro seguroVida = new Seguro("VIDA", "Seguro de vida", TipoSeguro.VIDA, 120.50);
+        Seguro seguroCasa = new Seguro("CASA", "Seguro de casa", TipoSeguro.CASA, 200.75);
+        List<Seguro> mockSeguros = List.of(seguroVida, seguroCasa);
+        when(seguroService.obtenerTodosSeguros()).thenReturn(mockSeguros);
+
+        // Prueba
+        ResponseEntity<List<Seguro>> response = seguroController.obtenerTodosSeguros();
+
+        // Verificaciones
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockSeguros, response.getBody());
+        verify(seguroService, times(1)).obtenerTodosSeguros();
+    }
+
+    @Test
+    void testObtenerTodosSeguros_SegurosNull() {
+        // Mock del servicio para devolver null
+        when(seguroService.obtenerTodosSeguros()).thenReturn(null);
+
+        // Prueba
+        ResponseEntity<List<Seguro>> response = seguroController.obtenerTodosSeguros();
+
+        // Verificaciones
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(1, response.getBody().size());
+        Seguro seguroVacio = response.getBody().get(0);
+        assertEquals("vacio", seguroVacio.getNombre());
+        assertNull(seguroVacio.getDescripcion());
+        assertNull(seguroVacio.getTipoSeguro());
+        assertNull(seguroVacio.getPrecio());
+        verify(seguroService, times(1)).obtenerTodosSeguros();
+    }
+
+    @Test
+    void testObtenerTodosSeguros_SegurosVacios() {
+        // Mock del servicio para devolver una lista vacía
+        when(seguroService.obtenerTodosSeguros()).thenReturn(Collections.emptyList());
+
+        // Prueba
+        ResponseEntity<List<Seguro>> response = seguroController.obtenerTodosSeguros();
+
+        // Verificaciones
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(1, response.getBody().size());
+        Seguro seguroVacio = response.getBody().get(0);
+        assertEquals("vacio", seguroVacio.getNombre());
+        assertNull(seguroVacio.getDescripcion());
+        assertNull(seguroVacio.getTipoSeguro());
+        assertNull(seguroVacio.getPrecio());
+        verify(seguroService, times(1)).obtenerTodosSeguros();
+    }
+
+    @Test
+    void testObtenerTodosSeguros_ErrorDelSistema() {
+        // Mock del servicio para lanzar una excepción
+        when(seguroService.obtenerTodosSeguros()).thenThrow(new RuntimeException("Error simulado"));
+
+        // Prueba
+        ResponseEntity<List<Seguro>> response = seguroController.obtenerTodosSeguros();
+
+        // Verificaciones
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        verify(seguroService, times(1)).obtenerTodosSeguros();
+    }
+
+    @Test
+    void testObtenerSegurosPorTipo_SegurosDisponibles() {
+        // Mock del servicio
+        Seguro seguroVida = new Seguro("VIDA", "Seguro de vida", TipoSeguro.VIDA, 120.50);
+        List<Seguro> mockSeguros = List.of(seguroVida);
+        when(seguroService.obtenerSegurosPorTipo("VIDA")).thenReturn(mockSeguros);
+
+        // Prueba
+        ResponseEntity<List<Seguro>> response = seguroController.obtenerSegurosPorTipo("VIDA");
+
+        // Verificaciones
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockSeguros, response.getBody());
+        verify(seguroService, times(1)).obtenerSegurosPorTipo("VIDA");
+    }
+
+    @Test
+    void testObtenerSegurosPorTipo_SegurosNull() {
+        // Mock del servicio para devolver null
+        when(seguroService.obtenerSegurosPorTipo("VIDA")).thenReturn(null);
+
+        // Prueba
+        ResponseEntity<List<Seguro>> response = seguroController.obtenerSegurosPorTipo("VIDA");
+
+        // Verificaciones
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(1, response.getBody().size());
+        Seguro seguroVacio = response.getBody().get(0);
+        assertEquals("vacio", seguroVacio.getNombre());
+        assertNull(seguroVacio.getDescripcion());
+        assertNull(seguroVacio.getTipoSeguro());
+        assertNull(seguroVacio.getPrecio());
+        verify(seguroService, times(1)).obtenerSegurosPorTipo("VIDA");
+    }
+
+    @Test
+    void testObtenerSegurosPorTipo_SegurosVacios() {
+        // Mock del servicio para devolver una lista vacía
+        when(seguroService.obtenerSegurosPorTipo("VIDA")).thenReturn(Collections.emptyList());
+
+        // Prueba
+        ResponseEntity<List<Seguro>> response = seguroController.obtenerSegurosPorTipo("VIDA");
+
+        // Verificaciones
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(1, response.getBody().size());
+        Seguro seguroVacio = response.getBody().get(0);
+        assertEquals("vacio", seguroVacio.getNombre());
+        assertNull(seguroVacio.getDescripcion());
+        assertNull(seguroVacio.getTipoSeguro());
+        assertNull(seguroVacio.getPrecio());
+        verify(seguroService, times(1)).obtenerSegurosPorTipo("VIDA");
+    }
+
+    @Test
+    void testObtenerSegurosPorTipo_ErrorDelSistema() {
+        // Mock del servicio para lanzar una excepción
+        when(seguroService.obtenerSegurosPorTipo("VIDA")).thenThrow(new RuntimeException("Error simulado"));
+
+        // Prueba
+        ResponseEntity<List<Seguro>> response = seguroController.obtenerSegurosPorTipo("VIDA");
+
+        // Verificaciones
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        verify(seguroService, times(1)).obtenerSegurosPorTipo("VIDA");
+    }
 }

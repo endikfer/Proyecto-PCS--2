@@ -1,6 +1,7 @@
 package com.seguros.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -121,70 +122,77 @@ public class SeguroServiceTest {
         assertEquals(expected, result);
     }
 
-    /*
-     * @Test
-     * void testObtenerTodosSeguros_ListaConSeguros() {
-     * // Simulación de seguros en la base de datos
-     * List<Seguro> segurosMock = List.of(
-     * new Seguro("Seguro Vida", "Cobertura completa", TipoSeguro.VIDA, 1000.0),
-     * new Seguro("Seguro Auto", "Protección contra accidentes", TipoSeguro.COCHE,
-     * 500.0));
-     * 
-     * // Mockeamos el comportamiento del repositorio
-     * when(seguroRepository.findAll()).thenReturn(segurosMock);
-     * 
-     * // Ejecutamos el método
-     * List<String> nombresSeguros = seguroService.obtenerTodosSeguros();
-     * 
-     * // Validamos los resultados
-     * assertEquals(2, nombresSeguros.size());
-     * assertTrue(nombresSeguros.contains("Seguro Vida"));
-     * assertTrue(nombresSeguros.contains("Seguro Auto"));
-     * }
-     * 
-     * @Test
-     * void testObtenerTodosSeguros_ListaVacia() {
-     * // Mock de lista vacía en el repositorio
-     * when(seguroRepository.findAll()).thenReturn(new ArrayList<>());
-     * 
-     * // Ejecutamos el método
-     * List<String> nombresSeguros = seguroService.obtenerTodosSeguros();
-     * 
-     * // Validamos que la lista es vacía
-     * assertNotNull(nombresSeguros);
-     * assertTrue(nombresSeguros.isEmpty());
-     * }
-     * 
-     * @Test
-     * void testObtenerTodosSeguros_ListaNula() {
-     * // Simulación de que el repositorio devuelve null
-     * when(seguroRepository.findAll()).thenReturn(null);
-     * 
-     * // Ejecutamos el método
-     * List<String> nombresSeguros = seguroService.obtenerTodosSeguros();
-     * 
-     * // Validamos que devuelve una lista vacía en lugar de fallar
-     * assertNotNull(nombresSeguros);
-     * assertTrue(nombresSeguros.isEmpty());
-     * }
-     * 
-     * @Test
-     * void testObtenerTodosSeguros_ListaConNombresNulos() {
-     * // Simulación de seguros con nombres nulos o en blanco
-     * List<Seguro> segurosMock = List.of(
-     * new Seguro(null, "Cobertura completa", TipoSeguro.VIDA, 1000.0),
-     * new Seguro(" ", "Protección contra accidentes", TipoSeguro.COCHE, 500.0),
-     * new Seguro("Seguro Hogar", "Protección contra incendios", TipoSeguro.CASA,
-     * 1200.0));
-     * 
-     * when(seguroRepository.findAll()).thenReturn(segurosMock);
-     * 
-     * // Ejecutamos el método
-     * List<String> nombresSeguros = seguroService.obtenerTodosSeguros();
-     * 
-     * // Validamos que solo se agregue el nombre válido
-     * assertEquals(1, nombresSeguros.size());
-     * assertTrue(nombresSeguros.contains("Seguro Hogar"));
-     * }
-     */
+    @Test
+    void testObtenerTodosSeguros_Exitoso() {
+        // Datos de prueba
+        List<Seguro> segurosMock = new ArrayList<>();
+        segurosMock.add(new Seguro("Seguro de Vida", "Cobertura total", TipoSeguro.VIDA, 1000.0));
+        segurosMock.add(new Seguro("Seguro de Auto", "Cobertura contra daños", TipoSeguro.COCHE, 500.0));
+
+        // Simulación del método findAll en el repositorio
+        when(seguroRepository.findAll()).thenReturn(segurosMock);
+
+        // Ejecución del método a probar
+        List<Seguro> result = seguroService.obtenerTodosSeguros();
+
+        // Verificaciones
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals("Seguro de Vida", result.get(0).getNombre());
+        assertEquals("Seguro de Auto", result.get(1).getNombre());
+        verify(seguroRepository, times(1)).findAll();
+    }
+
+    @Test
+    void testObtenerTodosSeguros_ListaVacia() {
+        // Simulación del método findAll en el repositorio con una lista vacía
+        when(seguroRepository.findAll()).thenReturn(new ArrayList<>());
+
+        // Ejecución del método a probar
+        List<Seguro> result = seguroService.obtenerTodosSeguros();
+
+        // Verificaciones
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(seguroRepository, times(1)).findAll();
+    }
+
+    @Test
+    void testObtenerTodosSeguros_RepositorioNulo() {
+        // Simulación del método findAll en el repositorio devolviendo null
+        when(seguroRepository.findAll()).thenReturn(null);
+
+        // Ejecución del método a probar
+        List<Seguro> result = seguroService.obtenerTodosSeguros();
+
+        // Verificaciones
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(seguroRepository, times(1)).findAll();
+    }
+
+    @Test
+    void testObtenerSegurosPorTipo_ValidTipoSeguro() {
+        // Mock del repositorio
+        TipoSeguro tipoSeguro = TipoSeguro.VIDA;
+        List<Seguro> mockSeguros = Arrays.asList(new Seguro(), new Seguro());
+        when(seguroRepository.findByTipoSeguro(tipoSeguro)).thenReturn(mockSeguros);
+
+        // Prueba
+        List<Seguro> resultado = seguroService.obtenerSegurosPorTipo("VIDA");
+        assertEquals(mockSeguros, resultado);
+
+        // Verificación de interacción
+        verify(seguroRepository, times(1)).findByTipoSeguro(tipoSeguro);
+    }
+
+    @Test
+    void testObtenerSegurosPorTipo_InvalidTipoSeguro() {
+        // Prueba de excepción
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> seguroService.obtenerSegurosPorTipo("invalido"));
+
+        assertEquals("El tipo de seguro 'invalido' no es válido. Los valores permitidos son: " +
+                Arrays.toString(TipoSeguro.values()), exception.getMessage());
+    }
 }
