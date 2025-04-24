@@ -105,7 +105,7 @@ public class SeguroManager {
         botonInfomracion.setPreferredSize(new Dimension(200, 40));
         botonInfomracion.setFont(new Font("Arial", Font.BOLD, 14));
 
-        SeguroVentana ventanaCrear = new SeguroVentana(); 
+        SeguroVentana ventanaCrear = new SeguroVentana();
 
         btnSeleccionar.addActionListener(e -> {
             // Obtener la pestaña seleccionada
@@ -142,7 +142,7 @@ public class SeguroManager {
                             JOptionPane.WARNING_MESSAGE);
                 }
             }
-                
+
         });
 
         panelInferior.add(btnSeleccionar);
@@ -195,17 +195,24 @@ public class SeguroManager {
             List<Seguro> seguros = seguroClient.obtenerTodosSeguros();
 
             DefaultListModel<Seguro> modeloLista = new DefaultListModel<>();
-            for (Seguro seguro : seguros) {
-                modeloLista.addElement(seguro);
+
+            if (seguros.size() == 1 && "vacio".equalsIgnoreCase(seguros.get(0).getNombre())) {
+                // Si la lista contiene solo un seguro con nombre "vacio", mostrar mensaje
+                JLabel mensaje = new JLabel("No hay seguros de ningun tipo disponibles.", SwingConstants.CENTER);
+                mensaje.setFont(new Font("Arial", Font.BOLD, 16));
+                panel.add(mensaje, BorderLayout.CENTER);
+            } else {
+                for (Seguro seguro : seguros) {
+                    modeloLista.addElement(seguro);
+                }
+
+                JList<Seguro> listaSeguros = new JList<>(modeloLista);
+                listaSeguros.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                listaSeguros.setCellRenderer(new SeguroListCellRenderer());
+
+                JScrollPane scrollPane = new JScrollPane(listaSeguros);
+                panel.add(scrollPane, BorderLayout.CENTER);
             }
-
-            JList<Seguro> listaSeguros = new JList<>(modeloLista);
-            listaSeguros.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-            listaSeguros.setCellRenderer(new SeguroListCellRenderer());
-
-            JScrollPane scrollPane = new JScrollPane(listaSeguros);
-            panel.add(scrollPane, BorderLayout.CENTER);
-
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al cargar los seguros: " + e.getMessage(), "Error",
                     JOptionPane.ERROR_MESSAGE);
