@@ -25,6 +25,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
+import java.util.Optional;
 
 import com.seguros.model.Seguro;
 import com.seguros.model.TipoSeguro;
@@ -203,6 +204,20 @@ public class SeguroServiceTest {
 
     // ----------------- TESTS PARA editarSeguro -----------------
 
+    @Test
+    void testEditarSeguro_Exitoso() {
+        Seguro seguro = new Seguro("Antiguo", "Vieja desc", TipoSeguro.COCHE, 500.0);
+        when(seguroRepository.findById(anyLong())).thenReturn(Optional.of(seguro));
+
+        boolean resultado = seguroService.editarSeguro(1L, "Nuevo", "Nueva desc", "VIDA", 1500.0);
+
+        assertTrue(resultado);
+        assertEquals("Nuevo", seguro.getNombre());
+        assertEquals("Nueva desc", seguro.getDescripcion());
+        assertEquals(TipoSeguro.VIDA, seguro.getTipoSeguro());
+        assertEquals(1500.0, seguro.getPrecio());
+        verify(seguroRepository).save(seguro);
+    }
     
     @Test
     void testEditarSeguro_SeguroNoExiste() {
@@ -250,5 +265,16 @@ public class SeguroServiceTest {
         assertFalse(resultado);
         verify(seguroRepository, never()).deleteById(anyLong());
     }
+    @Test
+    void testEliminarSeguro_Exitoso() {
+        Seguro seguro = new Seguro("Auto", "Cobertura completa", TipoSeguro.COCHE, 800.0);
+        when(seguroRepository.findById(1L)).thenReturn(java.util.Optional.of(seguro));
+
+        boolean resultado = seguroService.eliminarSeguro(1L);
+
+        assertTrue(resultado);
+        verify(seguroRepository, times(1)).delete(seguro);
+    }
+
     
 }

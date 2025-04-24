@@ -19,6 +19,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -315,9 +316,25 @@ class SeguroControllerTest {
     }
 
     @Test
+    public void testEditarSeguro_DescripcionNula() {
+        ResponseEntity<String> response = seguroController.editarSeguro(1L, "Seguro", null, "TIPO", 120.0);
+        assertEquals(BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios y el precio debe ser mayor a 0.", response.getBody());
+        verify(seguroService, never()).editarSeguro(any(), any(), any(), any(), any());
+    }
+
+    @Test
     public void testEditarSeguro_PrecioInvalido() {
         ResponseEntity<String> response = seguroController.editarSeguro(1L, "Nombre", "Desc", "TIPO", -10.0);
         assertEquals(BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    public void testEditarSeguro_PrecioNulo() {
+        ResponseEntity<String> response = seguroController.editarSeguro(1L, "Seguro", "Desc", "TIPO", null);
+        assertEquals(BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios y el precio debe ser mayor a 0.", response.getBody());
+        verify(seguroService, never()).editarSeguro(any(), any(), any(), any(), any());
     }
 
     @Test
@@ -345,6 +362,33 @@ class SeguroControllerTest {
         ResponseEntity<String> response = seguroController.editarSeguro(3L, "Seguro", "Desc", "TIPO", 150.0);
         assertEquals(INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
+
+    @Test
+    public void testEditarSeguro_IdNull() {
+        ResponseEntity<String> response = seguroController.editarSeguro(null, "Seguro", "Desc", "TIPO", 120.0);
+        assertEquals(BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios y el precio debe ser mayor a 0.", response.getBody());
+        verify(seguroService, never()).editarSeguro(any(), any(), any(), any(), any());
+    }
+
+    @Test
+    public void testEditarSeguro_NombreBlanco() {
+        ResponseEntity<String> response = seguroController.editarSeguro(1L, "   ", "Desc", "TIPO", 120.0);
+        assertEquals(BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios y el precio debe ser mayor a 0.", response.getBody());
+        verify(seguroService, never()).editarSeguro(any(), any(), any(), any(), any());
+    }
+
+    @Test
+    public void testEditarSeguro_DescripcionBlanca() {
+        ResponseEntity<String> response = seguroController.editarSeguro(1L, "Seguro", "   ", "TIPO", 120.0);
+        assertEquals(BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios y el precio debe ser mayor a 0.", response.getBody());
+        verify(seguroService, never()).editarSeguro(any(), any(), any(), any(), any());
+    }
+
+
+
 
     // ----------------- TESTS PARA obtenerSeguroPorNombre -----------------
 
@@ -377,6 +421,13 @@ class SeguroControllerTest {
     @Test
     public void testEliminarSeguro_IdInvalido() {
         ResponseEntity<String> response = seguroController.eliminarSeguro(0L);
+        assertEquals(BAD_REQUEST, response.getStatusCode());
+        assertEquals("ID inválido.", response.getBody());
+    }
+
+    @Test
+    public void testEliminarSeguro_IdNull() {
+        ResponseEntity<String> response = seguroController.eliminarSeguro(null);
         assertEquals(BAD_REQUEST, response.getStatusCode());
         assertEquals("ID inválido.", response.getBody());
     }
