@@ -7,7 +7,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 import java.util.List;
-import java.util.ArrayList;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -59,16 +58,17 @@ public class SeguroControllerClient {
     public void editarSeguro(Long id, String nombre, String descripcion, String tipoSeguro, Double precio) {
         try {
             String url = BASE_URL + "/api/seguros/seguro/editar";
-HttpRequest request = HttpRequest.newBuilder()
-        .uri(URI.create(url))
-        .header("Content-Type", "application/x-www-form-urlencoded") // Cambia el tipo de contenido
-        .POST(HttpRequest.BodyPublishers.ofString(
-                "id=" + id + "&nombre=" + nombre.trim() + "&descripcion=" + descripcion.trim() + 
-                "&tipoSeguro=" + tipoSeguro + "&precio=" + precio))
-        .build();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/x-www-form-urlencoded") // Cambia el tipo de contenido
+                    .POST(HttpRequest.BodyPublishers.ofString(
+                            "id=" + id + "&nombre=" + nombre.trim() + "&descripcion=" + descripcion.trim() +
+                                    "&tipoSeguro=" + tipoSeguro + "&precio=" + precio))
+                    .build();
             System.out.println("URL de la solicitud: " + request.uri()); // Imprimir la URL de la solicitud
             HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
-            System.out.println("Código de estado de la respuesta: " + response.statusCode()); // Imprimir el código de estado
+            System.out.println("Código de estado de la respuesta: " + response.statusCode()); // Imprimir el código de
+                                                                                              // estado
             switch (response.statusCode()) {
                 case 200 -> {
                     System.out.println("Seguro editado correctamente");
@@ -102,17 +102,19 @@ HttpRequest request = HttpRequest.newBuilder()
                     .header("Content-Type", "application/json")
                     .GET()
                     .build();
-    
+
             System.out.println("URL de la solicitud: " + request.uri()); // Imprimir la URL de la solicitud
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-            System.out.println("Código de estado de la respuesta: " + response.statusCode()); // Imprimir el código de estado
-    
+            System.out.println("Código de estado de la respuesta: " + response.statusCode()); // Imprimir el código de
+                                                                                              // estado
+
             if (response.statusCode() == 200) {
                 ObjectMapper mapper = new ObjectMapper();
                 System.out.println("Respuesta del servidor: " + response.body()); // Imprimir el cuerpo de la respuesta
-            // Deserializamos el cuerpo de la respuesta en un objeto Seguro
-            return mapper.readValue(response.body(), Seguro.class); // Cambiar response.toString() por response.body()
+                // Deserializamos el cuerpo de la respuesta en un objeto Seguro
+                return mapper.readValue(response.body(), Seguro.class); // Cambiar response.toString() por
+                                                                        // response.body()
             } else if (response.statusCode() == 404) {
                 throw new RuntimeException("Seguro no encontrado.");
             } else {
@@ -130,13 +132,14 @@ HttpRequest request = HttpRequest.newBuilder()
                     .header("Content-Type", "application/json")
                     .GET()
                     .build();
-    
+
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-    
+
             if (response.statusCode() == 200) {
                 ObjectMapper mapper = new ObjectMapper();
-                return mapper.readValue(response.body(), 
-                    new TypeReference<List<Seguro>>(){});
+                return mapper.readValue(response.body(),
+                        new TypeReference<List<Seguro>>() {
+                        });
             } else {
                 throw new RuntimeException("Error al obtener seguros: " + response.statusCode());
             }
@@ -144,7 +147,7 @@ HttpRequest request = HttpRequest.newBuilder()
             throw new RuntimeException("Error obteniendo seguros.", e);
         }
     }
-    
+
     public List<Seguro> obtenerSegurosPorTipo(String tipoSeguro) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
@@ -152,13 +155,14 @@ HttpRequest request = HttpRequest.newBuilder()
                     .header("Content-Type", "application/json")
                     .GET()
                     .build();
-    
+
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-    
+
             if (response.statusCode() == 200) {
                 ObjectMapper mapper = new ObjectMapper();
-                return mapper.readValue(response.body(), 
-                    new TypeReference<List<Seguro>>(){});
+                return mapper.readValue(response.body(),
+                        new TypeReference<List<Seguro>>() {
+                        });
             } else {
                 throw new RuntimeException("Error al obtener seguros por tipo: " + response.statusCode());
             }
@@ -168,26 +172,26 @@ HttpRequest request = HttpRequest.newBuilder()
     }
 
     public Cliente obtenerDatosCliente(String email) {
-    try {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/api/clientes/perfil?email=" + email))
-                .header("Content-Type", "application/json")
-                .GET()
-                .build();
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(BASE_URL + "/api/clientes/perfil?email=" + email))
+                    .header("Content-Type", "application/json")
+                    .GET()
+                    .build();
 
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() == 200) {
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(response.body(), Cliente.class);
-        } else if (response.statusCode() == 404) {
-            throw new RuntimeException("Cliente no encontrado.");
-        } else {
-            throw new RuntimeException("Error al obtener datos del cliente: " + response.statusCode());
+            if (response.statusCode() == 200) {
+                ObjectMapper mapper = new ObjectMapper();
+                return mapper.readValue(response.body(), Cliente.class);
+            } else if (response.statusCode() == 404) {
+                throw new RuntimeException("Cliente no encontrado.");
+            } else {
+                throw new RuntimeException("Error al obtener datos del cliente: " + response.statusCode());
+            }
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException("Error obteniendo datos del cliente.", e);
         }
-    } catch (IOException | InterruptedException e) {
-        throw new RuntimeException("Error obteniendo datos del cliente.", e);
     }
-}
 
 }
