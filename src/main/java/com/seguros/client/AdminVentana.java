@@ -11,6 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -19,6 +20,8 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
@@ -236,9 +239,35 @@ public class AdminVentana {
     }
 
     public void mostrarContenidoSegurosCliente() {
-        JLabel lblSegurosCliente = new JLabel("Contenido de la opción 2: Seguros cliente", SwingConstants.CENTER);
-        lblSegurosCliente.setFont(new Font("Arial", Font.BOLD, 16)); // Mismo estilo que el original
-        panelCentral.add(lblSegurosCliente);
+        // Configurar layout del panel central
+        panelCentral.removeAll();
+        panelCentral.setLayout(new BorderLayout());
+        panelCentral.add(panelSuperiorCentral, BorderLayout.NORTH);
+
+        // 1) JTextArea para listar clientes
+        JTextArea taClientes = new JTextArea();
+        taClientes.setEditable(false);
+        taClientes.setFont(new Font("Arial", Font.PLAIN, 16));
+        JScrollPane spClientes = new JScrollPane(taClientes);
+        spClientes.setBorder(BorderFactory.createTitledBorder("Clientes"));
+        spClientes.setPreferredSize(new Dimension(250, 400));
+
+        // 2) JList para mostrar seguros del cliente
+        DefaultListModel<String> modeloSeguros = new DefaultListModel<>();
+        JList<String> listSeguros = new JList<>(modeloSeguros);
+        listSeguros.setFont(new Font("Arial", Font.PLAIN, 16));
+        JScrollPane spSeguros = new JScrollPane(listSeguros);
+        spSeguros.setBorder(BorderFactory.createTitledBorder("Seguros del cliente"));
+        spSeguros.setPreferredSize(new Dimension(350, 400));
+
+        // 3) Partición horizontal con JSplitPane
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, spClientes, spSeguros);
+        split.setResizeWeight(0.4);
+        panelCentral.add(split, BorderLayout.CENTER);
+
+        // Refrescar vista
+        panelCentral.revalidate();
+        panelCentral.repaint();
     }
 
     public void mostrarContenidoClientesPorSeguro() {
