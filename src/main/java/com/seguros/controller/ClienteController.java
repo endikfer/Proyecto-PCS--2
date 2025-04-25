@@ -96,15 +96,16 @@ public class ClienteController {
     public ResponseEntity<String> logout() {
         return ResponseEntity.ok("Sesión de cliente cerrada correctamente");
     }
-    
-    @GetMapping("/cliente/porNombre")
-    public ResponseEntity<Cliente> obtenerUsuarioPorNombre(@RequestParam String nombre) {
-        Cliente cliente = usuarioService.obtenerClientePorNombre(nombre);
-        if (cliente != null) {
-            return ResponseEntity.ok(cliente);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-    }
+
+    // @GetMapping("/cliente/porNombre")
+    // public ResponseEntity<Cliente> obtenerUsuarioPorNombre(@RequestParam String
+    // nombre) {
+    // Cliente cliente = usuarioService.obtenerClientePorNombre(nombre);
+    // if (cliente != null) {
+    // return ResponseEntity.ok(cliente);
+    // } else {
+    // return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    // }
+    // }
 
 }
