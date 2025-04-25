@@ -147,4 +147,27 @@ public class SeguroController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping("/seguro/seleccionar")
+    public ResponseEntity<String> seleccionarSeguro(
+            @RequestParam("seguroId") Long seguroId,
+            @RequestParam("clienteId") Long clienteId) {
+        try {
+            if (seguroId == null || seguroId <= 0 || clienteId == null || clienteId <= 0) {
+                return ResponseEntity.badRequest()
+                        .body("Los IDs del seguro y del cliente son obligatorios y deben ser mayores a 0.");
+            }
+            
+            boolean seleccionado = seguroService.seleccionarSeguro(seguroId, clienteId);
+            if (seleccionado) {
+                return ResponseEntity.ok("Seguro seleccionado correctamente");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No se pudo seleccionar el seguro. Verifique los IDs proporcionados.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al seleccionar el seguro: " + e.getMessage());
+        }
+    }
 }

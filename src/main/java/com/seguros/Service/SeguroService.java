@@ -7,8 +7,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.seguros.model.Cliente;
 import com.seguros.model.Seguro;
 import com.seguros.model.TipoSeguro;
+import com.seguros.repository.ClienteRepository;
 import com.seguros.repository.SeguroRepository;
 
 @Service
@@ -103,5 +105,31 @@ public class SeguroService {
         }
         return segurorepo.findByTipoSeguro(tipoSeguroEnum);
     }
+
+    @Autowired
+    private ClienteRepository clienteRepository;
+
+    public boolean seleccionarSeguro(Long seguroId, Long clienteId) {
+        System.out.println("Petición recibida para seleccionar seguro. SeguroId: " + seguroId + ", ClienteId: " + clienteId);
+
+        var seguroOptional = segurorepo.findById(seguroId);
+        var clienteOptional = clienteRepository.findById(clienteId);
+
+        if (seguroOptional.isPresent() && clienteOptional.isPresent()) {
+            Seguro seguro = seguroOptional.get();
+            Cliente cliente = clienteOptional.get();
+
+            cliente.setSeguroSeleccionado(seguro);
+
+            clienteRepository.save(cliente);
+
+            System.out.println("Seguro seleccionado y asociado al cliente correctamente");
+            return true;
+        } else {
+            System.out.println("No se encontró el seguro o el cliente");
+            return false;
+        }
+    }
+
 
 }

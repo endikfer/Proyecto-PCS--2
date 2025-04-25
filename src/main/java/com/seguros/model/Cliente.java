@@ -7,6 +7,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+
 
 @Entity
 @Table(name = "clientes")
@@ -60,4 +64,18 @@ public class Cliente {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "seguro_id")
+    private Seguro seguroSeleccionado;
+
+    // Getter y Setter
+    public Seguro getSeguroSeleccionado() {
+        return seguroSeleccionado;
+    }
+
+    public void setSeguroSeleccionado(Seguro seguroSeleccionado) {
+        this.seguroSeleccionado = seguroSeleccionado;
+    }
+
 }
