@@ -153,7 +153,7 @@ public class SeguroManager {
         ventana.setVisible(true);
     }
 
-    private static JPanel crearPanelSeguros(TipoSeguro tipo) {
+    public static JPanel crearPanelSeguros(TipoSeguro tipo) {
         JPanel panel = new JPanel(new BorderLayout());
 
         try {
@@ -187,7 +187,7 @@ public class SeguroManager {
         return panel;
     }
 
-    private static JPanel crearPanelTodosSeguros() {
+    public static JPanel crearPanelTodosSeguros() {
         JPanel panel = new JPanel(new BorderLayout());
 
         try {
@@ -221,7 +221,7 @@ public class SeguroManager {
         return panel;
     }
 
-    private static void abrirVentanaSeguro(Seguro seguro) {
+    public static void abrirVentanaSeguro(Seguro seguro) {
         switch (seguro.getTipoSeguro()) {
             case COCHE -> new SeguroCocheVentana(seguro).mostrar();
             case VIDA -> new SeguroVidaVentana(seguro).mostrar();
@@ -231,7 +231,7 @@ public class SeguroManager {
         }
     }
 
-    private static void llamarLogoutClienteAPI(JFrame ventana) {
+    public static void llamarLogoutClienteAPI(JFrame ventana) {
         try {
             String urlCompleta = "http://" + HOSTNAME + ":" + PORT + "/api/clientes/logout";
             @SuppressWarnings("deprecation")
