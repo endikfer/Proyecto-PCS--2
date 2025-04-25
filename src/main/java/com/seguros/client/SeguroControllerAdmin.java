@@ -16,9 +16,22 @@ public class SeguroControllerAdmin {
     private final HttpClient httpClient;
     private final String BASE_URL;
 
+    // Constructor original
     public SeguroControllerAdmin(String hostname, String port) {
-        this.httpClient = HttpClient.newHttpClient();
+        this(HttpClient.newHttpClient(), hostname, port);
+    }
+
+    public SeguroControllerAdmin(HttpClient httpClient, String hostname, String port) {
+        this.httpClient = httpClient;
         this.BASE_URL = String.format("http://%s:%s", hostname, port);
+    }
+
+    public String getBaseUrl() {
+        return BASE_URL;
+    }
+
+    public HttpClient getHttpClient() {
+        return httpClient;
     }
 
     public List<Seguro> listaNombreSeguros() {

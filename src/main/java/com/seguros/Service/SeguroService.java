@@ -71,8 +71,8 @@ public class SeguroService {
     public static String restaurarEspacios(String texto) {
         if (texto == null)
             return null;
-        System.out.println("Texto original: " + texto);
-        System.out.println("Texto con espacios: " + texto.replace(';', ' '));
+        // System.out.println("Texto original: " + texto);
+        // System.out.println("Texto con espacios: " + texto.replace(';', ' '));
         return texto.replace(';', ' ');
     }
 
