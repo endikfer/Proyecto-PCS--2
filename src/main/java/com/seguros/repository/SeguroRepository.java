@@ -12,5 +12,5 @@ import com.seguros.model.TipoSeguro;
 public interface SeguroRepository extends JpaRepository<Seguro, Long> {
     Seguro findByNombre(String nombre);
     List<Seguro> findByTipoSeguro(TipoSeguro tipoSeguro);
-
+    List<Seguro> findByClienteId(Long clienteID);
 }

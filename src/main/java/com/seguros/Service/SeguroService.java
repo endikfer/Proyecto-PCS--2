@@ -18,6 +18,7 @@ public class SeguroService {
 
     @Autowired
     public SeguroRepository segurorepo;
+    
 
     public void crearSeguro(String nombre, String descripcion, String tipoSeguro, Double precio) {
         System.out.println("Peticion recibida para crear seguro desde service\n");
@@ -131,5 +132,9 @@ public class SeguroService {
         }
     }
 
+    public List<Seguro> obtenerPorCliente(Long clienteId) {
+        // delegamos directamente al repositorio JPA
+        return segurorepo.findByClienteId(clienteId);
+    }
 
 }

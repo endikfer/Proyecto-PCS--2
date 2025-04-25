@@ -170,4 +170,15 @@ public class SeguroController {
                     .body("Error al seleccionar el seguro: " + e.getMessage());
         }
     }
+    
+    @GetMapping("/porCliente")
+    public ResponseEntity<List<Seguro>> getSegurosPorCliente(
+            @RequestParam("clienteId") Long clienteId) {
+        List<Seguro> lista = seguroService.obtenerPorCliente(clienteId);
+        if (lista == null || lista.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(lista);
+    }
+    
 }
