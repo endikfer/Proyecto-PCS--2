@@ -222,6 +222,11 @@ public class SeguroManager {
     }
 
     public static void abrirVentanaSeguro(Seguro seguro) {
+        if (seguro.getTipoSeguro() == null) {
+            JOptionPane.showMessageDialog(null, "Tipo de seguro no reconocido", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         switch (seguro.getTipoSeguro()) {
             case COCHE -> new SeguroCocheVentana(seguro).mostrar();
             case VIDA -> new SeguroVidaVentana(seguro).mostrar();
