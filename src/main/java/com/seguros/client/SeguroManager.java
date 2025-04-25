@@ -29,8 +29,8 @@ public class SeguroManager {
 
     private static final String HOSTNAME = System.getProperty("hostname", "localhost");
     private static final String PORT = System.getProperty("port", "8080");
-    private static final InicioSesionVentana inicioSesionVentana = new InicioSesionVentana();
-    private static final SeguroControllerClient seguroClient = new SeguroControllerClient(HOSTNAME, PORT);
+    public static final InicioSesionVentana inicioSesionVentana = new InicioSesionVentana();
+    public static SeguroControllerClient seguroClient = new SeguroControllerClient(HOSTNAME, PORT);
 
     public static void main(String[] args) {
         inicioSesionVentana.mostrar();
