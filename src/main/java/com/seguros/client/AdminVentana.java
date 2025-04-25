@@ -25,14 +25,22 @@ import javax.swing.SwingUtilities;
 import com.seguros.model.Seguro;
 
 public class AdminVentana {
-    private final JFrame frame;
-    private final JPanel panelCentral;
-    private final JPanel panelSuperiorCentral;
+    public final JFrame frame;
+    public JPanel panelCentral;
+    public JPanel panelSuperiorCentral;
+    private final SeguroControllerAdmin seguroControllerAdmin;
 
-    private DefaultListModel<String> modeloLista;
-    private JList<String> listaSeguros;
+    public DefaultListModel<String> modeloLista;
+    public JList<String> listaSeguros;
 
+    // Constructor por defecto
     public AdminVentana() {
+        this(new SeguroControllerAdmin("localhost", "8080")); // Instancia por defecto
+    }
+
+    public AdminVentana(SeguroControllerAdmin seguroControllerAdmin) {
+        this.seguroControllerAdmin = seguroControllerAdmin;
+
         frame = new JFrame("Panel de Administrador");
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -108,7 +116,7 @@ public class AdminVentana {
         });
     }
 
-    private void cambiarContenido(int opcion) {
+    public void cambiarContenido(int opcion) {
         // Limpiar el panel central
         panelCentral.removeAll();
         panelCentral.add(panelSuperiorCentral, BorderLayout.NORTH);
@@ -128,7 +136,7 @@ public class AdminVentana {
         panelCentral.repaint();
     }
 
-    private void mostrarContenidoSeguros() {
+    public void mostrarContenidoSeguros() {
         // Configurar el layout del panel central
         panelCentral.setLayout(new BorderLayout());
 
@@ -186,8 +194,6 @@ public class AdminVentana {
         botonEliminar.setPreferredSize(new java.awt.Dimension(150, 50));
         botonEliminar.setFont(new Font("Arial", Font.BOLD, 16));
 
-        
-
         // Listeners para los botones
         SeguroVentana ventanaCrear = new SeguroVentana(this); // Instancia de SeguroVentana
         botonCrear.addActionListener(e -> {
@@ -210,8 +216,6 @@ public class AdminVentana {
         botonEliminar.addActionListener(e -> {
             String seguroSeleccionado = listaSeguros.getSelectedValue(); // Obtener el valor seleccionado
             if (seguroSeleccionado == null || seguroSeleccionado.equals("No hay seguros creados")) {
-                // Mostrar mensaje si no hay selección o si la lista contiene "No hay seguros
-                // creados"
                 JOptionPane.showMessageDialog(frame, "No hay ningun seguro seleccionada.",
                         "Advertencia", JOptionPane.WARNING_MESSAGE);
             } else {
@@ -222,44 +226,41 @@ public class AdminVentana {
             }
         });
 
-        
-
         panelInferior.add(botonCrear);
         panelInferior.add(botonEditar);
         panelInferior.add(botonEliminar);
-
 
         // Agregar los subpaneles al panel central
         panelCentral.add(panelCentro, BorderLayout.CENTER);
         panelCentral.add(panelInferior, BorderLayout.SOUTH);
     }
 
-    private void mostrarContenidoSegurosCliente() {
+    public void mostrarContenidoSegurosCliente() {
         JLabel lblSegurosCliente = new JLabel("Contenido de la opción 2: Seguros cliente", SwingConstants.CENTER);
         lblSegurosCliente.setFont(new Font("Arial", Font.BOLD, 16)); // Mismo estilo que el original
         panelCentral.add(lblSegurosCliente);
     }
 
-    private void mostrarContenidoClientesPorSeguro() {
+    public void mostrarContenidoClientesPorSeguro() {
         JLabel lblClientesPorSeguro = new JLabel("Contenido de la opción 3: Clientes por seguro",
                 SwingConstants.CENTER);
         lblClientesPorSeguro.setFont(new Font("Arial", Font.BOLD, 16)); // Mismo estilo que el original
         panelCentral.add(lblClientesPorSeguro);
     }
 
-    private void mostrarContenidoClientes() {
+    public void mostrarContenidoClientes() {
         JLabel lblClientes = new JLabel("Contenido de la opción 4: Clientes", SwingConstants.CENTER);
         lblClientes.setFont(new Font("Arial", Font.BOLD, 16)); // Mismo estilo que el original
         panelCentral.add(lblClientes);
     }
 
-    private void mostrarContenidoDudas() {
+    public void mostrarContenidoDudas() {
         JLabel lblDudas = new JLabel("Contenido de la opción 5: Dudas", SwingConstants.CENTER);
         lblDudas.setFont(new Font("Arial", Font.BOLD, 16)); // Mismo estilo que el original
         panelCentral.add(lblDudas);
     }
 
-    private void mostrarContenidoInvalido() {
+    public void mostrarContenidoInvalido() {
         JLabel lblInvalido = new JLabel("Opción no válida", SwingConstants.CENTER);
         lblInvalido.setFont(new Font("Arial", Font.BOLD, 16)); // Mismo estilo que el original
         panelCentral.add(lblInvalido);
@@ -273,7 +274,6 @@ public class AdminVentana {
         System.out.println("Actualizando la lista de seguros...");
         modeloLista.clear(); // Limpiar el modelo antes de cargar nuevos datos
         try {
-            SeguroControllerAdmin seguroControllerAdmin = new SeguroControllerAdmin("localhost", "8080");
             List<Seguro> seguros = seguroControllerAdmin.listaNombreSeguros(); // Obtener lista de objetos Seguro
             if (seguros != null && !seguros.isEmpty()) {
                 if (seguros.size() == 1 && "vacio".equalsIgnoreCase(seguros.get(0).getNombre())) {
