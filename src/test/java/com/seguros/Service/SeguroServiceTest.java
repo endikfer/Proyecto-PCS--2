@@ -27,14 +27,19 @@ import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 import java.util.Optional;
 
+import com.seguros.model.Cliente;
 import com.seguros.model.Seguro;
 import com.seguros.model.TipoSeguro;
 import com.seguros.repository.SeguroRepository;
+import com.seguros.repository.ClienteRepository;
 
 public class SeguroServiceTest {
 
     @Mock
     private SeguroRepository seguroRepository;
+
+    @Mock
+    private ClienteRepository clienteRepository;
 
     @InjectMocks
     private SeguroService seguroService;
@@ -274,6 +279,92 @@ public class SeguroServiceTest {
 
         assertTrue(resultado);
         verify(seguroRepository, times(1)).delete(seguro);
+    }
+
+
+    // ----------------- TESTS PARA seleccionarSeguro -----------------
+
+
+    @Test
+    void testSeleccionarSeguro_Exitoso() {
+        // Datos de prueba
+        Long seguroId = 1L;
+        Long clienteId = 1L;
+
+        // Mock de seguro y cliente
+        Seguro seguro = new Seguro("Seguro de Vida", "Cobertura total", TipoSeguro.VIDA, 1000.0);
+        Cliente cliente = new Cliente();
+        cliente.setId(clienteId);
+
+        // Simulación de los métodos findById en los repositorios
+        when(seguroRepository.findById(seguroId)).thenReturn(Optional.of(seguro));
+        when(clienteRepository.findById(clienteId)).thenReturn(Optional.of(cliente));
+
+        // Ejecución del método a probar
+        boolean resultado = seguroService.seleccionarSeguro(seguroId, clienteId);
+
+        // Verificación
+        assertTrue(resultado);
+        assertEquals(seguro, cliente.getSeguroSeleccionado());
+        verify(clienteRepository, times(1)).save(cliente);
+    }
+
+    @Test
+    void testSeleccionarSeguro_SeguroNoEncontrado() {
+        Long seguroId = 1L;
+        Long clienteId = 1L;
+
+        // Mock del cliente sin seguro
+        Cliente cliente = new Cliente();
+        cliente.setId(clienteId);
+
+        // Simulación del método findById en el repositorio de seguro
+        when(seguroRepository.findById(seguroId)).thenReturn(Optional.empty());
+        when(clienteRepository.findById(clienteId)).thenReturn(Optional.of(cliente));
+
+        // Ejecución del método a probar
+        boolean resultado = seguroService.seleccionarSeguro(seguroId, clienteId);
+
+        // Verificación
+        assertFalse(resultado);
+        verify(clienteRepository, never()).save(any(Cliente.class));
+    }
+
+    @Test
+    void testSeleccionarSeguro_ClienteNoEncontrado() {
+        Long seguroId = 1L;
+        Long clienteId = 1L;
+
+        // Mock del seguro
+        Seguro seguro = new Seguro("Seguro de Auto", "Cobertura contra daños", TipoSeguro.COCHE, 500.0);
+
+        // Simulación del método findById en el repositorio de cliente
+        when(seguroRepository.findById(seguroId)).thenReturn(Optional.of(seguro));
+        when(clienteRepository.findById(clienteId)).thenReturn(Optional.empty());
+
+        // Ejecución del método a probar
+        boolean resultado = seguroService.seleccionarSeguro(seguroId, clienteId);
+
+        // Verificación
+        assertFalse(resultado);
+        verify(clienteRepository, never()).save(any(Cliente.class));
+    }
+
+    @Test
+    void testSeleccionarSeguro_SeguroYClienteNoEncontrados() {
+        Long seguroId = 1L;
+        Long clienteId = 1L;
+
+        // Simulación del método findById en los repositorios
+        when(seguroRepository.findById(seguroId)).thenReturn(Optional.empty());
+        when(clienteRepository.findById(clienteId)).thenReturn(Optional.empty());
+
+        // Ejecución del método a probar
+        boolean resultado = seguroService.seleccionarSeguro(seguroId, clienteId);
+
+        // Verificación
+        assertFalse(resultado);
+        verify(clienteRepository, never()).save(any(Cliente.class));
     }
 
     

@@ -446,4 +446,72 @@ class SeguroControllerTest {
         ResponseEntity<String> response = seguroController.eliminarSeguro(1L);
         assertEquals(INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
+
+
+    // ----------------- TESTS PARA sleccionarSeguro -----------------
+
+    @Test
+    void testSeleccionarSeguro_Exitoso() {
+        // Simula el comportamiento del servicio
+        when(seguroService.seleccionarSeguro(1L, 1L)).thenReturn(true);
+
+        // Llama al método del controlador
+        ResponseEntity<String> response = seguroController.seleccionarSeguro(1L, 1L);
+
+        // Verifica el resultado
+        assertEquals(OK, response.getStatusCode());
+        assertEquals("Seguro seleccionado correctamente", response.getBody());
+        verify(seguroService, times(1)).seleccionarSeguro(1L, 1L);
+    }
+
+    @Test
+    void testSeleccionarSeguro_SeguroIdInvalido() {
+        // Llama al método del controlador con seguroId inválido
+        ResponseEntity<String> response = seguroController.seleccionarSeguro(-1L, 1L);
+
+        // Verifica el resultado
+        assertEquals(BAD_REQUEST, response.getStatusCode());
+        assertEquals("Los IDs del seguro y del cliente son obligatorios y deben ser mayores a 0.", response.getBody());
+        verify(seguroService, never()).seleccionarSeguro(anyLong(), anyLong());
+    }
+
+    @Test
+    void testSeleccionarSeguro_ClienteIdInvalido() {
+        // Llama al método del controlador con clienteId inválido
+        ResponseEntity<String> response = seguroController.seleccionarSeguro(1L, -1L);
+
+        // Verifica el resultado
+        assertEquals(BAD_REQUEST, response.getStatusCode());
+        assertEquals("Los IDs del seguro y del cliente son obligatorios y deben ser mayores a 0.", response.getBody());
+        verify(seguroService, never()).seleccionarSeguro(anyLong(), anyLong());
+    }
+
+    @Test
+    void testSeleccionarSeguro_NoEncontrado() {
+        // Simula que el servicio devuelve false, indicando que no se pudo seleccionar el seguro
+        when(seguroService.seleccionarSeguro(1L, 1L)).thenReturn(false);
+
+        // Llama al método del controlador
+        ResponseEntity<String> response = seguroController.seleccionarSeguro(1L, 1L);
+
+        // Verifica el resultado
+        assertEquals(NOT_FOUND, response.getStatusCode());
+        assertEquals("No se pudo seleccionar el seguro. Verifique los IDs proporcionados.", response.getBody());
+        verify(seguroService, times(1)).seleccionarSeguro(1L, 1L);
+    }
+
+    @Test
+    void testSeleccionarSeguro_ErrorInterno() {
+        // Simula que ocurre una excepción en el servicio
+        when(seguroService.seleccionarSeguro(1L, 1L)).thenThrow(new RuntimeException("Error inesperado"));
+
+        // Llama al método del controlador
+        ResponseEntity<String> response = seguroController.seleccionarSeguro(1L, 1L);
+
+        // Verifica el resultado
+        assertEquals(INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals("Error al seleccionar el seguro: Error inesperado", response.getBody());
+        verify(seguroService, times(1)).seleccionarSeguro(1L, 1L);
+    }
+
 }
