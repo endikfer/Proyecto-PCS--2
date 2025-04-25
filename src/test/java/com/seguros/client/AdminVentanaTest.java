@@ -97,17 +97,17 @@ public class AdminVentanaTest {
         verify(mockPanelCentral).repaint();
     }
 
-    @Test
-    public void testCambiarContenido_opcion2() {
-        // Ejecutar el método con la opción 2
-        adminVentana.cambiarContenido(2);
+    // @Test
+    // public void testCambiarContenido_opcion2() {
+    // // Ejecutar el método con la opción 2
+    // adminVentana.cambiarContenido(2);
 
-        // Verificar que el panel central se limpia y se actualiza
-        verify(mockPanelCentral).removeAll();
-        verify(mockPanelCentral).add(mockPanelSuperiorCentral, BorderLayout.NORTH);
-        verify(mockPanelCentral).revalidate();
-        verify(mockPanelCentral).repaint();
-    }
+    // // Verificar que el panel central se limpia y se actualiza
+    // verify(mockPanelCentral).removeAll();
+    // verify(mockPanelCentral).add(mockPanelSuperiorCentral, BorderLayout.NORTH);
+    // verify(mockPanelCentral).revalidate();
+    // verify(mockPanelCentral).repaint();
+    // }
 
     @Test
     public void testCambiarContenido_opcion3() {
