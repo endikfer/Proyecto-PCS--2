@@ -6,6 +6,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -14,7 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+
 import org.mockito.Mock;
+
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
@@ -68,17 +74,24 @@ public class SeguroControllerAdminTest {
 
         @Test
         void testCrearSeguroCodigo400() throws Exception {
-                when(responseMock.statusCode()).thenReturn(400);
-                when(responseMock.body()).thenReturn("Datos inválidos");
-                when(httpClientMock.send(any(HttpRequest.class),
-                                any(HttpResponse.BodyHandler.class))).thenReturn(responseMock);
+                try (var mockedJOptionPane = mockStatic(JOptionPane.class)) {
+                        mockedJOptionPane.when(() -> JOptionPane.showMessageDialog(any(), any(), any(), anyInt()))
+                                        .thenAnswer(invocation -> null);
 
-                IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                                () -> adminController.crearSeguro("Seguro1", "Cobertura", "casa", 500.0));
-                assertTrue(exception.getMessage().contains("Error al crear el seguro: Datos inválidos"));
+                        // Configurar el mock para devolver un código 400
+                        when(responseMock.statusCode()).thenReturn(400);
+                        when(responseMock.body()).thenReturn("Datos inválidos");
+                        when(httpClientMock.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
+                                        .thenReturn(responseMock);
 
-                verify(httpClientMock).send(any(HttpRequest.class),
-                                any(HttpResponse.BodyHandler.class));
+                        // Ejecutar el método y verificar la excepción
+                        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                                        () -> adminController.crearSeguro("Seguro1", "Cobertura", "casa", 500.0));
+                        assertTrue(exception.getMessage().contains("Error al crear el seguro: Datos inválidos"));
+
+                        // Verificar que el mock fue llamado
+                        verify(httpClientMock).send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class));
+                }
         }
 
         @Test
