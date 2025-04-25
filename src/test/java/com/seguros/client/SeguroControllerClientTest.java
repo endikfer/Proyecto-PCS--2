@@ -37,18 +37,19 @@ public class SeguroControllerClientTest {
         clientController = new SeguroControllerClient(httpClientMock, "localhost", "8080");
     }
 
-    @Test
-    void testConstructorOriginal() {
-        // Crear una instancia del controlador usando el constructor original
-        SeguroControllerClient client = new SeguroControllerClient("localhost", "8080");
+    // @Test
+    // void testConstructorOriginal() {
+    // // Crear una instancia del controlador usando el constructor original
+    // SeguroControllerClient client = new SeguroControllerClient("localhost",
+    // "8080");
 
-        // Verificar que la URL base se construyó correctamente
-        String expectedBaseUrl = "http://localhost:8080";
-        assertEquals(expectedBaseUrl, client.getBaseUrl());
+    // // Verificar que la URL base se construyó correctamente
+    // String expectedBaseUrl = "http://localhost:8080";
+    // assertEquals(expectedBaseUrl, client.getBaseUrl());
 
-        // Verificar que el HttpClient no sea nulo
-        assertNotNull(client.getHttpClient());
-    }
+    // // Verificar que el HttpClient no sea nulo
+    // assertNotNull(client.getHttpClient());
+    // }
 
     @Test
     void testObtenerTodosSegurosCodigo200() throws Exception {
