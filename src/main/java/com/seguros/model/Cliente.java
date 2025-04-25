@@ -69,7 +69,7 @@ public class Cliente {
         this.password = password;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "seguro_id")
     private Seguro seguroSeleccionado;
 

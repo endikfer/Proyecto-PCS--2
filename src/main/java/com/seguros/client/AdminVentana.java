@@ -6,7 +6,10 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
@@ -24,7 +27,11 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.text.BadLocationException;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seguros.model.Cliente;
 import com.seguros.model.Seguro;
 
 public class AdminVentana {
@@ -35,6 +42,8 @@ public class AdminVentana {
 
     public DefaultListModel<String> modeloLista;
     public JList<String> listaSeguros;
+    private DefaultListModel<String> modeloSegurosCliente;
+    private JList<String> listaSegurosCliente;
 
     // Constructor por defecto
     public AdminVentana() {
@@ -239,12 +248,14 @@ public class AdminVentana {
     }
 
     public void mostrarContenidoSegurosCliente() {
-        // Configurar layout del panel central
-        panelCentral.removeAll();
+    	panelCentral.removeAll();
         panelCentral.setLayout(new BorderLayout());
         panelCentral.add(panelSuperiorCentral, BorderLayout.NORTH);
 
-        // 1) JTextArea para listar clientes
+        modeloSegurosCliente = new DefaultListModel<>();
+        listaSegurosCliente = new JList<>(modeloSegurosCliente);
+        listaSegurosCliente.setFont(new Font("Arial", Font.PLAIN, 16));
+
         JTextArea taClientes = new JTextArea();
         taClientes.setEditable(false);
         taClientes.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -252,20 +263,105 @@ public class AdminVentana {
         spClientes.setBorder(BorderFactory.createTitledBorder("Clientes"));
         spClientes.setPreferredSize(new Dimension(250, 400));
 
-        // 2) JList para mostrar seguros del cliente
-        DefaultListModel<String> modeloSeguros = new DefaultListModel<>();
-        JList<String> listSeguros = new JList<>(modeloSeguros);
-        listSeguros.setFont(new Font("Arial", Font.PLAIN, 16));
-        JScrollPane spSeguros = new JScrollPane(listSeguros);
+        JScrollPane spSeguros = new JScrollPane(listaSegurosCliente);
         spSeguros.setBorder(BorderFactory.createTitledBorder("Seguros del cliente"));
         spSeguros.setPreferredSize(new Dimension(350, 400));
 
-        // 3) Partición horizontal con JSplitPane
         JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, spClientes, spSeguros);
         split.setResizeWeight(0.4);
         panelCentral.add(split, BorderLayout.CENTER);
 
-        // Refrescar vista
+        new Thread(() -> {
+            try {
+                URL url = new URL("http://localhost:8080/api/clientes");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("Accept", "application/json");
+                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    InputStream in = conn.getInputStream();
+                    ObjectMapper mapper = new ObjectMapper();
+                    List<Cliente> clientes = mapper.readValue(in, new TypeReference<List<Cliente>>(){});
+                    in.close();
+                    SwingUtilities.invokeLater(() -> clientes.forEach(
+                        c -> taClientes.append(c.getId() + " - " + c.getNombre() + "\n")
+                    ));
+                } else {
+                    SwingUtilities.invokeLater(() -> {
+						try {
+							taClientes.setText("Error HTTP " + conn.getResponseCode());
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					});
+                }
+                conn.disconnect();
+            } catch (Exception ex) {
+                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame,
+                    "Error al cargar clientes:\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE));
+            }
+        }).start();
+
+        taClientes.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    int code = taClientes.viewToModel2D(e.getPoint());
+                    int response = e.getModifiersEx(); // not used, ignore
+                } catch (Exception ignored) {}
+                try {
+                    int offset = taClientes.viewToModel2D(e.getPoint());
+                    int row = taClientes.getLineOfOffset(offset);
+                    int start = taClientes.getLineStartOffset(row);
+                    int end = taClientes.getLineEndOffset(row);
+                    String linea = taClientes.getText().substring(start, end).trim();
+                    if (linea.isEmpty()) return;
+                    Long clienteId = Long.parseLong(linea.split("-")[0].trim());
+                    modeloSegurosCliente.clear();
+
+                    new Thread(() -> {
+                        try {
+                            URL url2 = new URL("http://localhost:8080/api/seguros/porCliente?clienteId=" + clienteId);
+                            HttpURLConnection conn2 = (HttpURLConnection) url2.openConnection();
+                            conn2.setRequestMethod("GET");
+                            conn2.setRequestProperty("Accept", "application/json");
+                            int status = conn2.getResponseCode();
+                            if (status == HttpURLConnection.HTTP_OK) {
+                                InputStream in2 = conn2.getInputStream();
+                                ObjectMapper mapper2 = new ObjectMapper();
+                                List<Seguro> seguros = mapper2.readValue(
+                                    in2, new TypeReference<List<Seguro>>(){});
+                                in2.close();
+                                SwingUtilities.invokeLater(() -> {
+                                    if (seguros.isEmpty()) {
+                                        modeloSegurosCliente.addElement("No tiene pólizas contratadas");
+                                    } else {
+                                        seguros.forEach(s -> modeloSegurosCliente.addElement(
+                                            s.getNombre() + " (" + s.getTipoSeguro() + ")"));
+                                    }
+                                });
+                            } else if (status == HttpURLConnection.HTTP_NO_CONTENT) {
+                                SwingUtilities.invokeLater(() ->
+                                    modeloSegurosCliente.addElement("No tiene pólizas contratadas")
+                                );
+                            } else {
+                                SwingUtilities.invokeLater(() ->
+                                    modeloSegurosCliente.addElement("Error HTTP " + status)
+                                );
+                            }
+                            conn2.disconnect();
+                        } catch (Exception ex) {
+                            SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame,
+                                "Error al cargar pólizas:\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE));
+                        }
+                    }).start();
+
+                } catch (BadLocationException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
         panelCentral.revalidate();
         panelCentral.repaint();
     }
