@@ -56,25 +56,25 @@ public class SeguroManagerTest {
         SeguroManager.inicioSesionVentana.emailInicioSesion = "test@example.com";
     }
 
-    // @Test
-    // void testCrearVentanaPrincipal() {
-    // // Ejecutar el método
-    // SeguroManager.crearVentanaPrincipal(clienteMock);
+    @Test
+    void testCrearVentanaPrincipal() {
+        // Ejecutar el método
+        SeguroManager.crearVentanaPrincipal(clienteMock);
 
-    // // Verificar que los componentes de la ventana se configuran correctamente
-    // JLabel etiqueta = findComponentByType(JLabel.class);
-    // JButton btnPerfil = findComponentByType(JButton.class);
+        // Verificar que los componentes de la ventana se configuran correctamente
+        JLabel etiqueta = findComponentByType(JLabel.class);
+        JButton btnPerfil = findComponentByType(JButton.class);
 
-    // assertNotNull(etiqueta, "La etiqueta de bienvenida debería estar presente");
-    // assertEquals("Bienvenido, test@example.com - Gestión de Seguros",
-    // etiqueta.getText());
+        assertNotNull(etiqueta, "La etiqueta de bienvenida debería estar presente");
+        assertEquals("Bienvenido, test@example.com - Gestión de Seguros",
+                etiqueta.getText());
 
-    // assertNotNull(btnPerfil, "El botón de perfil debería estar presente");
-    // assertEquals("Ver Perfil", btnPerfil.getText());
+        assertNotNull(btnPerfil, "El botón de perfil debería estar presente");
+        assertEquals("Ver Perfil", btnPerfil.getText());
 
-    // // Verificar que se llamó al cliente seguroClient
-    // verify(seguroClientMock, times(1)).obtenerTodosSeguros();
-    // }
+        // Verificar que se llamó al cliente seguroClient
+        verify(seguroClientMock, times(1)).obtenerTodosSeguros();
+    }
 
     // @Test
     // void testCrearPanelSeguros_UnSeguroNoVacio() {
