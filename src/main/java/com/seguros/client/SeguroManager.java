@@ -27,16 +27,16 @@ import com.seguros.client.ui.SeguroListCellRenderer;
 
 public class SeguroManager {
 
-    private static final String HOSTNAME = System.getProperty("hostname", "localhost");
-    private static final String PORT = System.getProperty("port", "8080");
-    public static final InicioSesionVentana inicioSesionVentana = new InicioSesionVentana();
-    public static SeguroControllerClient seguroClient = new SeguroControllerClient(HOSTNAME, PORT);
+    private final String HOSTNAME = System.getProperty("hostname", "localhost");
+    private final String PORT = System.getProperty("port", "8080");
+    public final InicioSesionVentana inicioSesionVentana = new InicioSesionVentana();
+    public SeguroControllerClient seguroClient = new SeguroControllerClient(HOSTNAME, PORT);
 
-    public static void main(String[] args) {
+    public void main(String[] args) {
         inicioSesionVentana.mostrar();
     }
 
-    public static void crearVentanaPrincipal(Cliente cliente) {
+    public void crearVentanaPrincipal(Cliente cliente) {
         JFrame ventana = new JFrame("Gestión de Seguros");
         ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -153,7 +153,7 @@ public class SeguroManager {
         ventana.setVisible(true);
     }
 
-    public static JPanel crearPanelSeguros(TipoSeguro tipo) {
+    public JPanel crearPanelSeguros(TipoSeguro tipo) {
         JPanel panel = new JPanel(new BorderLayout());
 
         try {
@@ -187,7 +187,7 @@ public class SeguroManager {
         return panel;
     }
 
-    public static JPanel crearPanelTodosSeguros() {
+    public JPanel crearPanelTodosSeguros() {
         JPanel panel = new JPanel(new BorderLayout());
 
         try {
@@ -236,7 +236,7 @@ public class SeguroManager {
         }
     }
 
-    public static void llamarLogoutClienteAPI(JFrame ventana) {
+    public void llamarLogoutClienteAPI(JFrame ventana) {
         try {
             String urlCompleta = "http://" + HOSTNAME + ":" + PORT + "/api/clientes/logout";
             @SuppressWarnings("deprecation")

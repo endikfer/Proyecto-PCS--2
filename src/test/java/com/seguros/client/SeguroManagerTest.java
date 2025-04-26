@@ -35,6 +35,7 @@ public class SeguroManagerTest {
     @Mock
     private SeguroControllerClient seguroClientMock;
 
+    private SeguroManager seguroManager;
     private Cliente clienteMock;
 
     @BeforeEach
@@ -45,29 +46,29 @@ public class SeguroManagerTest {
         clienteMock = new Cliente();
         clienteMock.setEmail("test@example.com");
 
+        // Crear una instancia de SeguroManager con el mock de SeguroControllerClient
+        seguroManager = new SeguroManager();
+        seguroManager.seguroClient = seguroClientMock;
+
         // Simular el comportamiento del cliente seguroClient
         when(seguroClientMock.obtenerSegurosPorTipo(anyString())).thenReturn(Collections.emptyList());
         when(seguroClientMock.obtenerTodosSeguros()).thenReturn(Collections.emptyList());
 
-        // Reemplazar el cliente seguroClient en SeguroManager
-        SeguroManager.seguroClient = seguroClientMock;
-
         // Configurar el email en inicioSesionVentana
-        SeguroManager.inicioSesionVentana.emailInicioSesion = "test@example.com";
+        seguroManager.inicioSesionVentana.emailInicioSesion = "test@example.com";
     }
 
     @Test
     void testCrearVentanaPrincipal() {
         // Ejecutar el método
-        SeguroManager.crearVentanaPrincipal(clienteMock);
+        seguroManager.crearVentanaPrincipal(clienteMock);
 
         // Verificar que los componentes de la ventana se configuran correctamente
         JLabel etiqueta = findComponentByType(JLabel.class);
         JButton btnPerfil = findComponentByType(JButton.class);
 
         assertNotNull(etiqueta, "La etiqueta de bienvenida debería estar presente");
-        assertEquals("Bienvenido, test@example.com - Gestión de Seguros",
-                etiqueta.getText());
+        assertEquals("Bienvenido, test@example.com - Gestión de Seguros", etiqueta.getText());
 
         assertNotNull(btnPerfil, "El botón de perfil debería estar presente");
         assertEquals("Ver Perfil", btnPerfil.getText());
