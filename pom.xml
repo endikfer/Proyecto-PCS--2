@@ -25,7 +25,7 @@
         <server.port>8080</server.port>
         <maven.compiler.source>23</maven.compiler.source>  
         <maven.compiler.target>23</maven.compiler.target>
-        <java.awt.headless>true</java.awt.headless>
+        <java.awt.headless>${enable.headless}</java.awt.headless>
     </properties>
 
     <dependencies>
@@ -149,7 +149,7 @@
                 <version>3.5.2</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <java.awt.headless>true</java.awt.headless>
+                        <java.awt.headless>${enable.headless}</java.awt.headless>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
