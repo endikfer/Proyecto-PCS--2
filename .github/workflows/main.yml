@@ -25,4 +25,4 @@ jobs:
       run: mvn -B package --file pom.xml
 
     - name: Ejecutar los tests en modo headless
-      run: mvn clean test -Denable.headless=true --file pom.xml -e -X
+      run: mvn clean test -Djava.awt.headless=true --file pom.xml
