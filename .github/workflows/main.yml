@@ -25,4 +25,4 @@ jobs:
       run: mvn -B package --file pom.xml
 
     - name: Ejecutar los tests
-      run: mvn -B test --file pom.xml
+      run: mvn -B test --file pom.xml -X
