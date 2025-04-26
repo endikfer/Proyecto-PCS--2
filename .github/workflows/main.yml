@@ -26,9 +26,3 @@ jobs:
 
     - name: Ejecutar los tests
       run: mvn -B test --file pom.xml -e -X
-
-    - name: Guardar los informes de Surefire
-      uses: actions/upload-artifact@v3
-      with:
-        name: surefire-reports
-        path: target/surefire-reports
