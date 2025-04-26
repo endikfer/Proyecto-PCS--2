@@ -136,11 +136,12 @@ public class InicioSesionVentana {
                         String passwordDB = rs.getString("password");
 
                         clienteLogueado = new Cliente(nombre, emailDB, passwordDB);
-                        //clienteLogueado.setId(id); // ¡Asegurate que Cliente.java tenga este método!
+                        // clienteLogueado.setId(id); // ¡Asegurate que Cliente.java tenga este método!
 
                         JOptionPane.showMessageDialog(frame, "Inicio de sesión exitoso!");
                         frame.dispose();
-                        SeguroManager.crearVentanaPrincipal(clienteLogueado);
+                        SeguroManager seguroManager = new SeguroManager();
+                        seguroManager.crearVentanaPrincipal(clienteLogueado);
                     } else {
                         JOptionPane.showMessageDialog(frame, "Email o contraseña incorrectos", "Error",
                                 JOptionPane.ERROR_MESSAGE);
