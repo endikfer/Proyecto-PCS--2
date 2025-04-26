@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -13,6 +14,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -24,9 +26,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.BadLocationException;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -367,10 +371,80 @@ public class AdminVentana {
     }
 
     public void mostrarContenidoClientesPorSeguro() {
-        JLabel lblClientesPorSeguro = new JLabel("Contenido de la opción 3: Clientes por seguro",
-                SwingConstants.CENTER);
-        lblClientesPorSeguro.setFont(new Font("Arial", Font.BOLD, 16)); // Mismo estilo que el original
-        panelCentral.add(lblClientesPorSeguro);
+    	// Configurar layout
+        panelCentral.removeAll();
+        panelCentral.setLayout(new BorderLayout());
+        panelCentral.add(panelSuperiorCentral, BorderLayout.NORTH);
+
+        // Subtítulo
+        JLabel title = new JLabel("Clientes por Seguro", SwingConstants.CENTER);
+        title.setFont(new Font("Arial", Font.BOLD, 18));
+        panelCentral.add(title, BorderLayout.NORTH);
+
+        // Lanzar la petición en un hilo aparte
+        new Thread(() -> {
+            try {
+                // 1) Llamada HTTP a tu nuevo endpoint
+                String url = "http://localhost:8080/api/seguros/cantidadClientes";
+                HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("Accept", "application/json");
+
+                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    // 2) Parsear el JSON recibido
+                    InputStream in = conn.getInputStream();
+                    ObjectMapper mapper = new ObjectMapper();
+                    List<Map<String, Object>> stats = mapper.readValue(
+                        in, new TypeReference<List<Map<String,Object>>>(){}
+                    );
+                    in.close();
+
+                    // 3) Construir el TableModel
+                    String[] columnas = { "Seguro", "Clientes contratados" };
+                    DefaultTableModel model = new DefaultTableModel(columnas, 0);
+                    for (Map<String, Object> row : stats) {
+                        String nombreSeguro = (String) row.get("nombreSeguro");
+                        Number cantidad = (Number) row.get("cantidadClientes");
+                        model.addRow(new Object[]{ nombreSeguro, cantidad.longValue() });
+                    }
+
+                    // 4) Crear la JTable y añadirla al panel en el hilo de Swing
+                    SwingUtilities.invokeLater(() -> {
+                        JTable table = new JTable(model);
+                        table.setFillsViewportHeight(true);
+                        JScrollPane scroll = new JScrollPane(table);
+                        scroll.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+                        panelCentral.add(scroll, BorderLayout.CENTER);
+                        panelCentral.revalidate();
+                        panelCentral.repaint();
+                    });
+                } else {
+                    // Tratamiento de error HTTP
+                    SwingUtilities.invokeLater(() ->
+                        {
+							try {
+								JOptionPane.showMessageDialog(frame,
+								    "Error al obtener datos: HTTP " + conn.getResponseCode(),
+								    "Error", JOptionPane.ERROR_MESSAGE);
+							} catch (HeadlessException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+                    );
+                }
+                conn.disconnect();
+            } catch (Exception ex) {
+                SwingUtilities.invokeLater(() ->
+                    JOptionPane.showMessageDialog(frame,
+                        "Error de conexión: " + ex.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE)
+                );
+            }
+        }).start();
     }
 
     public void mostrarContenidoClientes() {

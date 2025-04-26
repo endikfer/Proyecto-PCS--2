@@ -136,5 +136,17 @@ public class SeguroService {
         // delegamos directamente al repositorio JPA
         return segurorepo.findByClienteId(clienteId);
     }
+    
+    public List<ClientesPorSeguro> contarClientesPorSeguro() {
+        // Primero obtenemos todos los seguros
+        List<Seguro> seguros = segurorepo.findAll();
+        // Para cada uno contamos cuántos clientes lo tienen asignado
+        List<ClientesPorSeguro> resultado = new ArrayList<>();
+        for (Seguro s : seguros) {
+            long count = clienteRepository.countBySeguroSeleccionado_Id(s.getId());
+            resultado.add(new ClientesPorSeguro(s.getNombre(), count));
+        }
+        return resultado;
+    }
 
 }

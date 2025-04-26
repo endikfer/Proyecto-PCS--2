@@ -19,6 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import com.seguros.model.Cliente;
 import com.seguros.model.Seguro;
@@ -32,8 +33,11 @@ public class SeguroManager {
     public final InicioSesionVentana inicioSesionVentana = new InicioSesionVentana();
     public SeguroControllerClient seguroClient = new SeguroControllerClient(HOSTNAME, PORT);
 
-    public void main(String[] args) {
-        inicioSesionVentana.mostrar();
+    public static void main(String[] args) {
+        // Siempre que trabajes con Swing, arráncalo en el Event Dispatch Thread:
+        SwingUtilities.invokeLater(() -> {
+            new SeguroManager().inicioSesionVentana.mostrar();
+        });
     }
 
     public void crearVentanaPrincipal(Cliente cliente) {

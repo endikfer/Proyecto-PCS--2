@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.seguros.Service.ClientesPorSeguro;
 import com.seguros.Service.SeguroService;
 import com.seguros.model.Seguro;
 
@@ -180,5 +181,12 @@ public class SeguroController {
         }
         return ResponseEntity.ok(lista);
     }
+    
+    @GetMapping("/cantidadClientes")
+    public ResponseEntity<List<ClientesPorSeguro>> cantidadClientesPorSeguro() {
+        List<ClientesPorSeguro> stats = seguroService.contarClientesPorSeguro();
+        return ResponseEntity.ok(stats);
+    }
+
     
 }
