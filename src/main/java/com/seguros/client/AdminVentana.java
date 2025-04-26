@@ -256,10 +256,12 @@ public class AdminVentana {
         panelCentral.setLayout(new BorderLayout());
         panelCentral.add(panelSuperiorCentral, BorderLayout.NORTH);
 
+        // modelo y lista para los seguros del cliente
         modeloSegurosCliente = new DefaultListModel<>();
-        listaSegurosCliente = new JList<>(modeloSegurosCliente);
+        listaSegurosCliente  = new JList<>(modeloSegurosCliente);
         listaSegurosCliente.setFont(new Font("Arial", Font.PLAIN, 16));
 
+        // area de texto para los clientes
         JTextArea taClientes = new JTextArea();
         taClientes.setEditable(false);
         taClientes.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -267,14 +269,17 @@ public class AdminVentana {
         spClientes.setBorder(BorderFactory.createTitledBorder("Clientes"));
         spClientes.setPreferredSize(new Dimension(250, 400));
 
+        // scroll para la lista de seguros
         JScrollPane spSeguros = new JScrollPane(listaSegurosCliente);
         spSeguros.setBorder(BorderFactory.createTitledBorder("Seguros del cliente"));
         spSeguros.setPreferredSize(new Dimension(350, 400));
 
+        // dividir la zona central
         JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, spClientes, spSeguros);
         split.setResizeWeight(0.4);
         panelCentral.add(split, BorderLayout.CENTER);
 
+        // 1) Cargar todos los clientes desde /api/clientes
         new Thread(() -> {
             try {
                 URL url = new URL("http://localhost:8080/api/clientes");
@@ -284,48 +289,57 @@ public class AdminVentana {
                 if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     InputStream in = conn.getInputStream();
                     ObjectMapper mapper = new ObjectMapper();
-                    List<Cliente> clientes = mapper.readValue(in, new TypeReference<List<Cliente>>(){});
+                    List<Cliente> clientes = mapper.readValue(in, new TypeReference<List<Cliente>>() {});
                     in.close();
-                    SwingUtilities.invokeLater(() -> clientes.forEach(
-                        c -> taClientes.append(c.getId() + " - " + c.getNombre() + "\n")
-                    ));
-                } else {
                     SwingUtilities.invokeLater(() -> {
-						try {
-							taClientes.setText("Error HTTP " + conn.getResponseCode());
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+                        clientes.forEach(c ->
+                            taClientes.append(c.getId() + " - " + c.getNombre() + "\n")
+                        );
+                    });
+                } else {
+                    SwingUtilities.invokeLater(() ->
+                        {
+							try {
+								taClientes.setText("Error HTTP " + conn.getResponseCode());
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						}
-					});
+                    );
                 }
                 conn.disconnect();
             } catch (Exception ex) {
-                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame,
-                    "Error al cargar clientes:\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE));
+                SwingUtilities.invokeLater(() ->
+                    JOptionPane.showMessageDialog(frame,
+                        "Error al cargar clientes:\n" + ex.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE)
+                );
             }
         }).start();
 
+        // 2) Listener para clicks sobre un cliente
         taClientes.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 try {
-                    int code = taClientes.viewToModel2D(e.getPoint());
-                    int response = e.getModifiersEx(); // not used, ignore
-                } catch (Exception ignored) {}
-                try {
+                    // calcular la línea clicada
                     int offset = taClientes.viewToModel2D(e.getPoint());
-                    int row = taClientes.getLineOfOffset(offset);
-                    int start = taClientes.getLineStartOffset(row);
-                    int end = taClientes.getLineEndOffset(row);
+                    int row    = taClientes.getLineOfOffset(offset);
+                    int start  = taClientes.getLineStartOffset(row);
+                    int end    = taClientes.getLineEndOffset(row);
                     String linea = taClientes.getText().substring(start, end).trim();
                     if (linea.isEmpty()) return;
+
                     Long clienteId = Long.parseLong(linea.split("-")[0].trim());
                     modeloSegurosCliente.clear();
 
+                    // 3) Pedir pólizas de ese cliente
                     new Thread(() -> {
                         try {
-                            URL url2 = new URL("http://localhost:8080/api/seguros/porCliente?clienteId=" + clienteId);
+                            URL url2 = new URL(
+                                "http://localhost:8080/api/seguros/porCliente?clienteId=" + clienteId
+                            );
                             HttpURLConnection conn2 = (HttpURLConnection) url2.openConnection();
                             conn2.setRequestMethod("GET");
                             conn2.setRequestProperty("Accept", "application/json");
@@ -334,14 +348,18 @@ public class AdminVentana {
                                 InputStream in2 = conn2.getInputStream();
                                 ObjectMapper mapper2 = new ObjectMapper();
                                 List<Seguro> seguros = mapper2.readValue(
-                                    in2, new TypeReference<List<Seguro>>(){});
+                                    in2, new TypeReference<List<Seguro>>() {}
+                                );
                                 in2.close();
                                 SwingUtilities.invokeLater(() -> {
                                     if (seguros.isEmpty()) {
                                         modeloSegurosCliente.addElement("No tiene pólizas contratadas");
                                     } else {
-                                        seguros.forEach(s -> modeloSegurosCliente.addElement(
-                                            s.getNombre() + " (" + s.getTipoSeguro() + ")"));
+                                        seguros.forEach(s ->
+                                            modeloSegurosCliente.addElement(
+                                                s.getNombre() + " (" + s.getTipoSeguro() + ")"
+                                            )
+                                        );
                                     }
                                 });
                             } else if (status == HttpURLConnection.HTTP_NO_CONTENT) {
@@ -355,13 +373,16 @@ public class AdminVentana {
                             }
                             conn2.disconnect();
                         } catch (Exception ex) {
-                            SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame,
-                                "Error al cargar pólizas:\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE));
+                            SwingUtilities.invokeLater(() ->
+                                JOptionPane.showMessageDialog(frame,
+                                    "Error al cargar pólizas:\n" + ex.getMessage(),
+                                    "Error", JOptionPane.ERROR_MESSAGE)
+                            );
                         }
                     }).start();
 
                 } catch (BadLocationException ex) {
-                    ex.printStackTrace();
+                    // ignorar
                 }
             }
         });
