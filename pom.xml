@@ -194,6 +194,21 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>headless-enabled</id>
+            <properties>
+                <enable.headless>true</enable.headless>
+            </properties>
+        </profile>
+        <profile>
+            <id>headless-disabled</id>
+            <properties>
+                <enable.headless>false</enable.headless>
+            </properties>
+        </profile>
+    </profiles>
+
     <repositories>
         <repository>
             <id>central</id>

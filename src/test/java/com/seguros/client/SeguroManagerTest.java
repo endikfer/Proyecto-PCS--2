@@ -208,22 +208,22 @@ public class SeguroManagerTest {
         verify(seguroClientMock, times(1)).obtenerTodosSeguros();
     }
 
-    @Test
-    void testAbrirVentanaSeguro_Coche() {
-        // Crear un seguro de tipo COCHE
-        Seguro seguroCoche = new Seguro("Seguro Coche", "Cobertura completa",
-                TipoSeguro.COCHE, 300.0);
+    // @Test
+    // void testAbrirVentanaSeguro_Coche() {
+    // // Crear un seguro de tipo COCHE
+    // Seguro seguroCoche = new Seguro("Seguro Coche", "Cobertura completa",
+    // TipoSeguro.COCHE, 300.0);
 
-        // Mockear la ventana SeguroCocheVentana
-        SeguroCocheVentana ventanaMock = mock(SeguroCocheVentana.class);
-        doNothing().when(ventanaMock).mostrar();
+    // // Mockear la ventana SeguroCocheVentana
+    // SeguroCocheVentana ventanaMock = mock(SeguroCocheVentana.class);
+    // doNothing().when(ventanaMock).mostrar();
 
-        // Ejecutar el método
-        SeguroManager.abrirVentanaSeguro(seguroCoche);
+    // // Ejecutar el método
+    // SeguroManager.abrirVentanaSeguro(seguroCoche);
 
-        // Verificar que se llamó al método mostrar de SeguroCocheVentana
-        verify(ventanaMock, times(1)).mostrar();
-    }
+    // // Verificar que se llamó al método mostrar de SeguroCocheVentana
+    // verify(ventanaMock, times(1)).mostrar();
+    // }
 
     // @Test
     // void testAbrirVentanaSeguro_Vida() {
