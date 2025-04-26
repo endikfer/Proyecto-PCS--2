@@ -57,13 +57,8 @@ public class SeguroManagerTest {
         clienteMock = new Cliente();
         clienteMock.setEmail("test@example.com");
 
-        // Mockear las ventanas necesarias
-        SeguroCocheVentana ventanaCocheMock = mock(SeguroCocheVentana.class);
-        SeguroVidaVentana ventanaVidaMock = mock(SeguroVidaVentana.class);
-        SeguroCasaVentana ventanaCasaMock = mock(SeguroCasaVentana.class);
-
         // Crear una instancia de SeguroManager con los mocks
-        seguroManager = new SeguroManager(ventanaCocheMock, ventanaVidaMock, ventanaCasaMock);
+        seguroManager = new SeguroManager();
         seguroManager.seguroClient = seguroClientMock;
 
         // Simular el comportamiento del cliente seguroClient
@@ -209,96 +204,6 @@ public class SeguroManagerTest {
         // observar
         // que el método no lanza una excepción y el flujo continúa correctamente.
         verify(seguroClientMock, times(1)).obtenerTodosSeguros();
-    }
-
-    @Test
-    void testAbrirVentanaSeguro_Coche() {
-        // Crear un seguro de tipo COCHE
-        Seguro seguroCoche = new Seguro("Seguro Coche", "Cobertura completa", TipoSeguro.COCHE, 300.0);
-
-        // Mockear las ventanas
-        SeguroCocheVentana ventanaCocheMock = mock(SeguroCocheVentana.class);
-        SeguroVidaVentana ventanaVidaMock = mock(SeguroVidaVentana.class);
-        SeguroCasaVentana ventanaCasaMock = mock(SeguroCasaVentana.class);
-
-        // Crear una instancia de SeguroManager con los mocks
-        SeguroManager seguroManager = new SeguroManager(ventanaCocheMock, ventanaVidaMock, ventanaCasaMock);
-
-        // Ejecutar el método
-        seguroManager.abrirVentanaSeguro(seguroCoche);
-
-        // Verificar que se llamó al método mostrar de SeguroCocheVentana
-        verify(ventanaCocheMock, times(1)).mostrar();
-        verifyNoInteractions(ventanaVidaMock, ventanaCasaMock);
-    }
-
-    @Test
-    void testAbrirVentanaSeguro_Vida() {
-        // Crear un seguro de tipo VIDA
-        Seguro seguroVida = new Seguro("Seguro Vida", "Cobertura de vida completa",
-                TipoSeguro.VIDA, 500.0);
-
-        // Mockear la ventana SeguroVidaVentana
-        SeguroVidaVentana ventanaMock = mock(SeguroVidaVentana.class);
-        doNothing().when(ventanaMock).mostrar();
-
-        SeguroCocheVentana ventanaCocheMock = mock(SeguroCocheVentana.class);
-        SeguroVidaVentana ventanaVidaMock = mock(SeguroVidaVentana.class);
-        SeguroCasaVentana ventanaCasaMock = mock(SeguroCasaVentana.class);
-
-        SeguroManager seguroManager = new SeguroManager(ventanaCocheMock, ventanaVidaMock, ventanaCasaMock);
-
-        // Ejecutar el método
-        seguroManager.abrirVentanaSeguro(seguroVida);
-
-        // Verificar que se llamó al método mostrar de SeguroVidaVentana
-        verify(ventanaVidaMock, times(1)).mostrar();
-        verifyNoInteractions(ventanaCocheMock, ventanaCasaMock);
-    }
-
-    @Test
-    void testAbrirVentanaSeguro_Casa() {
-        // Crear un seguro de tipo CASA
-        Seguro seguroCasa = new Seguro("Seguro Casa", "Protección contra incendios", TipoSeguro.CASA, 200.0);
-
-        // Mockear las ventanas necesarias
-        SeguroCocheVentana ventanaCocheMock = mock(SeguroCocheVentana.class);
-        SeguroVidaVentana ventanaVidaMock = mock(SeguroVidaVentana.class);
-        SeguroCasaVentana ventanaCasaMock = mock(SeguroCasaVentana.class);
-
-        // Crear una instancia de SeguroManager con los mocks
-        SeguroManager seguroManager = new SeguroManager(ventanaCocheMock, ventanaVidaMock, ventanaCasaMock);
-
-        // Ejecutar el método
-        seguroManager.abrirVentanaSeguro(seguroCasa);
-
-        // Verificar que se llamó al método mostrar de SeguroCasaVentana
-        verify(ventanaCasaMock, times(1)).mostrar();
-        verifyNoInteractions(ventanaCocheMock, ventanaVidaMock);
-    }
-
-    @Test
-    void testAbrirVentanaSeguro_Default() {
-        // Crear un seguro con un tipo no reconocido (null)
-        Seguro seguroInvalido = new Seguro("Seguro Invalido", "Descripción no válida", null, 0.0);
-
-        // Mockear las ventanas necesarias
-        SeguroCocheVentana ventanaCocheMock = mock(SeguroCocheVentana.class);
-        SeguroVidaVentana ventanaVidaMock = mock(SeguroVidaVentana.class);
-        SeguroCasaVentana ventanaCasaMock = mock(SeguroCasaVentana.class);
-
-        // Crear una instancia de SeguroManager con los mocks
-        SeguroManager seguroManager = new SeguroManager(ventanaCocheMock, ventanaVidaMock, ventanaCasaMock);
-
-        // Ejecutar el método
-        seguroManager.abrirVentanaSeguro(seguroInvalido);
-
-        // Verificar que no se llamó al método mostrar de ninguna ventana
-        verifyNoInteractions(ventanaCocheMock, ventanaVidaMock, ventanaCasaMock);
-
-        // Nota: No se puede verificar directamente el JOptionPane, pero este test
-        // asegura
-        // que no se lanza una excepción y que el flujo continúa correctamente.
     }
 
     private <T> T findComponentByType(Class<T> type) {

@@ -15,6 +15,10 @@ public class SeguroVidaVentana {
         initialize();
     }
 
+    public void setSeguro(Seguro seguro) {
+        this.seguro = seguro;
+    }
+
     private void initialize() {
         frame = new JFrame("Seguro de Vida - " + seguro.getNombre());
         frame.setSize(400, 300);
@@ -57,11 +61,11 @@ public class SeguroVidaVentana {
                 throw new NumberFormatException("La edad debe ser un número positivo");
             }
 
-            JOptionPane.showMessageDialog(frame, 
+            JOptionPane.showMessageDialog(frame,
                     "Seguro de vida contratado exitosamente!\n" +
-                    "Seguro: " + seguro.getNombre() + "\n" +
-                    "Edad: " + edad + "\n" +
-                    "Beneficiarios: " + beneficiarios);
+                            "Seguro: " + seguro.getNombre() + "\n" +
+                            "Edad: " + edad + "\n" +
+                            "Beneficiarios: " + beneficiarios);
             frame.dispose();
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(frame,

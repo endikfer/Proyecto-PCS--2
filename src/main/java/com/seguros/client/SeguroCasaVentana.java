@@ -18,6 +18,10 @@ public class SeguroCasaVentana {
         initialize();
     }
 
+    public void setSeguro(Seguro seguro) {
+        this.seguro = seguro;
+    }
+
     private void initialize() {
         frame = new JFrame("Seguro de Casa - " + seguro.getNombre());
         frame.setSize(450, 300);

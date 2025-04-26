@@ -32,28 +32,11 @@ public class SeguroManager {
     private final String PORT = System.getProperty("port", "8080");
     public final InicioSesionVentana inicioSesionVentana = new InicioSesionVentana();
     public SeguroControllerClient seguroClient = new SeguroControllerClient(HOSTNAME, PORT);
-    private final SeguroCocheVentana seguroCocheVentana;
-    private final SeguroVidaVentana seguroVidaVentana;
-    private final SeguroCasaVentana seguroCasaVentana;
-
-    // Constructor para inyectar dependencias
-    public SeguroManager(SeguroCocheVentana seguroCocheVentana, SeguroVidaVentana seguroVidaVentana,
-            SeguroCasaVentana seguroCasaVentana) {
-        this.seguroCocheVentana = seguroCocheVentana;
-        this.seguroVidaVentana = seguroVidaVentana;
-        this.seguroCasaVentana = seguroCasaVentana;
-    }
 
     public static void main(String[] args) {
         // Siempre que trabajes con Swing, arráncalo en el Event Dispatch Thread:
         SwingUtilities.invokeLater(() -> {
-            Seguro seguroEjemplo = new Seguro("Ejemplo", "Descripción de ejemplo", TipoSeguro.COCHE, 100.0);
-
-            SeguroCocheVentana cocheVentana = new SeguroCocheVentana(seguroEjemplo);
-            SeguroVidaVentana vidaVentana = new SeguroVidaVentana(seguroEjemplo);
-            SeguroCasaVentana casaVentana = new SeguroCasaVentana(seguroEjemplo);
-
-            new SeguroManager(cocheVentana, vidaVentana, casaVentana).inicioSesionVentana.mostrar();
+            new SeguroManager().inicioSesionVentana.mostrar();
         });
     }
 
@@ -243,15 +226,15 @@ public class SeguroManager {
     }
 
     public void abrirVentanaSeguro(Seguro seguro) {
-        if (seguro.getTipoSeguro() == null) {
+        if (seguro == null || seguro.getTipoSeguro() == null) {
             JOptionPane.showMessageDialog(null, "Tipo de seguro no reconocido", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         switch (seguro.getTipoSeguro()) {
-            case COCHE -> seguroCocheVentana.mostrar();
-            case VIDA -> seguroVidaVentana.mostrar();
-            case CASA -> seguroCasaVentana.mostrar();
+            case COCHE -> new SeguroCocheVentana(seguro).mostrar();
+            case VIDA -> new SeguroVidaVentana(seguro).mostrar();
+            case CASA -> new SeguroCasaVentana(seguro).mostrar();
             default ->
                 JOptionPane.showMessageDialog(null, "Tipo de seguro no reconocido", "Error", JOptionPane.ERROR_MESSAGE);
         }

@@ -16,6 +16,10 @@ public class SeguroCocheVentana {
         initialize();
     }
 
+    public void setSeguro(Seguro seguro) {
+        this.seguro = seguro;
+    }
+
     private void initialize() {
         frame = new JFrame("Seguro de Coche - " + seguro.getNombre());
         frame.setSize(400, 300);
@@ -58,12 +62,12 @@ public class SeguroCocheVentana {
         }
 
         try {
-            JOptionPane.showMessageDialog(frame, 
+            JOptionPane.showMessageDialog(frame,
                     "Seguro de coche contratado exitosamente!\n" +
-                    "Seguro: " + seguro.getNombre() + "\n" +
-                    "Matrícula: " + matricula + "\n" +
-                    "Modelo: " + modelo + "\n" +
-                    "Marca: " + marca);
+                            "Seguro: " + seguro.getNombre() + "\n" +
+                            "Matrícula: " + matricula + "\n" +
+                            "Modelo: " + modelo + "\n" +
+                            "Marca: " + marca);
             frame.dispose();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(frame,
