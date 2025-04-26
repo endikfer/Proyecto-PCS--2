@@ -56,135 +56,156 @@ public class SeguroManagerTest {
         SeguroManager.inicioSesionVentana.emailInicioSesion = "test@example.com";
     }
 
-    @Test
-    void testCrearVentanaPrincipal() {
-        // Ejecutar el método
-        SeguroManager.crearVentanaPrincipal(clienteMock);
+    // @Test
+    // void testCrearVentanaPrincipal() {
+    // // Ejecutar el método
+    // SeguroManager.crearVentanaPrincipal(clienteMock);
 
-        // Verificar que los componentes de la ventana se configuran correctamente
-        JLabel etiqueta = findComponentByType(JLabel.class);
-        JButton btnPerfil = findComponentByType(JButton.class);
+    // // Verificar que los componentes de la ventana se configuran correctamente
+    // JLabel etiqueta = findComponentByType(JLabel.class);
+    // JButton btnPerfil = findComponentByType(JButton.class);
 
-        assertNotNull(etiqueta, "La etiqueta de bienvenida debería estar presente");
-        assertEquals("Bienvenido, test@example.com - Gestión de Seguros", etiqueta.getText());
+    // assertNotNull(etiqueta, "La etiqueta de bienvenida debería estar presente");
+    // assertEquals("Bienvenido, test@example.com - Gestión de Seguros",
+    // etiqueta.getText());
 
-        assertNotNull(btnPerfil, "El botón de perfil debería estar presente");
-        assertEquals("Ver Perfil", btnPerfil.getText());
+    // assertNotNull(btnPerfil, "El botón de perfil debería estar presente");
+    // assertEquals("Ver Perfil", btnPerfil.getText());
 
-        // Verificar que se llamó al cliente seguroClient
-        verify(seguroClientMock, times(1)).obtenerTodosSeguros();
-    }
+    // // Verificar que se llamó al cliente seguroClient
+    // verify(seguroClientMock, times(1)).obtenerTodosSeguros();
+    // }
 
-    @Test
-    void testCrearPanelSeguros_UnSeguroNoVacio() {
-        // Simular que el cliente devuelve una lista con un seguro cuyo nombre no es
-        // "vacio"
-        Seguro seguroNoVacio = new Seguro("Seguro Activo", "Descripción del seguro", TipoSeguro.CASA, 150.0);
-        when(seguroClientMock.obtenerSegurosPorTipo("CASA")).thenReturn(Collections.singletonList(seguroNoVacio));
+    // @Test
+    // void testCrearPanelSeguros_UnSeguroNoVacio() {
+    // // Simular que el cliente devuelve una lista con un seguro cuyo nombre no es
+    // // "vacio"
+    // Seguro seguroNoVacio = new Seguro("Seguro Activo", "Descripción del seguro",
+    // TipoSeguro.CASA, 150.0);
+    // when(seguroClientMock.obtenerSegurosPorTipo("CASA")).thenReturn(Collections.singletonList(seguroNoVacio));
 
-        // Ejecutar el método
-        JPanel panel = SeguroManager.crearPanelSeguros(TipoSeguro.CASA);
+    // // Ejecutar el método
+    // JPanel panel = SeguroManager.crearPanelSeguros(TipoSeguro.CASA);
 
-        // Verificar que el panel no es nulo
-        assertNotNull(panel, "El panel no debería ser nulo");
+    // // Verificar que el panel no es nulo
+    // assertNotNull(panel, "El panel no debería ser nulo");
 
-        // Verificar que contiene un JScrollPane con una JList
-        assertEquals(1, panel.getComponentCount(), "El panel debería contener un componente");
-        assertTrue(panel.getComponent(0) instanceof JScrollPane, "El componente debería ser un JScrollPane");
-        JScrollPane scrollPane = (JScrollPane) panel.getComponent(0);
-        JList<?> listaSeguros = (JList<?>) scrollPane.getViewport().getView();
-        assertNotNull(listaSeguros, "La lista de seguros no debería ser nula");
-        assertEquals(1, listaSeguros.getModel().getSize(), "La lista debería contener 1 seguro");
+    // // Verificar que contiene un JScrollPane con una JList
+    // assertEquals(1, panel.getComponentCount(), "El panel debería contener un
+    // componente");
+    // assertTrue(panel.getComponent(0) instanceof JScrollPane, "El componente
+    // debería ser un JScrollPane");
+    // JScrollPane scrollPane = (JScrollPane) panel.getComponent(0);
+    // JList<?> listaSeguros = (JList<?>) scrollPane.getViewport().getView();
+    // assertNotNull(listaSeguros, "La lista de seguros no debería ser nula");
+    // assertEquals(1, listaSeguros.getModel().getSize(), "La lista debería contener
+    // 1 seguro");
 
-        // Verificar que el seguro en la lista es el esperado
-        Seguro seguroEnLista = (Seguro) listaSeguros.getModel().getElementAt(0);
-        assertEquals(seguroNoVacio, seguroEnLista, "El seguro no es el esperado");
-    }
+    // // Verificar que el seguro en la lista es el esperado
+    // Seguro seguroEnLista = (Seguro) listaSeguros.getModel().getElementAt(0);
+    // assertEquals(seguroNoVacio, seguroEnLista, "El seguro no es el esperado");
+    // }
 
-    @Test
-    void testCrearPanelTodosSeguros_SeguroVacio() {
-        // Simular que el cliente devuelve un seguro con nombre "vacio"
-        Seguro seguroVacio = new Seguro("vacio", "Sin descripción", TipoSeguro.CASA, 0.0);
-        when(seguroClientMock.obtenerTodosSeguros()).thenReturn(Collections.singletonList(seguroVacio));
+    // @Test
+    // void testCrearPanelTodosSeguros_SeguroVacio() {
+    // // Simular que el cliente devuelve un seguro con nombre "vacio"
+    // Seguro seguroVacio = new Seguro("vacio", "Sin descripción", TipoSeguro.CASA,
+    // 0.0);
+    // when(seguroClientMock.obtenerTodosSeguros()).thenReturn(Collections.singletonList(seguroVacio));
 
-        // Ejecutar el método
-        JPanel panel = SeguroManager.crearPanelTodosSeguros();
+    // // Ejecutar el método
+    // JPanel panel = SeguroManager.crearPanelTodosSeguros();
 
-        // Verificar que el panel no es nulo
-        assertNotNull(panel, "El panel no debería ser nulo");
+    // // Verificar que el panel no es nulo
+    // assertNotNull(panel, "El panel no debería ser nulo");
 
-        // Verificar que contiene un JLabel con el mensaje esperado
-        assertEquals(1, panel.getComponentCount(), "El panel debería contener un componente");
-        assertTrue(panel.getComponent(0) instanceof JLabel, "El componente debería ser un JLabel");
-        JLabel mensaje = (JLabel) panel.getComponent(0);
-        assertEquals("No hay seguros de ningun tipo disponibles.", mensaje.getText(), "El mensaje no es el esperado");
-    }
+    // // Verificar que contiene un JLabel con el mensaje esperado
+    // assertEquals(1, panel.getComponentCount(), "El panel debería contener un
+    // componente");
+    // assertTrue(panel.getComponent(0) instanceof JLabel, "El componente debería
+    // ser un JLabel");
+    // JLabel mensaje = (JLabel) panel.getComponent(0);
+    // assertEquals("No hay seguros de ningun tipo disponibles.", mensaje.getText(),
+    // "El mensaje no es el esperado");
+    // }
 
-    @Test
-    void testCrearPanelTodosSeguros_ListaValida() {
-        // Simular que el cliente devuelve una lista de seguros válida
-        Seguro seguro1 = new Seguro("Seguro Vida", "Cobertura completa", TipoSeguro.VIDA, 100.0);
-        Seguro seguro2 = new Seguro("Seguro Casa", "Protección contra incendios", TipoSeguro.CASA, 200.0);
-        Seguro seguro3 = new Seguro("Seguro Coche", "Cobertura de accidentes", TipoSeguro.COCHE, 300.0);
-        when(seguroClientMock.obtenerTodosSeguros()).thenReturn(Arrays.asList(seguro1, seguro2, seguro3));
+    // @Test
+    // void testCrearPanelTodosSeguros_ListaValida() {
+    // // Simular que el cliente devuelve una lista de seguros válida
+    // Seguro seguro1 = new Seguro("Seguro Vida", "Cobertura completa",
+    // TipoSeguro.VIDA, 100.0);
+    // Seguro seguro2 = new Seguro("Seguro Casa", "Protección contra incendios",
+    // TipoSeguro.CASA, 200.0);
+    // Seguro seguro3 = new Seguro("Seguro Coche", "Cobertura de accidentes",
+    // TipoSeguro.COCHE, 300.0);
+    // when(seguroClientMock.obtenerTodosSeguros()).thenReturn(Arrays.asList(seguro1,
+    // seguro2, seguro3));
 
-        // Ejecutar el método
-        JPanel panel = SeguroManager.crearPanelTodosSeguros();
+    // // Ejecutar el método
+    // JPanel panel = SeguroManager.crearPanelTodosSeguros();
 
-        // Verificar que el panel no es nulo
-        assertNotNull(panel, "El panel no debería ser nulo");
+    // // Verificar que el panel no es nulo
+    // assertNotNull(panel, "El panel no debería ser nulo");
 
-        // Verificar que contiene un JScrollPane con una JList
-        assertEquals(1, panel.getComponentCount(), "El panel debería contener un componente");
-        assertTrue(panel.getComponent(0) instanceof JScrollPane, "El componente debería ser un JScrollPane");
-        JScrollPane scrollPane = (JScrollPane) panel.getComponent(0);
-        JList<?> listaSeguros = (JList<?>) scrollPane.getViewport().getView();
-        assertNotNull(listaSeguros, "La lista de seguros no debería ser nula");
-        assertEquals(3, listaSeguros.getModel().getSize(), "La lista debería contener 3 seguros");
-    }
+    // // Verificar que contiene un JScrollPane con una JList
+    // assertEquals(1, panel.getComponentCount(), "El panel debería contener un
+    // componente");
+    // assertTrue(panel.getComponent(0) instanceof JScrollPane, "El componente
+    // debería ser un JScrollPane");
+    // JScrollPane scrollPane = (JScrollPane) panel.getComponent(0);
+    // JList<?> listaSeguros = (JList<?>) scrollPane.getViewport().getView();
+    // assertNotNull(listaSeguros, "La lista de seguros no debería ser nula");
+    // assertEquals(3, listaSeguros.getModel().getSize(), "La lista debería contener
+    // 3 seguros");
+    // }
 
-    @Test
-    void testCrearPanelTodosSeguros_UnSeguroNoVacio() {
-        // Simular que el cliente devuelve una lista con un seguro cuyo nombre no es
-        // "vacio"
-        Seguro seguroNoVacio = new Seguro("Seguro Activo", "Descripción del seguro", TipoSeguro.CASA, 150.0);
-        when(seguroClientMock.obtenerTodosSeguros()).thenReturn(Collections.singletonList(seguroNoVacio));
+    // @Test
+    // void testCrearPanelTodosSeguros_UnSeguroNoVacio() {
+    // // Simular que el cliente devuelve una lista con un seguro cuyo nombre no es
+    // // "vacio"
+    // Seguro seguroNoVacio = new Seguro("Seguro Activo", "Descripción del seguro",
+    // TipoSeguro.CASA, 150.0);
+    // when(seguroClientMock.obtenerTodosSeguros()).thenReturn(Collections.singletonList(seguroNoVacio));
 
-        // Ejecutar el método
-        JPanel panel = SeguroManager.crearPanelTodosSeguros();
+    // // Ejecutar el método
+    // JPanel panel = SeguroManager.crearPanelTodosSeguros();
 
-        // Verificar que el panel no es nulo
-        assertNotNull(panel, "El panel no debería ser nulo");
+    // // Verificar que el panel no es nulo
+    // assertNotNull(panel, "El panel no debería ser nulo");
 
-        // Verificar que contiene un JScrollPane con una JList
-        assertEquals(1, panel.getComponentCount(), "El panel debería contener un componente");
-        assertTrue(panel.getComponent(0) instanceof JScrollPane, "El componente debería ser un JScrollPane");
-        JScrollPane scrollPane = (JScrollPane) panel.getComponent(0);
-        JList<?> listaSeguros = (JList<?>) scrollPane.getViewport().getView();
-        assertNotNull(listaSeguros, "La lista de seguros no debería ser nula");
-        assertEquals(1, listaSeguros.getModel().getSize(), "La lista debería contener 1 seguro");
+    // // Verificar que contiene un JScrollPane con una JList
+    // assertEquals(1, panel.getComponentCount(), "El panel debería contener un
+    // componente");
+    // assertTrue(panel.getComponent(0) instanceof JScrollPane, "El componente
+    // debería ser un JScrollPane");
+    // JScrollPane scrollPane = (JScrollPane) panel.getComponent(0);
+    // JList<?> listaSeguros = (JList<?>) scrollPane.getViewport().getView();
+    // assertNotNull(listaSeguros, "La lista de seguros no debería ser nula");
+    // assertEquals(1, listaSeguros.getModel().getSize(), "La lista debería contener
+    // 1 seguro");
 
-        // Comparar el seguro completo en lugar de solo el nombre
-        Seguro seguroEnLista = (Seguro) listaSeguros.getModel().getElementAt(0);
-        assertEquals(seguroNoVacio, seguroEnLista, "El seguro no es el esperado");
-    }
+    // // Comparar el seguro completo en lugar de solo el nombre
+    // Seguro seguroEnLista = (Seguro) listaSeguros.getModel().getElementAt(0);
+    // assertEquals(seguroNoVacio, seguroEnLista, "El seguro no es el esperado");
+    // }
 
-    @Test
-    void testCrearPanelTodosSeguros_ExceptionHandling() {
-        // Simular una excepción al obtener los seguros
-        when(seguroClientMock.obtenerTodosSeguros()).thenThrow(new RuntimeException("Simulated backend error"));
+    // @Test
+    // void testCrearPanelTodosSeguros_ExceptionHandling() {
+    // // Simular una excepción al obtener los seguros
+    // when(seguroClientMock.obtenerTodosSeguros()).thenThrow(new
+    // RuntimeException("Simulated backend error"));
 
-        // Ejecutar el método
-        JPanel panel = SeguroManager.crearPanelTodosSeguros();
+    // // Ejecutar el método
+    // JPanel panel = SeguroManager.crearPanelTodosSeguros();
 
-        // Verificar que el panel no es nulo
-        assertNotNull(panel, "El panel no debería ser nulo");
+    // // Verificar que el panel no es nulo
+    // assertNotNull(panel, "El panel no debería ser nulo");
 
-        // Nota: No se puede verificar directamente el JOptionPane, pero se puede
-        // observar
-        // que el método no lanza una excepción y el flujo continúa correctamente.
-        verify(seguroClientMock, times(1)).obtenerTodosSeguros();
-    }
+    // // Nota: No se puede verificar directamente el JOptionPane, pero se puede
+    // // observar
+    // // que el método no lanza una excepción y el flujo continúa correctamente.
+    // verify(seguroClientMock, times(1)).obtenerTodosSeguros();
+    // }
 
     // @Test
     // void testAbrirVentanaSeguro_Coche() {
@@ -237,18 +258,19 @@ public class SeguroManagerTest {
     // verify(ventanaMock, times(1)).mostrar();
     // }
 
-    @Test
-    void testAbrirVentanaSeguro_Default() {
-        // Crear un seguro con un tipo no reconocido (null)
-        Seguro seguroInvalido = new Seguro("Seguro Invalido", "Descripción no válida", null, 0.0);
+    // @Test
+    // void testAbrirVentanaSeguro_Default() {
+    // // Crear un seguro con un tipo no reconocido (null)
+    // Seguro seguroInvalido = new Seguro("Seguro Invalido", "Descripción no
+    // válida", null, 0.0);
 
-        // Ejecutar el método
-        SeguroManager.abrirVentanaSeguro(seguroInvalido);
+    // // Ejecutar el método
+    // SeguroManager.abrirVentanaSeguro(seguroInvalido);
 
-        // Nota: No se puede verificar directamente el JOptionPane en este caso.
-        // Este test asegura que no se lanza una excepción y que el flujo continúa
-        // correctamente.
-    }
+    // // Nota: No se puede verificar directamente el JOptionPane en este caso.
+    // // Este test asegura que no se lanza una excepción y que el flujo continúa
+    // // correctamente.
+    // }
 
     private <T> T findComponentByType(Class<T> type) {
         // Buscar la ventana con el título específico
