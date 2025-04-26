@@ -164,53 +164,49 @@ public class SeguroManagerTest {
         assertEquals(3, listaSeguros.getModel().getSize(), "La lista debería contener 3 seguros");
     }
 
-    // @Test
-    // void testCrearPanelTodosSeguros_UnSeguroNoVacio() {
-    // // Simular que el cliente devuelve una lista con un seguro cuyo nombre no es
-    // // "vacio"
-    // Seguro seguroNoVacio = new Seguro("Seguro Activo", "Descripción del seguro",
-    // TipoSeguro.CASA, 150.0);
-    // when(seguroClientMock.obtenerTodosSeguros()).thenReturn(Collections.singletonList(seguroNoVacio));
+    @Test
+    void testCrearPanelTodosSeguros_UnSeguroNoVacio() {
+        // Simular que el cliente devuelve una lista con un seguro cuyo nombre no es
+        // "vacio"
+        Seguro seguroNoVacio = new Seguro("Seguro Activo", "Descripción del seguro",
+                TipoSeguro.CASA, 150.0);
+        when(seguroClientMock.obtenerTodosSeguros()).thenReturn(Collections.singletonList(seguroNoVacio));
 
-    // // Ejecutar el método
-    // JPanel panel = SeguroManager.crearPanelTodosSeguros();
+        // Ejecutar el método
+        JPanel panel = seguroManager.crearPanelTodosSeguros();
 
-    // // Verificar que el panel no es nulo
-    // assertNotNull(panel, "El panel no debería ser nulo");
+        // Verificar que el panel no es nulo
+        assertNotNull(panel, "El panel no debería ser nulo");
 
-    // // Verificar que contiene un JScrollPane con una JList
-    // assertEquals(1, panel.getComponentCount(), "El panel debería contener un
-    // componente");
-    // assertTrue(panel.getComponent(0) instanceof JScrollPane, "El componente
-    // debería ser un JScrollPane");
-    // JScrollPane scrollPane = (JScrollPane) panel.getComponent(0);
-    // JList<?> listaSeguros = (JList<?>) scrollPane.getViewport().getView();
-    // assertNotNull(listaSeguros, "La lista de seguros no debería ser nula");
-    // assertEquals(1, listaSeguros.getModel().getSize(), "La lista debería contener
-    // 1 seguro");
+        // Verificar que contiene un JScrollPane con una JList
+        assertEquals(1, panel.getComponentCount(), "El panel debería contener un componente");
+        assertTrue(panel.getComponent(0) instanceof JScrollPane, "El componente debería ser un JScrollPane");
+        JScrollPane scrollPane = (JScrollPane) panel.getComponent(0);
+        JList<?> listaSeguros = (JList<?>) scrollPane.getViewport().getView();
+        assertNotNull(listaSeguros, "La lista de seguros no debería ser nula");
+        assertEquals(1, listaSeguros.getModel().getSize(), "La lista debería contener 1 seguro");
 
-    // // Comparar el seguro completo en lugar de solo el nombre
-    // Seguro seguroEnLista = (Seguro) listaSeguros.getModel().getElementAt(0);
-    // assertEquals(seguroNoVacio, seguroEnLista, "El seguro no es el esperado");
-    // }
+        // Comparar el seguro completo en lugar de solo el nombre
+        Seguro seguroEnLista = (Seguro) listaSeguros.getModel().getElementAt(0);
+        assertEquals(seguroNoVacio, seguroEnLista, "El seguro no es el esperado");
+    }
 
-    // @Test
-    // void testCrearPanelTodosSeguros_ExceptionHandling() {
-    // // Simular una excepción al obtener los seguros
-    // when(seguroClientMock.obtenerTodosSeguros()).thenThrow(new
-    // RuntimeException("Simulated backend error"));
+    @Test
+    void testCrearPanelTodosSeguros_ExceptionHandling() {
+        // Simular una excepción al obtener los seguros
+        when(seguroClientMock.obtenerTodosSeguros()).thenThrow(new RuntimeException("Simulated backend error"));
 
-    // // Ejecutar el método
-    // JPanel panel = SeguroManager.crearPanelTodosSeguros();
+        // Ejecutar el método
+        JPanel panel = seguroManager.crearPanelTodosSeguros();
 
-    // // Verificar que el panel no es nulo
-    // assertNotNull(panel, "El panel no debería ser nulo");
+        // Verificar que el panel no es nulo
+        assertNotNull(panel, "El panel no debería ser nulo");
 
-    // // Nota: No se puede verificar directamente el JOptionPane, pero se puede
-    // // observar
-    // // que el método no lanza una excepción y el flujo continúa correctamente.
-    // verify(seguroClientMock, times(1)).obtenerTodosSeguros();
-    // }
+        // Nota: No se puede verificar directamente el JOptionPane, pero se puede
+        // observar
+        // que el método no lanza una excepción y el flujo continúa correctamente.
+        verify(seguroClientMock, times(1)).obtenerTodosSeguros();
+    }
 
     // @Test
     // void testAbrirVentanaSeguro_Coche() {
