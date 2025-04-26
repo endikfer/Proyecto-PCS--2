@@ -24,7 +24,6 @@ public class SeguroServicePerfTest {
     @Autowired
     private SeguroRepository segurorepo;
 
-    @JUnitPerfTestActiveConfig
     private final static JUnitPerfReportingConfig PERF_CONFIG = JUnitPerfReportingConfig.builder()
             .reportGenerator(
                     new HtmlReportGenerator(System.getProperty("user.dir") + "/target/reports/perf-report.html"))
