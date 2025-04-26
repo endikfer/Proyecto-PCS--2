@@ -196,13 +196,13 @@
 
     <profiles>
         <profile>
-            <id>headless-enabled</id>
+            <id>ci</id>
             <properties>
                 <enable.headless>true</enable.headless>
             </properties>
         </profile>
         <profile>
-            <id>headless-disabled</id>
+            <id>local</id>
             <properties>
                 <enable.headless>false</enable.headless>
             </properties>

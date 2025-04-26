@@ -1,7 +1,6 @@
 package com.seguros.client;
 
 import java.awt.BorderLayout;
-import java.awt.GraphicsEnvironment;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -14,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,11 +43,10 @@ public class AdminVentanaTest {
 
     @BeforeAll
     public static void setUp1() {
-        // Verificar si el entorno es headless
-        if (GraphicsEnvironment.isHeadless()) {
-            System.out.println("Entorno Headless detectado. Saltando test...");
-            Assumptions.assumeTrue(false, "El entorno no soporta GUI");
-        }
+        // Leer la propiedad para determinar si el entorno es headless
+        String isHeadlessProperty = System.getProperty("java.awt.headless", "false");
+        boolean isHeadless = Boolean.parseBoolean(isHeadlessProperty);
+        Assumptions.assumeTrue(!isHeadless, "El entorno es headless. Saltando pruebas de GUI.");
     }
 
     @BeforeEach
