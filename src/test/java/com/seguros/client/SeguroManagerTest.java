@@ -1,5 +1,8 @@
 package com.seguros.client;
 
+import java.awt.GraphicsEnvironment;
+import org.junit.jupiter.api.Assumptions;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -21,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -37,6 +41,15 @@ public class SeguroManagerTest {
 
     private SeguroManager seguroManager;
     private Cliente clienteMock;
+
+    @BeforeAll
+    public static void setUp1() {
+        // Verificar si el entorno es headless
+        if (GraphicsEnvironment.isHeadless()) {
+            System.out.println("Entorno Headless detectado. Saltando test...");
+            Assumptions.assumeTrue(false, "El entorno no soporta GUI");
+        }
+    }
 
     @BeforeEach
     void setUp() {
