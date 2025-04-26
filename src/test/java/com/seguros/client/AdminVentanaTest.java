@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.awt.BorderLayout;
+import java.awt.GraphicsEnvironment;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -18,6 +19,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -40,59 +43,61 @@ public class AdminVentanaTest {
     @Mock
     private SeguroControllerAdmin mockSeguroControllerAdmin;
 
-    // @BeforeEach
-    // public void setUp() {
+    @BeforeAll
+    public static void setUp1() {
+        // Verificar si el entorno es headless
+        if (GraphicsEnvironment.isHeadless()) {
+            System.out.println("Entorno Headless detectado. Saltando test...");
+            Assumptions.assumeTrue(false, "El entorno no soporta GUI");
+        }
+    }
 
-    // MockitoAnnotations.openMocks(this);
-    // adminVentana = new AdminVentana(mockSeguroControllerAdmin);
-    // adminVentana1 = new AdminVentana();
+    @BeforeEach
+    public void setUp() {
 
-    // // Reemplazar los paneles reales por mocks
-    // adminVentana.panelCentral = mockPanelCentral;
-    // adminVentana.panelSuperiorCentral = mockPanelSuperiorCentral;
-    // adminVentana.modeloLista = new DefaultListModel<>();
-    // }
+        MockitoAnnotations.openMocks(this);
+        adminVentana = new AdminVentana(mockSeguroControllerAdmin);
+        adminVentana1 = new AdminVentana();
 
-    // @Test
-    // public void testAdminVentanaConstructor() {
-    // // Reemplazar los paneles reales por los mocks
-    // adminVentana.panelCentral = mockPanelCentral;
-    // adminVentana.panelSuperiorCentral = mockPanelSuperiorCentral;
+        // Reemplazar los paneles reales por mocks
+        adminVentana.panelCentral = mockPanelCentral;
+        adminVentana.panelSuperiorCentral = mockPanelSuperiorCentral;
+        adminVentana.modeloLista = new DefaultListModel<>();
+    }
 
-    // // Verify JFrame properties
-    // assertNotNull(adminVentana, "AdminVentana instance should not be null");
-    // assertNotNull(adminVentana.frame, "Frame should be initialized");
-    // assertEquals("Panel de Administrador", adminVentana.frame.getTitle(), "Frame
-    // title should match");
-    // assertEquals(javax.swing.JFrame.MAXIMIZED_BOTH,
-    // adminVentana.frame.getExtendedState(),
-    // "Frame should be maximized");
-    // assertEquals(javax.swing.JFrame.EXIT_ON_CLOSE,
-    // adminVentana.frame.getDefaultCloseOperation(),
-    // "Default close operation should be EXIT_ON_CLOSE");
+    @Test
+    public void testAdminVentanaConstructor() {
+        // Reemplazar los paneles reales por los mocks
+        adminVentana.panelCentral = mockPanelCentral;
+        adminVentana.panelSuperiorCentral = mockPanelSuperiorCentral;
 
-    // // Verify panelCentral and panelSuperiorCentral are initialized
-    // assertNotNull(adminVentana.panelCentral, "Panel central should be
-    // initialized");
-    // assertNotNull(adminVentana.panelSuperiorCentral, "Panel superior central
-    // should be initialized");
+        // Verify JFrame properties
+        assertNotNull(adminVentana, "AdminVentana instance should not be null");
+        assertNotNull(adminVentana.frame, "Frame should be initialized");
+        assertEquals("Panel de Administrador", adminVentana.frame.getTitle(), "Frame title should match");
+        assertEquals(javax.swing.JFrame.MAXIMIZED_BOTH,
+                adminVentana.frame.getExtendedState(),
+                "Frame should be maximized");
+        assertEquals(javax.swing.JFrame.EXIT_ON_CLOSE,
+                adminVentana.frame.getDefaultCloseOperation(),
+                "Default close operation should be EXIT_ON_CLOSE");
 
-    // // Verify left panel buttons
-    // JPanel panelIzquierdo = (JPanel)
-    // adminVentana.frame.getContentPane().getComponent(0);
-    // assertNotNull(panelIzquierdo, "Left panel should be added to the frame");
-    // assertEquals(5, panelIzquierdo.getComponentCount(), "Left panel should
-    // contain 5 buttons");
+        // Verify panelCentral and panelSuperiorCentral are initialized
+        assertNotNull(adminVentana.panelCentral, "Panel central should be initialized");
+        assertNotNull(adminVentana.panelSuperiorCentral, "Panel superior central should be initialized");
 
-    // // Verify button names
-    // String[] expectedButtonNames = { "Seguros", "Seguros cliente", "Clientes por
-    // seguro", "Clientes", "Dudas" };
-    // for (int i = 0; i < expectedButtonNames.length; i++) {
-    // JButton button = (JButton) panelIzquierdo.getComponent(i);
-    // assertEquals(expectedButtonNames[i], button.getText(), "Button text should
-    // match");
-    // }
-    // }
+        // Verify left panel buttons
+        JPanel panelIzquierdo = (JPanel) adminVentana.frame.getContentPane().getComponent(0);
+        assertNotNull(panelIzquierdo, "Left panel should be added to the frame");
+        assertEquals(5, panelIzquierdo.getComponentCount(), "Left panel should contain 5 buttons");
+
+        // Verify button names
+        String[] expectedButtonNames = { "Seguros", "Seguros cliente", "Clientes por seguro", "Clientes", "Dudas" };
+        for (int i = 0; i < expectedButtonNames.length; i++) {
+            JButton button = (JButton) panelIzquierdo.getComponent(i);
+            assertEquals(expectedButtonNames[i], button.getText(), "Button text should match");
+        }
+    }
 
     // @Test
     // public void testCambiarContenido_opcion1() {
