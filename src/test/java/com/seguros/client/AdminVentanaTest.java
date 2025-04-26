@@ -1,14 +1,5 @@
 package com.seguros.client;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.awt.BorderLayout;
 import java.awt.GraphicsEnvironment;
 import java.util.Arrays;
@@ -19,11 +10,20 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 
 import com.seguros.model.Seguro;
@@ -99,190 +99,185 @@ public class AdminVentanaTest {
         }
     }
 
+    @Test
+    public void testCambiarContenido_opcion1() {
+        // Ejecutar el método con la opción 1
+        adminVentana.cambiarContenido(1);
+
+        // Verificar que el panel central se limpia y se actualiza
+        verify(mockPanelCentral).removeAll();
+        verify(mockPanelCentral, times(2)).add(mockPanelSuperiorCentral,
+                BorderLayout.NORTH); // Verificar dos llamadas
+        verify(mockPanelCentral).revalidate();
+        verify(mockPanelCentral).repaint();
+    }
+
     // @Test
-    // public void testCambiarContenido_opcion1() {
-    // // Ejecutar el método con la opción 1
-    // adminVentana.cambiarContenido(1);
+    // public void testCambiarContenido_opcion2() {
+    // Ejecutar el método con la opción 2
+    // adminVentana.cambiarContenido(2);
 
-    // // Verificar que el panel central se limpia y se actualiza
+    // Verificar que el panel central se limpia y se actualiza
     // verify(mockPanelCentral).removeAll();
-    // verify(mockPanelCentral, times(2)).add(mockPanelSuperiorCentral,
-    // BorderLayout.NORTH); // Verificar dos llamadas
-    // verify(mockPanelCentral).revalidate();
-    // verify(mockPanelCentral).repaint();
-    // }
-
-    // // @Test
-    // // public void testCambiarContenido_opcion2() {
-    // // // Ejecutar el método con la opción 2
-    // // adminVentana.cambiarContenido(2);
-
-    // // // Verificar que el panel central se limpia y se actualiza
-    // // verify(mockPanelCentral).removeAll();
-    // // verify(mockPanelCentral).add(mockPanelSuperiorCentral,
+    // verify(mockPanelCentral).add(mockPanelSuperiorCentral,
     // BorderLayout.NORTH);
-    // // verify(mockPanelCentral).revalidate();
-    // // verify(mockPanelCentral).repaint();
-    // // }
-
-    // @Test
-    // public void testCambiarContenido_opcion3() {
-    // // Ejecutar el método con la opción 3
-    // adminVentana.cambiarContenido(3);
-
-    // // Verificar que el panel central se limpia y se actualiza
-    // verify(mockPanelCentral).removeAll();
-    // verify(mockPanelCentral).add(mockPanelSuperiorCentral, BorderLayout.NORTH);
     // verify(mockPanelCentral).revalidate();
     // verify(mockPanelCentral).repaint();
     // }
 
-    // @Test
-    // public void testCambiarContenido_opcion4() {
-    // // Ejecutar el método con la opción 4
-    // adminVentana.cambiarContenido(4);
+    @Test
+    public void testCambiarContenido_opcion3() {
+        // Ejecutar el método con la opción 3
+        adminVentana.cambiarContenido(3);
 
-    // // Verificar que el panel central se limpia y se actualiza
-    // verify(mockPanelCentral).removeAll();
-    // verify(mockPanelCentral).add(mockPanelSuperiorCentral, BorderLayout.NORTH);
-    // verify(mockPanelCentral).revalidate();
-    // verify(mockPanelCentral).repaint();
-    // }
+        // Verificar que el panel central se limpia y se actualiza
+        verify(mockPanelCentral).removeAll();
+        verify(mockPanelCentral).add(mockPanelSuperiorCentral, BorderLayout.NORTH);
+        verify(mockPanelCentral).revalidate();
+        verify(mockPanelCentral).repaint();
+    }
 
-    // @Test
-    // public void testCambiarContenido_opcion5() {
-    // // Ejecutar el método con la opción 5
-    // adminVentana.cambiarContenido(5);
+    @Test
+    public void testCambiarContenido_opcion4() {
+        // Ejecutar el método con la opción 4
+        adminVentana.cambiarContenido(4);
 
-    // // Verificar que el panel central se limpia y se actualiza
-    // verify(mockPanelCentral).removeAll();
-    // verify(mockPanelCentral).add(mockPanelSuperiorCentral, BorderLayout.NORTH);
-    // verify(mockPanelCentral).revalidate();
-    // verify(mockPanelCentral).repaint();
-    // }
+        // Verificar que el panel central se limpia y se actualiza
+        verify(mockPanelCentral).removeAll();
+        verify(mockPanelCentral).add(mockPanelSuperiorCentral, BorderLayout.NORTH);
+        verify(mockPanelCentral).revalidate();
+        verify(mockPanelCentral).repaint();
+    }
 
-    // @Test
-    // public void testCambiarContenido_opcionInvalida() {
-    // // Ejecutar el método con una opción inválida
-    // adminVentana.cambiarContenido(99);
+    @Test
+    public void testCambiarContenido_opcion5() {
+        // Ejecutar el método con la opción 5
+        adminVentana.cambiarContenido(5);
 
-    // // Verificar que el panel central se limpia y se actualiza
-    // verify(mockPanelCentral).removeAll();
-    // verify(mockPanelCentral).add(mockPanelSuperiorCentral, BorderLayout.NORTH);
-    // verify(mockPanelCentral).revalidate();
-    // verify(mockPanelCentral).repaint();
-    // }
+        // Verificar que el panel central se limpia y se actualiza
+        verify(mockPanelCentral).removeAll();
+        verify(mockPanelCentral).add(mockPanelSuperiorCentral, BorderLayout.NORTH);
+        verify(mockPanelCentral).revalidate();
+        verify(mockPanelCentral).repaint();
+    }
 
-    // @Test
-    // public void testActualizarListaSeguros_conSeguros() {
-    // // Simular una lista de seguros
-    // List<Seguro> seguros = Arrays.asList(
-    // new Seguro("Seguro Vida", "Cobertura completa de vida", TipoSeguro.VIDA,
-    // 100.0),
-    // new Seguro("Seguro Casa", "Cobertura para el hogar", TipoSeguro.CASA, 200.0),
-    // new Seguro("Seguro Coche", "Cobertura para vehículos", TipoSeguro.COCHE,
-    // 300.0));
+    @Test
+    public void testCambiarContenido_opcionInvalida() {
+        // Ejecutar el método con una opción inválida
+        adminVentana.cambiarContenido(99);
 
-    // // Simular el comportamiento del controlador
-    // when(mockSeguroControllerAdmin.listaNombreSeguros()).thenReturn(seguros);
+        // Verificar que el panel central se limpia y se actualiza
+        verify(mockPanelCentral).removeAll();
+        verify(mockPanelCentral).add(mockPanelSuperiorCentral, BorderLayout.NORTH);
+        verify(mockPanelCentral).revalidate();
+        verify(mockPanelCentral).repaint();
+    }
 
-    // // Ejecutar el método
-    // adminVentana.actualizarListaSeguros();
+    @Test
+    public void testActualizarListaSeguros_conSeguros() {
+        // Simular una lista de seguros
+        List<Seguro> seguros = Arrays.asList(
+                new Seguro("Seguro Vida", "Cobertura completa de vida", TipoSeguro.VIDA,
+                        100.0),
+                new Seguro("Seguro Casa", "Cobertura para el hogar", TipoSeguro.CASA, 200.0),
+                new Seguro("Seguro Coche", "Cobertura para vehículos", TipoSeguro.COCHE,
+                        300.0));
 
-    // // Verificar que el modelo de la lista contiene los nombres de los seguros
-    // assertEquals(3, adminVentana.modeloLista.size());
-    // assertEquals("Seguro Vida", adminVentana.modeloLista.get(0));
-    // assertEquals("Seguro Casa", adminVentana.modeloLista.get(1));
-    // assertEquals("Seguro Coche", adminVentana.modeloLista.get(2));
-    // }
+        // Simular el comportamiento del controlador
+        when(mockSeguroControllerAdmin.listaNombreSeguros()).thenReturn(seguros);
 
-    // @Test
-    // public void testActualizarListaSeguros_listaNula() {
-    // // Simular un caso donde la lista de seguros es null
-    // when(mockSeguroControllerAdmin.listaNombreSeguros()).thenReturn(null);
+        // Ejecutar el método
+        adminVentana.actualizarListaSeguros();
 
-    // // Ejecutar el método
-    // adminVentana.actualizarListaSeguros();
+        // Verificar que el modelo de la lista contiene los nombres de los seguros
+        assertEquals(3, adminVentana.modeloLista.size());
+        assertEquals("Seguro Vida", adminVentana.modeloLista.get(0));
+        assertEquals("Seguro Casa", adminVentana.modeloLista.get(1));
+        assertEquals("Seguro Coche", adminVentana.modeloLista.get(2));
+    }
 
-    // // Verificar que el modelo de la lista está vacío
-    // assertEquals(0, adminVentana.modeloLista.size());
-    // }
+    @Test
+    public void testActualizarListaSeguros_listaNula() {
+        // Simular un caso donde la lista de seguros es null
+        when(mockSeguroControllerAdmin.listaNombreSeguros()).thenReturn(null);
 
-    // @Test
-    // public void testActualizarListaSeguros_sinSeguros() {
-    // // Simular una lista vacía
-    // when(mockSeguroControllerAdmin.listaNombreSeguros()).thenReturn(Collections.emptyList());
+        // Ejecutar el método
+        adminVentana.actualizarListaSeguros();
 
-    // // Ejecutar el método
-    // adminVentana.actualizarListaSeguros();
+        // Verificar que el modelo de la lista está vacío
+        assertEquals(0, adminVentana.modeloLista.size());
+    }
 
-    // // Verificar que el modelo de la lista está vacío
-    // assertEquals(0, adminVentana.modeloLista.size());
-    // }
+    @Test
+    public void testActualizarListaSeguros_sinSeguros() {
+        // Simular una lista vacía
+        when(mockSeguroControllerAdmin.listaNombreSeguros()).thenReturn(Collections.emptyList());
 
-    // @Test
-    // public void testActualizarListaSeguros_conSeguroVacio() {
-    // // Simular una lista con un seguro "vacio"
-    // List<Seguro> seguros = Collections.singletonList(new Seguro("vacio", "Sin
-    // descripción", TipoSeguro.VIDA, 0.0));
+        // Ejecutar el método
+        adminVentana.actualizarListaSeguros();
 
-    // // Simular el comportamiento del controlador
-    // when(mockSeguroControllerAdmin.listaNombreSeguros()).thenReturn(seguros);
+        // Verificar que el modelo de la lista está vacío
+        assertEquals(0, adminVentana.modeloLista.size());
+    }
 
-    // // Ejecutar el método
-    // adminVentana.actualizarListaSeguros();
+    @Test
+    public void testActualizarListaSeguros_conSeguroVacio() {
+        // Simular una lista con un seguro "vacio"
+        List<Seguro> seguros = Collections.singletonList(new Seguro("vacio", "Sin descripción", TipoSeguro.VIDA, 0.0));
 
-    // // Verificar que el modelo de la lista contiene el mensaje "No hay seguros
-    // // creados"
-    // assertEquals(1, adminVentana.modeloLista.size());
-    // assertEquals("No hay seguros creados", adminVentana.modeloLista.get(0));
-    // }
+        // Simular el comportamiento del controlador
+        when(mockSeguroControllerAdmin.listaNombreSeguros()).thenReturn(seguros);
 
-    // @Test
-    // public void testActualizarListaSeguros_conUnSeguroNoVacio() {
-    // // Simular una lista con un solo seguro cuyo nombre no es "vacio"
-    // List<Seguro> seguros = Collections
-    // .singletonList(new Seguro("Seguro Único", "Descripción única",
-    // TipoSeguro.VIDA, 100.0));
+        // Ejecutar el método
+        adminVentana.actualizarListaSeguros();
 
-    // // Simular el comportamiento del controlador
-    // when(mockSeguroControllerAdmin.listaNombreSeguros()).thenReturn(seguros);
+        // Verificar que el modelo de la lista contiene el mensaje "No hay seguros
+        // creados"
+        assertEquals(1, adminVentana.modeloLista.size());
+        assertEquals("No hay seguros creados", adminVentana.modeloLista.get(0));
+    }
 
-    // // Ejecutar el método
-    // adminVentana.actualizarListaSeguros();
+    @Test
+    public void testActualizarListaSeguros_conUnSeguroNoVacio() {
+        // Simular una lista con un solo seguro cuyo nombre no es "vacio"
+        List<Seguro> seguros = Collections
+                .singletonList(new Seguro("Seguro Único", "Descripción única",
+                        TipoSeguro.VIDA, 100.0));
 
-    // // Verificar que el modelo de la lista contiene el nombre del seguro
-    // assertEquals(1, adminVentana.modeloLista.size());
-    // assertEquals("Seguro Único", adminVentana.modeloLista.get(0));
-    // }
+        // Simular el comportamiento del controlador
+        when(mockSeguroControllerAdmin.listaNombreSeguros()).thenReturn(seguros);
 
-    // @Test
-    // public void testActualizarListaSeguros_conExcepcion() {
-    // // Simular una excepción al obtener los seguros
-    // SeguroControllerAdmin seguroControllerAdmin =
-    // mock(SeguroControllerAdmin.class);
-    // when(seguroControllerAdmin.listaNombreSeguros()).thenThrow(new
-    // RuntimeException("Error de conexión"));
+        // Ejecutar el método
+        adminVentana.actualizarListaSeguros();
 
-    // // Ejecutar el método
-    // adminVentana.actualizarListaSeguros();
+        // Verificar que el modelo de la lista contiene el nombre del seguro
+        assertEquals(1, adminVentana.modeloLista.size());
+        assertEquals("Seguro Único", adminVentana.modeloLista.get(0));
+    }
 
-    // // Verificar que el modelo de la lista está vacío
-    // assertEquals(0, adminVentana.modeloLista.size());
-    // }
+    @Test
+    public void testActualizarListaSeguros_conExcepcion() {
+        // Simular una excepción al obtener los seguros
+        SeguroControllerAdmin seguroControllerAdmin = mock(SeguroControllerAdmin.class);
+        when(seguroControllerAdmin.listaNombreSeguros()).thenThrow(new RuntimeException("Error de conexión"));
 
-    // @Test
-    // public void testMostrar() {
-    // // Verificar que el frame no es visible inicialmente
-    // assertFalse(adminVentana1.frame.isVisible(), "El frame debería estar
-    // inicialmente invisible");
+        // Ejecutar el método
+        adminVentana.actualizarListaSeguros();
 
-    // // Llamar al método mostrar
-    // adminVentana1.mostrar();
+        // Verificar que el modelo de la lista está vacío
+        assertEquals(0, adminVentana.modeloLista.size());
+    }
 
-    // // Verificar que el frame ahora es visible
-    // assertTrue(adminVentana1.frame.isVisible(), "El frame debería ser visible
-    // después de llamar a mostrar");
-    // }
+    @Test
+    public void testMostrar() {
+        // Verificar que el frame no es visible inicialmente
+        assertFalse(adminVentana1.frame.isVisible(), "El frame debería estar inicialmente invisible");
+
+        // Llamar al método mostrar
+        adminVentana1.mostrar();
+
+        // Verificar que el frame ahora es visible
+        assertTrue(adminVentana1.frame.isVisible(), "El frame debería ser visible después de llamar a mostrar");
+    }
 
 }
