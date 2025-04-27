@@ -3,6 +3,7 @@ package com.seguros.client;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,12 +16,15 @@ import com.seguros.model.Seguro;
 
 import javax.swing.*;
 
-
 @ExtendWith(MockitoExtension.class)
 public class SeguroVidaVentanaTest {
+
     @BeforeAll
-    static void configurarHeadless() {
-        System.setProperty("java.awt.headless", "true");
+    public static void setUp1() {
+        // Leer la propiedad para determinar si el entorno es headless
+        String isHeadlessProperty = System.getProperty("java.awt.headless", "false");
+        boolean isHeadless = Boolean.parseBoolean(isHeadlessProperty);
+        Assumptions.assumeTrue(!isHeadless, "El entorno es headless. Saltando pruebas de GUI.");
     }
 
     @Mock
@@ -83,13 +87,13 @@ public class SeguroVidaVentanaTest {
     @Test
     void testGuardarSeguroDatosCorrectos() {
         seguroVentana.crearVentanaSeguro(1);
-        
+
         String nombreSeguroUnico = "SeguroTest_" + System.currentTimeMillis();
-        
+
         setTextField("txtNombre", nombreSeguroUnico);
         setTextAreaField("txtDescripcion", "Descripción Test");
         setTextField("txtPrecio", "99.99");
-        
+
         JButton guardar = seguroVentana.btnGuardar;
         guardar.doClick();
     }

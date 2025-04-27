@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import static org.mockito.Mockito.mock;
@@ -109,30 +110,32 @@ public class AdminVentanaTest {
         verify(mockPanelCentral).repaint();
     }
 
-    // @Test
-    // public void testCambiarContenido_opcion2() {
-    // Ejecutar el método con la opción 2
-    // adminVentana.cambiarContenido(2);
+    @Disabled("Not Ready to Run")
+    @Test
+    public void testCambiarContenido_opcion2() {
+        // Ejecutar el método con la opción 2
+        adminVentana.cambiarContenido(2);
 
-    // Verificar que el panel central se limpia y se actualiza
-    // verify(mockPanelCentral).removeAll();
-    // verify(mockPanelCentral).add(mockPanelSuperiorCentral,
-    // BorderLayout.NORTH);
-    // verify(mockPanelCentral).revalidate();
-    // verify(mockPanelCentral).repaint();
-    // }
+        // Verificar que el panel central se limpia y se actualiza
+        verify(mockPanelCentral).removeAll();
+        verify(mockPanelCentral).add(mockPanelSuperiorCentral,
+                BorderLayout.NORTH);
+        verify(mockPanelCentral).revalidate();
+        verify(mockPanelCentral).repaint();
+    }
 
-    // @Test
-    // public void testCambiarContenido_opcion3() {
-    // // Ejecutar el método con la opción 3
-    // adminVentana.cambiarContenido(3);
+    @Disabled("Not Ready to Run")
+    @Test
+    public void testCambiarContenido_opcion3() {
+        // Ejecutar el método con la opción 3
+        adminVentana.cambiarContenido(3);
 
-    // // Verificar que el panel central se limpia y se actualiza
-    // verify(mockPanelCentral).removeAll();
-    // verify(mockPanelCentral).add(mockPanelSuperiorCentral, BorderLayout.NORTH);
-    // verify(mockPanelCentral).revalidate();
-    // verify(mockPanelCentral).repaint();
-    // }
+        // Verificar que el panel central se limpia y se actualiza
+        verify(mockPanelCentral).removeAll();
+        verify(mockPanelCentral).add(mockPanelSuperiorCentral, BorderLayout.NORTH);
+        verify(mockPanelCentral).revalidate();
+        verify(mockPanelCentral).repaint();
+    }
 
     @Test
     public void testCambiarContenido_opcion4() {
