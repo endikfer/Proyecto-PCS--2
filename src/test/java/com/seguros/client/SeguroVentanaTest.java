@@ -5,6 +5,9 @@ import static org.mockito.Mockito.*;
 
 import com.seguros.model.Seguro;
 import com.seguros.model.TipoSeguro;
+
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,6 +17,14 @@ public class SeguroVentanaTest {
 
     private SeguroVentana seguroVentana;
     private SeguroControllerAdmin adminMock;
+
+    @BeforeAll
+    public static void setUp1() {
+        // Leer la propiedad para determinar si el entorno es headless
+        String isHeadlessProperty = System.getProperty("java.awt.headless", "false");
+        boolean isHeadless = Boolean.parseBoolean(isHeadlessProperty);
+        Assumptions.assumeTrue(!isHeadless, "El entorno es headless. Saltando pruebas de GUI.");
+    }
 
     @BeforeEach
     public void setUp() {
