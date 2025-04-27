@@ -19,7 +19,7 @@ public class SeguroVidaVentana {
         this.seguro = seguro;
     }
 
-    private void initialize() {
+    void initialize() {
         frame = new JFrame("Seguro de Vida - " + seguro.getNombre());
         frame.setSize(400, 300);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
