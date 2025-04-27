@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.*;
 import com.seguros.model.Administrador;
 import com.seguros.repository.AdministradorRepository;
 
-@RestController 
+@RestController
 @RequestMapping("/api/admin")
 @CrossOrigin(origins = "*")
 public class AdminController {
 
     @Autowired
-    private AdministradorRepository administradorRepository;
+    public AdministradorRepository administradorRepository;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Administrador admin) {
