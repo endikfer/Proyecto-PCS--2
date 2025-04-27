@@ -22,13 +22,16 @@ public class SeguroVentana {
 
     private static final String hostname;
     private static final String port;
-    private static final SeguroControllerAdmin admin;
+    private static SeguroControllerAdmin admin;
     private AdminVentana adminVentana;
 
     public SeguroVentana(AdminVentana adminVentana) {
         this.adminVentana = adminVentana; // Guardar la instancia de AdminVentana
     }
     public SeguroVentana(){// Inicializar adminVentana como null
+    }
+    public static void setAdmin(SeguroControllerAdmin adminMock) {
+        admin = adminMock;
     }
 
     static {
@@ -296,5 +299,31 @@ public class SeguroVentana {
         }
         
     }
+
+
+    public JTextArea getTxtDescripcion() {
+        return txtDescripcion;
+    }
+    
+    public JTextField getTxtPrecio() {
+        return txtPrecio;
+    }
+    
+    public JTextField getTxtNombre() {
+        return txtNombre;
+    }
+    
+    public JComboBox<TipoSeguro> getComboTipoSeguro() {
+        return comboTipoSeguro;
+    }
+    
+    public Long getIdSeguro() {
+        return idSeguro;
+    }
+    
+    public void guardarSeguroEditadoPublic(JFrame frame, String nombreSeguro) {
+        guardarSeguroEditado(frame, nombreSeguro);
+    }
+    
 
 }
