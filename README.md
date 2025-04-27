@@ -36,3 +36,9 @@ El usuario por defecto admin  es:
 El contraseña por defecto admin  es:
 
     1234
+
+Comando para ejecutar teses de rendimiento
+    mvn verify -Pperformance
+
+Comando para ejecutar teses de integracion
+    mvn verify -Pintegration
