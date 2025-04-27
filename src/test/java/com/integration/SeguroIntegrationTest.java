@@ -40,5 +40,25 @@ class SeguroCasaIntegrationTest {
         );
         
         assertEquals(HttpStatus.CREATED, clienteResponse.getStatusCode());
+
+        //Paso 2: Crear un seguro
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("nombre", "Alvaro");
+        params.add("descripcion", "seguro nuevo");
+        params.add("tipoSeguro", "CASA"); 
+        params.add("precio", "2500.0");    
+        
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+        
+        ResponseEntity<String> seguroResponse = restTemplate.postForEntity(
+            "/api/seguros/seguro/crear",
+            request,
+            String.class
+        );
+        
+        assertEquals(HttpStatus.OK, seguroResponse.getStatusCode());
     }
 }
