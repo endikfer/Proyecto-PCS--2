@@ -77,38 +77,6 @@ public class SeguroServicePerfTest {
         seguroService.crearSeguro(nombreUnicoTest, "Cobertura básica", "VIDA", 1200.0);
     }
 
-    // Test de rendimiento para el método editarSeguro
-    @Disabled
-    @Test
-    @JUnitPerfTest(threads = 10, durationMs = 1000, rampUpPeriodMs = 500)
-    @JUnitPerfTestRequirement(meanLatency = 1000, allowedErrorPercentage = (float) 0.1)
-    public void editarSeguroPerformanceTest() {
-        // Editar un seguro creado previamente usando su ID
-        boolean result = seguroService.editarSeguro(seguroId, nombreUnico, "Cobertura extendida", "VIDA", 1500.0);
-        assert result : "No se pudo editar el seguro con ID " + seguroId;
-    }
-
-    // Test de rendimiento para el método obtenerSeguroPorNombre
-    @Disabled
-    @Test
-    @JUnitPerfTest(threads = 10, durationMs = 1000, rampUpPeriodMs = 500)
-    @JUnitPerfTestRequirement(meanLatency = 100, allowedErrorPercentage = (float) 0.05)
-    public void obtenerSeguroPorNombrePerformanceTest() {
-        // Buscar un seguro creado previamente por su nombre
-        var seguro = seguroService.obtenerSeguroPorNombre(nombreUnico);
-        assert seguro != null; // Asegura que el seguro se encontró correctamente
-    }
-
-    // Test de rendimiento para el método eliminarSeguro
-    @Disabled
-    @Test
-    @JUnitPerfTest(threads = 10, durationMs = 1000, rampUpPeriodMs = 500)
-    @JUnitPerfTestRequirement(meanLatency = 100, allowedErrorPercentage = (float) 0.05)
-    public void eliminarSeguroPerformanceTest() {
-        boolean result = seguroService.eliminarSeguro(seguroId);
-        assert result; // Verifica que el seguro fue eliminado exitosamente
-    }
-
     // Test de rendimiento para el método obtenerTodosSeguros
     @Test
     @JUnitPerfTest(threads = 5, durationMs = 3000, rampUpPeriodMs = 1000)
