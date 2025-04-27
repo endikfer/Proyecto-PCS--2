@@ -2,10 +2,8 @@ package com.seguros.performance.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.github.noconnor.junitperf.JUnitPerfInterceptor;
+import org.springframework.boot.test.context.SpringBootTest;
 import com.github.noconnor.junitperf.JUnitPerfReportingConfig;
 import com.github.noconnor.junitperf.JUnitPerfTest;
 import com.github.noconnor.junitperf.JUnitPerfTestRequirement;
@@ -15,7 +13,7 @@ import com.seguros.model.Seguro;
 import com.seguros.model.TipoSeguro;
 import com.seguros.repository.SeguroRepository;
 
-@ExtendWith(JUnitPerfInterceptor.class)
+@SpringBootTest
 public class SeguroServicePerfTest {
 
     @Autowired
