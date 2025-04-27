@@ -83,13 +83,15 @@ public class SeguroVidaVentanaTest {
     @Test
     void testGuardarSeguroDatosCorrectos() {
         seguroVentana.crearVentanaSeguro(1);
-
-        setTextField("txtNombre", "Seguro Test");
+        
+        String nombreSeguroUnico = "SeguroTest_" + System.currentTimeMillis();
+        
+        setTextField("txtNombre", nombreSeguroUnico);
         setTextAreaField("txtDescripcion", "Descripción Test");
         setTextField("txtPrecio", "99.99");
-
+        
         JButton guardar = seguroVentana.btnGuardar;
-        guardar.doClick(); // Simula click
+        guardar.doClick();
     }
 
     @Test
