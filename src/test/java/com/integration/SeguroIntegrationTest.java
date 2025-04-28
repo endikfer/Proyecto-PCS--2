@@ -76,9 +76,9 @@ class SeguroCasaIntegrationTest {
         System.out.println("ID del seguro creado: " + seguroId);
 
         // Paso 4: Editar el seguro creado
-        /*MultiValueMap<String, String> editParams = new LinkedMultiValueMap<>();
+        MultiValueMap<String, String> editParams = new LinkedMultiValueMap<>();
         editParams.add("id", String.valueOf(seguroId));
-        editParams.add("nombre", "Alvaro Editado");
+        editParams.add("nombre", "Alvaro Editado" + System.currentTimeMillis());
         editParams.add("descripcion", "seguro actualizado");
         editParams.add("tipoSeguro", "CASA");
         editParams.add("precio", "3000.0");
@@ -92,6 +92,6 @@ class SeguroCasaIntegrationTest {
         );
 
         assertEquals(HttpStatus.OK, editResponse.getStatusCode());
-        System.out.println("Respuesta al editar seguro: " + editResponse.getBody());*/
+        System.out.println("Respuesta al editar seguro: " + editResponse.getBody());
     }
 }
