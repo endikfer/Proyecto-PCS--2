@@ -57,5 +57,40 @@ class SeguroCasaIntegrationTest {
                 String.class);
 
         assertEquals(HttpStatus.OK, seguroResponse.getStatusCode());
+
+        // Paso 3: Obtener el seguro creado por nombre
+        /*
+        String nombreSeguro = params.getFirst("nombre");
+        ResponseEntity<Seguro> seguroObtenidoResponse = restTemplate.getForEntity(
+                "/api/seguros/seguro/obtenerPorNombre?nombre=" + nombreSeguro,
+                Seguro.class
+        );
+
+        assertEquals(HttpStatus.OK, seguroObtenidoResponse.getStatusCode());
+        Seguro seguroCreado = seguroObtenidoResponse.getBody();
+        assertNotNull(seguroCreado, "El seguro creado no debe ser nulo");
+
+        Long seguroId = seguroCreado.getId();
+        assertNotNull(seguroId, "El ID del seguro no debe ser nulo");
+        System.out.println("ID del seguro creado: " + seguroId);*/
+
+        // Paso 4: Editar el seguro creado
+        /*MultiValueMap<String, String> editParams = new LinkedMultiValueMap<>();
+        editParams.add("id", String.valueOf(seguroId));
+        editParams.add("nombre", "Alvaro Editado");
+        editParams.add("descripcion", "seguro actualizado");
+        editParams.add("tipoSeguro", "CASA");
+        editParams.add("precio", "3000.0");
+
+        HttpEntity<MultiValueMap<String, String>> editRequest = new HttpEntity<>(editParams, headers);
+
+        ResponseEntity<String> editResponse = restTemplate.postForEntity(
+            "/api/seguros/seguro/editar",
+            editRequest,
+            String.class
+        );
+
+        assertEquals(HttpStatus.OK, editResponse.getStatusCode());
+        System.out.println("Respuesta al editar seguro: " + editResponse.getBody());*/
     }
 }
