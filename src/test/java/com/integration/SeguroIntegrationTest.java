@@ -40,8 +40,9 @@ class SeguroCasaIntegrationTest {
         assertEquals(HttpStatus.CREATED, clienteResponse.getStatusCode());
 
         // Paso 2: Crear un seguro
+        String nombre = "Alvaro" + System.currentTimeMillis();
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("nombre", "Alvaro" + System.currentTimeMillis());
+        params.add("nombre", nombre);
         params.add("descripcion", "seguro nuevo");
         params.add("tipoSeguro", "CASA");
         params.add("precio", "2500.0");
@@ -59,10 +60,10 @@ class SeguroCasaIntegrationTest {
         assertEquals(HttpStatus.OK, seguroResponse.getStatusCode());
 
         // Paso 3: Obtener el seguro creado por nombre
-        /*
-        String nombreSeguro = params.getFirst("nombre");
+        
+        
         ResponseEntity<Seguro> seguroObtenidoResponse = restTemplate.getForEntity(
-                "/api/seguros/seguro/obtenerPorNombre?nombre=" + nombreSeguro,
+                "/api/seguros/seguro/obtenerPorNombre?nombre=" + nombre,
                 Seguro.class
         );
 
@@ -72,7 +73,7 @@ class SeguroCasaIntegrationTest {
 
         Long seguroId = seguroCreado.getId();
         assertNotNull(seguroId, "El ID del seguro no debe ser nulo");
-        System.out.println("ID del seguro creado: " + seguroId);*/
+        System.out.println("ID del seguro creado: " + seguroId);
 
         // Paso 4: Editar el seguro creado
         /*MultiValueMap<String, String> editParams = new LinkedMultiValueMap<>();
