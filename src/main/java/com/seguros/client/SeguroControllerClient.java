@@ -5,7 +5,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-
+import java.util.Collections;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -112,6 +112,29 @@ public class SeguroControllerClient {
             }
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException("Error obteniendo datos del cliente.", e);
+        }
+    }
+
+    public List<Seguro> obtenerSegurosPorCliente(Long clienteId) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(BASE_URL + "/api/seguros/porCliente?clienteId=" + clienteId))
+                    .header("Content-Type", "application/json")
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                ObjectMapper mapper = new ObjectMapper();
+                return mapper.readValue(response.body(), new TypeReference<List<Seguro>>() {});
+            } else if (response.statusCode() == 204) {
+                return Collections.emptyList();
+            } else {
+                throw new RuntimeException("Error al obtener seguros del cliente: " + response.statusCode());
+            }
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException("Error obteniendo seguros del cliente.", e);
         }
     }
 
