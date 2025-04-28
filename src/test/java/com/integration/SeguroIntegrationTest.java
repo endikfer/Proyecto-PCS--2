@@ -41,7 +41,7 @@ class SeguroCasaIntegrationTest {
 
         // Paso 2: Crear un seguro
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("nombre", "Alvaro");
+        params.add("nombre", "Alvaro" + System.currentTimeMillis());
         params.add("descripcion", "seguro nuevo");
         params.add("tipoSeguro", "CASA");
         params.add("precio", "2500.0");
