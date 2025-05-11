@@ -469,9 +469,58 @@ public class AdminVentana {
     }
 
     public void mostrarContenidoClientes() {
-        JLabel lblClientes = new JLabel("Contenido de la opción 4: Clientes", SwingConstants.CENTER);
-        lblClientes.setFont(new Font("Arial", Font.BOLD, 16)); // Mismo estilo que el original
-        panelCentral.add(lblClientes);
+        // Limpiar el panel central
+        JLabel lblClientes = new JLabel("Lista de Clientes Registrados", SwingConstants.CENTER);
+        lblClientes.setFont(new Font("Arial", Font.BOLD, 18));
+        panelCentral.add(lblClientes, BorderLayout.NORTH);
+
+        DefaultListModel<String> modeloClientes = new DefaultListModel<>();
+        JList<String> listaClientes = new JList<>(modeloClientes);
+        listaClientes.setFont(new Font("Arial", Font.PLAIN, 16));
+        JScrollPane scrollPane = new JScrollPane(listaClientes);
+        scrollPane.setBorder(BorderFactory.createTitledBorder("Clientes"));
+        JPanel contenedorConMargen = new JPanel(new BorderLayout());
+        contenedorConMargen.setBorder(BorderFactory.createEmptyBorder(50, 60, 200, 60)); // top, left, bottom, right
+        contenedorConMargen.add(scrollPane, BorderLayout.CENTER);
+        panelCentral.add(contenedorConMargen, BorderLayout.CENTER);
+
+
+        /*// Cargar los clientes desde el backend
+        new Thread(() -> {
+            try {
+                URL url = new URL("http://localhost:8080/api/clientes");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("Accept", "application/json");
+
+                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    InputStream in = conn.getInputStream();
+                    ObjectMapper mapper = new ObjectMapper();
+                    List<Cliente> clientes = mapper.readValue(in, new TypeReference<List<Cliente>>() {});
+                    in.close();
+
+                    SwingUtilities.invokeLater(() -> {
+                        if (clientes.isEmpty()) {
+                            modeloClientes.addElement("No hay clientes registrados.");
+                        } else {
+                            for (Cliente cliente : clientes) {
+                                modeloClientes.addElement(cliente.getId() + " - " + cliente.getNombre() + " (" + cliente.getEmail() + ")");
+                            }
+                        }
+                    });
+                } else {
+                    SwingUtilities.invokeLater(() -> modeloClientes.addElement("Error HTTP " + conn.getResponseCode()));
+                }
+                conn.disconnect();
+            } catch (Exception ex) {
+                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame,
+                    "Error al cargar clientes: " + ex.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE));
+            }
+        }).start();*/
+
+        panelCentral.revalidate();
+        panelCentral.repaint();
     }
 
     public void mostrarContenidoDudas() {
