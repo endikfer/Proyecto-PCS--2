@@ -253,15 +253,17 @@ public class AdminVentana {
     }
 
     public void mostrarContenidoSegurosCliente() {
-    	panelCentral.removeAll();
+        panelCentral.removeAll();
         panelCentral.setLayout(new BorderLayout());
         panelCentral.add(panelSuperiorCentral, BorderLayout.NORTH);
-
+    
+        JPanel panelPrincipal = new JPanel(new BorderLayout());
+    
         // modelo y lista para los seguros del cliente
         modeloSegurosCliente = new DefaultListModel<>();
-        listaSegurosCliente  = new JList<>(modeloSegurosCliente);
+        listaSegurosCliente = new JList<>(modeloSegurosCliente);
         listaSegurosCliente.setFont(new Font("Arial", Font.PLAIN, 16));
-
+    
         // area de texto para los clientes
         JTextArea taClientes = new JTextArea();
         taClientes.setEditable(false);
@@ -269,17 +271,31 @@ public class AdminVentana {
         JScrollPane spClientes = new JScrollPane(taClientes);
         spClientes.setBorder(BorderFactory.createTitledBorder("Clientes"));
         spClientes.setPreferredSize(new Dimension(250, 400));
-
+    
         // scroll para la lista de seguros
         JScrollPane spSeguros = new JScrollPane(listaSegurosCliente);
         spSeguros.setBorder(BorderFactory.createTitledBorder("Seguros del cliente"));
         spSeguros.setPreferredSize(new Dimension(350, 400));
 
-        // dividir la zona central
         JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, spClientes, spSeguros);
         split.setResizeWeight(0.4);
-        panelCentral.add(split, BorderLayout.CENTER);
+        panelPrincipal.add(split, BorderLayout.CENTER);
 
+        JPanel panelBoton = new JPanel();
+        JButton btnEliminarSeguro = new JButton("Eliminar Seguro del Cliente");
+        btnEliminarSeguro.setPreferredSize(new Dimension(250, 40));
+        btnEliminarSeguro.setFont(new Font("Arial", Font.BOLD, 14));
+        
+        // ActionListener temporal (sin funcionalidad aún)
+        btnEliminarSeguro.addActionListener(e -> {
+            
+        });
+        
+        panelBoton.add(btnEliminarSeguro);
+        panelPrincipal.add(panelBoton, BorderLayout.SOUTH);
+    
+        panelCentral.add(panelPrincipal, BorderLayout.CENTER);
+    
         // 1) Cargar todos los clientes desde /api/clientes
         new Thread(() -> {
             try {
@@ -300,13 +316,12 @@ public class AdminVentana {
                 } else {
                     SwingUtilities.invokeLater(() ->
                         {
-							try {
-								taClientes.setText("Error HTTP " + conn.getResponseCode());
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
+                            try {
+                                taClientes.setText("Error HTTP " + conn.getResponseCode());
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
                     );
                 }
                 conn.disconnect();
@@ -318,7 +333,7 @@ public class AdminVentana {
                 );
             }
         }).start();
-
+    
         // 2) Listener para clicks sobre un cliente
         taClientes.addMouseListener(new MouseAdapter() {
             @Override
@@ -331,10 +346,10 @@ public class AdminVentana {
                     int end    = taClientes.getLineEndOffset(row);
                     String linea = taClientes.getText().substring(start, end).trim();
                     if (linea.isEmpty()) return;
-
+    
                     Long clienteId = Long.parseLong(linea.split("-")[0].trim());
                     modeloSegurosCliente.clear();
-
+    
                     // 3) Pedir pólizas de ese cliente
                     new Thread(() -> {
                         try {
@@ -381,13 +396,13 @@ public class AdminVentana {
                             );
                         }
                     }).start();
-
+    
                 } catch (BadLocationException ex) {
                     // ignorar
                 }
             }
         });
-
+    
         panelCentral.revalidate();
         panelCentral.repaint();
     }
