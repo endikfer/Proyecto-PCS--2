@@ -32,6 +32,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.BadLocationException;
+import java.awt.FlowLayout;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -470,20 +471,35 @@ public class AdminVentana {
 
     public void mostrarContenidoClientes() {
         // Limpiar el panel central
+        panelCentral.removeAll();
+        panelCentral.setLayout(new BorderLayout());
+        panelCentral.add(panelSuperiorCentral, BorderLayout.NORTH);
+
         JLabel lblClientes = new JLabel("Lista de Clientes Registrados", SwingConstants.CENTER);
         lblClientes.setFont(new Font("Arial", Font.BOLD, 18));
         panelCentral.add(lblClientes, BorderLayout.NORTH);
 
+        // Panel principal que contendrá todo
+        JPanel panelPrincipal = new JPanel(new BorderLayout());
+        panelPrincipal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Panel para la lista de clientes
         DefaultListModel<String> modeloClientes = new DefaultListModel<>();
         JList<String> listaClientes = new JList<>(modeloClientes);
         listaClientes.setFont(new Font("Arial", Font.PLAIN, 16));
         JScrollPane scrollPane = new JScrollPane(listaClientes);
         scrollPane.setBorder(BorderFactory.createTitledBorder("Clientes"));
-        JPanel contenedorConMargen = new JPanel(new BorderLayout());
-        contenedorConMargen.setBorder(BorderFactory.createEmptyBorder(50, 60, 200, 60)); // top, left, bottom, right
-        contenedorConMargen.add(scrollPane, BorderLayout.CENTER);
-        panelCentral.add(contenedorConMargen, BorderLayout.CENTER);
+        panelPrincipal.add(scrollPane, BorderLayout.CENTER);
 
+        // Panel para el botón de eliminar
+        JPanel panelBoton = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton btnEliminar = new JButton("Eliminar Usuario");
+        btnEliminar.setPreferredSize(new Dimension(200, 40));
+        btnEliminar.setFont(new Font("Arial", Font.BOLD, 14));
+
+        btnEliminar.addActionListener(e -> {
+            
+        });
 
         /*// Cargar los clientes desde el backend
         new Thread(() -> {
@@ -519,6 +535,10 @@ public class AdminVentana {
             }
         }).start();*/
 
+        panelBoton.add(btnEliminar);
+        panelPrincipal.add(panelBoton, BorderLayout.SOUTH);
+    
+        panelCentral.add(panelPrincipal, BorderLayout.CENTER);
         panelCentral.revalidate();
         panelCentral.repaint();
     }
