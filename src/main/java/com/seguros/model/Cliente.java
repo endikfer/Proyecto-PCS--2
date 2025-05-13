@@ -35,9 +35,6 @@ public class Cliente {
     @JoinColumn(name = "seguro_id")
     private Seguro seguroSeleccionado;
 
-    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Duda> dudas = new ArrayList<>();
-
     // Constructores
     public Cliente() {
     }
@@ -79,24 +76,6 @@ public class Cliente {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public List<Duda> getDudas() {
-        return dudas;
-    }
-
-    public void setDudas(List<Duda> dudas) {
-        this.dudas = dudas;
-    }
-
-    public void addDuda(Duda duda) {
-        dudas.add(duda);
-        duda.setCliente(this);
-    }
-
-    public void removeDuda(Duda duda) {
-        dudas.remove(duda);
-        duda.setCliente(null);
     }
 
     // Getter y Setter

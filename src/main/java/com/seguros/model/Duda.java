@@ -5,8 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -23,17 +21,12 @@ public class Duda {
     @Column(nullable = false, unique = false)
     private String mensaje;
 
-    @ManyToOne
-    @JoinColumn(name = "cliente_id", nullable = false) // Clave foránea
-    private Cliente cliente;
-
     public Duda() {
     }
 
-    public Duda(String asunto, String mensaje, Cliente cliente) {
+    public Duda(String asunto, String mensaje) {
         this.asunto = asunto;
         this.mensaje = mensaje;
-        this.cliente = cliente;
     }
 
     public Long getId() {
@@ -60,21 +53,12 @@ public class Duda {
         this.mensaje = mensaje;
     }
 
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
     @Override
     public String toString() {
         return "Dudas{" +
                 "id=" + id +
                 ", asunto='" + asunto + '\'' +
                 ", mensaje='" + mensaje + '\'' +
-                ", cliente=" + cliente +
                 '}';
     }
 
