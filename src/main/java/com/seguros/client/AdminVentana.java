@@ -513,8 +513,44 @@ public class AdminVentana {
         btnEliminar.setFont(new Font("Arial", Font.BOLD, 14));
 
         btnEliminar.addActionListener(e -> {
-            
+            String seleccionado = listaClientes.getSelectedValue();
+            if (seleccionado == null || seleccionado.startsWith("No hay")) {
+                JOptionPane.showMessageDialog(frame, "Selecciona un cliente para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        
+            int confirmacion = JOptionPane.showConfirmDialog(frame, "¿Estás seguro de que quieres eliminar este cliente?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                Long idCliente = Long.parseLong(seleccionado.split("-")[0].trim());
+        
+                new Thread(() -> {
+                    try {
+                        URL url = new URL("http://localhost:8080/api/clientes/" + idCliente);
+                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                        conn.setRequestMethod("DELETE");
+                        int respuesta = conn.getResponseCode();
+        
+                        SwingUtilities.invokeLater(() -> {
+                            if (respuesta == HttpURLConnection.HTTP_OK) {
+                                JOptionPane.showMessageDialog(frame, "Cliente eliminado exitosamente.");
+                                modeloClientes.removeElement(seleccionado);
+                            } else if (respuesta == HttpURLConnection.HTTP_NOT_FOUND) {
+                                JOptionPane.showMessageDialog(frame, "Cliente no encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
+                            } else {
+                                JOptionPane.showMessageDialog(frame, "Error al eliminar cliente. Código: " + respuesta, "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                        });
+        
+                        conn.disconnect();
+                    } catch (Exception ex) {
+                        SwingUtilities.invokeLater(() ->
+                            JOptionPane.showMessageDialog(frame, "Error de conexión: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE)
+                        );
+                    }
+                }).start();
+            }
         });
+        
 
         /*// Cargar los clientes desde el backend
         new Thread(() -> {
