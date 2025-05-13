@@ -1,5 +1,9 @@
 package com.seguros.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,7 +14,7 @@ import jakarta.validation.constraints.Size;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-
+import jakarta.persistence.OneToMany;
 
 @Entity
 @Table(name = "clientes")
@@ -27,8 +31,16 @@ public class Cliente {
     @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
     private String password;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "seguro_id")
+    private Seguro seguroSeleccionado;
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Duda> dudas = new ArrayList<>();
+
     // Constructores
-    public Cliente() {}
+    public Cliente() {
+    }
 
     public Cliente(String nombre, String email, String password) {
         this.nombre = nombre;
@@ -69,9 +81,23 @@ public class Cliente {
         this.password = password;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "seguro_id")
-    private Seguro seguroSeleccionado;
+    public List<Duda> getDudas() {
+        return dudas;
+    }
+
+    public void setDudas(List<Duda> dudas) {
+        this.dudas = dudas;
+    }
+
+    public void addDuda(Duda duda) {
+        dudas.add(duda);
+        duda.setCliente(this);
+    }
+
+    public void removeDuda(Duda duda) {
+        dudas.remove(duda);
+        duda.setCliente(null);
+    }
 
     // Getter y Setter
     public Seguro getSeguroSeleccionado() {
