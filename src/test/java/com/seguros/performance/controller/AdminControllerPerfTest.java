@@ -27,7 +27,7 @@ public class AdminControllerPerfTest {
     @BeforeEach
     void setUp() {
         // Mockear el repository que el controller usa
-        adminController = new AdminController();
+        adminController = new AdminController(null);
     }
 
     // Test de rendimiento para login

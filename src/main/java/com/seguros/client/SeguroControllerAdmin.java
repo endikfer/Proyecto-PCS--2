@@ -193,4 +193,38 @@ public class SeguroControllerAdmin {
         }
     }
 
+    public List<String> obtenerTodosAsuntos() {
+        try {
+            System.out.println("Pedir request\n");
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(BASE_URL + "/api/admin/duda/obtenerTodosAsuntos"))
+                    .header("Content-Type", "application/json")
+                    .GET()
+                    .build();
+
+            System.out.println("URL de la solicitud: " + request.uri()); // Imprimir la URL de la solicitud
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("Request pedida\n");
+
+            System.out.println("Código de estado de la respuesta: " + response.statusCode()); // Imprimir el código de
+                                                                                              // estado
+
+            if (response.statusCode() == 200) {
+                // Deserializar la lista de strings
+                ObjectMapper mapper = new ObjectMapper();
+                return mapper.readValue(response.body(),
+                        mapper.getTypeFactory().constructCollectionType(List.class, String.class));
+            } else if (response.statusCode() == 204) {
+                // No hay contenido, devolver una lista vacía
+                System.out.println("No se encontraron asuntos en el servidor.");
+                return List.of();
+            } else {
+                // Manejar otros errores
+                throw new RuntimeException("Error al obtener los asuntos: " + response.statusCode());
+            }
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException("Error obteniendo los asuntos.", e);
+        }
+    }
+
 }

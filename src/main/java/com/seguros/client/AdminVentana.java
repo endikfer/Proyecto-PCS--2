@@ -593,9 +593,16 @@ public class AdminVentana {
 
         // Crear el modelo y la lista para la mitad izquierda
         DefaultListModel<String> modeloDudas = new DefaultListModel<>();
-        modeloDudas.addElement("Duda 1");
-        modeloDudas.addElement("Duda 2");
-        modeloDudas.addElement("Duda 3");
+        System.out.println("Pedir asuntos\n");
+        List<String> asuntos = seguroControllerAdmin.obtenerTodosAsuntos();
+        System.out.println("Asuntos pedidos\n");
+        if (asuntos != null && !asuntos.isEmpty()) {
+            for (String asunto : asuntos) {
+                modeloDudas.addElement(asunto);
+            }
+        } else {
+            modeloDudas.addElement("No hay dudas registradas.");
+        }
         JList<String> listaDudas = new JList<>(modeloDudas);
         listaDudas.setFont(new Font("Arial", Font.PLAIN, 16));
         JScrollPane scrollLista = new JScrollPane(listaDudas);

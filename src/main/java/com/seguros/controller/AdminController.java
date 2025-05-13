@@ -1,17 +1,29 @@
 package com.seguros.controller;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.seguros.Service.AdminService;
+import com.seguros.Service.SeguroService;
 import com.seguros.model.Administrador;
+import com.seguros.model.Seguro;
 import com.seguros.repository.AdministradorRepository;
 
 @RestController
 @RequestMapping("/api/admin")
 @CrossOrigin(origins = "*")
 public class AdminController {
+
+    private final AdminService adminService;
+
+    public AdminController(AdminService adminService) {
+        this.adminService = adminService;
+    }
 
     @Autowired
     public AdministradorRepository administradorRepository;
@@ -32,5 +44,24 @@ public class AdminController {
     public ResponseEntity<String> logout() {
         // Aquí podrías invalidar tokens, sesiones, etc. si tuvieras.
         return ResponseEntity.ok("Sesión cerrada exitosamente.");
+    }
+
+    @GetMapping("/duda/obtenerTodosAsuntos")
+    public ResponseEntity<?> obtenerTodosAsuntos() {
+        try {
+            System.out.println("Petición recibida para obtener todos los asuntos desde el controller\n");
+            List<String> asuntos = adminService.getAllAsuntoDudas();
+
+            if (asuntos == null || asuntos.isEmpty()) {
+                System.out.println("No se encontraron asuntos en la base de datos.");
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No se encontraron asuntos.");
+            }
+
+            System.out.println("Asuntos obtenidos: " + asuntos.size());
+            return new ResponseEntity<>(asuntos, HttpStatus.OK);
+        } catch (Exception e) {
+            System.err.println("Error al obtener todos los asuntos: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
