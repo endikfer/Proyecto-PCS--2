@@ -256,14 +256,14 @@ public class AdminVentana {
         panelCentral.removeAll();
         panelCentral.setLayout(new BorderLayout());
         panelCentral.add(panelSuperiorCentral, BorderLayout.NORTH);
-    
+
         JPanel panelPrincipal = new JPanel(new BorderLayout());
-    
+
         // modelo y lista para los seguros del cliente
         modeloSegurosCliente = new DefaultListModel<>();
         listaSegurosCliente = new JList<>(modeloSegurosCliente);
         listaSegurosCliente.setFont(new Font("Arial", Font.PLAIN, 16));
-    
+
         // area de texto para los clientes
         JTextArea taClientes = new JTextArea();
         taClientes.setEditable(false);
@@ -271,7 +271,7 @@ public class AdminVentana {
         JScrollPane spClientes = new JScrollPane(taClientes);
         spClientes.setBorder(BorderFactory.createTitledBorder("Clientes"));
         spClientes.setPreferredSize(new Dimension(250, 400));
-    
+
         // scroll para la lista de seguros
         JScrollPane spSeguros = new JScrollPane(listaSegurosCliente);
         spSeguros.setBorder(BorderFactory.createTitledBorder("Seguros del cliente"));
@@ -285,17 +285,17 @@ public class AdminVentana {
         JButton btnEliminarSeguro = new JButton("Eliminar Seguro del Cliente");
         btnEliminarSeguro.setPreferredSize(new Dimension(250, 40));
         btnEliminarSeguro.setFont(new Font("Arial", Font.BOLD, 14));
-        
+
         // ActionListener temporal (sin funcionalidad aún)
         btnEliminarSeguro.addActionListener(e -> {
-            
+
         });
-        
+
         panelBoton.add(btnEliminarSeguro);
         panelPrincipal.add(panelBoton, BorderLayout.SOUTH);
-    
+
         panelCentral.add(panelPrincipal, BorderLayout.CENTER);
-    
+
         // 1) Cargar todos los clientes desde /api/clientes
         new Thread(() -> {
             try {
@@ -306,34 +306,29 @@ public class AdminVentana {
                 if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     InputStream in = conn.getInputStream();
                     ObjectMapper mapper = new ObjectMapper();
-                    List<Cliente> clientes = mapper.readValue(in, new TypeReference<List<Cliente>>() {});
+                    List<Cliente> clientes = mapper.readValue(in, new TypeReference<List<Cliente>>() {
+                    });
                     in.close();
                     SwingUtilities.invokeLater(() -> {
-                        clientes.forEach(c ->
-                            taClientes.append(c.getId() + " - " + c.getNombre() + "\n")
-                        );
+                        clientes.forEach(c -> taClientes.append(c.getId() + " - " + c.getNombre() + "\n"));
                     });
                 } else {
-                    SwingUtilities.invokeLater(() ->
-                        {
-                            try {
-                                taClientes.setText("Error HTTP " + conn.getResponseCode());
-                            } catch (IOException ex) {
-                                ex.printStackTrace();
-                            }
+                    SwingUtilities.invokeLater(() -> {
+                        try {
+                            taClientes.setText("Error HTTP " + conn.getResponseCode());
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
                         }
-                    );
+                    });
                 }
                 conn.disconnect();
             } catch (Exception ex) {
-                SwingUtilities.invokeLater(() ->
-                    JOptionPane.showMessageDialog(frame,
+                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame,
                         "Error al cargar clientes:\n" + ex.getMessage(),
-                        "Error", JOptionPane.ERROR_MESSAGE)
-                );
+                        "Error", JOptionPane.ERROR_MESSAGE));
             }
         }).start();
-    
+
         // 2) Listener para clicks sobre un cliente
         taClientes.addMouseListener(new MouseAdapter() {
             @Override
@@ -341,21 +336,21 @@ public class AdminVentana {
                 try {
                     // calcular la línea clicada
                     int offset = taClientes.viewToModel2D(e.getPoint());
-                    int row    = taClientes.getLineOfOffset(offset);
-                    int start  = taClientes.getLineStartOffset(row);
-                    int end    = taClientes.getLineEndOffset(row);
+                    int row = taClientes.getLineOfOffset(offset);
+                    int start = taClientes.getLineStartOffset(row);
+                    int end = taClientes.getLineEndOffset(row);
                     String linea = taClientes.getText().substring(start, end).trim();
-                    if (linea.isEmpty()) return;
-    
+                    if (linea.isEmpty())
+                        return;
+
                     Long clienteId = Long.parseLong(linea.split("-")[0].trim());
                     modeloSegurosCliente.clear();
-    
+
                     // 3) Pedir pólizas de ese cliente
                     new Thread(() -> {
                         try {
                             URL url2 = new URL(
-                                "http://localhost:8080/api/seguros/porCliente?clienteId=" + clienteId
-                            );
+                                    "http://localhost:8080/api/seguros/porCliente?clienteId=" + clienteId);
                             HttpURLConnection conn2 = (HttpURLConnection) url2.openConnection();
                             conn2.setRequestMethod("GET");
                             conn2.setRequestProperty("Accept", "application/json");
@@ -364,51 +359,44 @@ public class AdminVentana {
                                 InputStream in2 = conn2.getInputStream();
                                 ObjectMapper mapper2 = new ObjectMapper();
                                 List<Seguro> seguros = mapper2.readValue(
-                                    in2, new TypeReference<List<Seguro>>() {}
-                                );
+                                        in2, new TypeReference<List<Seguro>>() {
+                                        });
                                 in2.close();
                                 SwingUtilities.invokeLater(() -> {
                                     if (seguros.isEmpty()) {
                                         modeloSegurosCliente.addElement("No tiene pólizas contratadas");
                                     } else {
-                                        seguros.forEach(s ->
-                                            modeloSegurosCliente.addElement(
-                                                s.getNombre() + " (" + s.getTipoSeguro() + ")"
-                                            )
-                                        );
+                                        seguros.forEach(s -> modeloSegurosCliente.addElement(
+                                                s.getNombre() + " (" + s.getTipoSeguro() + ")"));
                                     }
                                 });
                             } else if (status == HttpURLConnection.HTTP_NO_CONTENT) {
-                                SwingUtilities.invokeLater(() ->
-                                    modeloSegurosCliente.addElement("No tiene pólizas contratadas")
-                                );
+                                SwingUtilities.invokeLater(
+                                        () -> modeloSegurosCliente.addElement("No tiene pólizas contratadas"));
                             } else {
-                                SwingUtilities.invokeLater(() ->
-                                    modeloSegurosCliente.addElement("Error HTTP " + status)
-                                );
+                                SwingUtilities
+                                        .invokeLater(() -> modeloSegurosCliente.addElement("Error HTTP " + status));
                             }
                             conn2.disconnect();
                         } catch (Exception ex) {
-                            SwingUtilities.invokeLater(() ->
-                                JOptionPane.showMessageDialog(frame,
+                            SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame,
                                     "Error al cargar pólizas:\n" + ex.getMessage(),
-                                    "Error", JOptionPane.ERROR_MESSAGE)
-                            );
+                                    "Error", JOptionPane.ERROR_MESSAGE));
                         }
                     }).start();
-    
+
                 } catch (BadLocationException ex) {
                     // ignorar
                 }
             }
         });
-    
+
         panelCentral.revalidate();
         panelCentral.repaint();
     }
 
     public void mostrarContenidoClientesPorSeguro() {
-    	// Configurar layout
+        // Configurar layout
         panelCentral.removeAll();
         panelCentral.setLayout(new BorderLayout());
         panelCentral.add(panelSuperiorCentral, BorderLayout.NORTH);
@@ -432,8 +420,8 @@ public class AdminVentana {
                     InputStream in = conn.getInputStream();
                     ObjectMapper mapper = new ObjectMapper();
                     List<Map<String, Object>> stats = mapper.readValue(
-                        in, new TypeReference<List<Map<String,Object>>>(){}
-                    );
+                            in, new TypeReference<List<Map<String, Object>>>() {
+                            });
                     in.close();
 
                     // 3) Construir el TableModel
@@ -442,7 +430,7 @@ public class AdminVentana {
                     for (Map<String, Object> row : stats) {
                         String nombreSeguro = (String) row.get("nombreSeguro");
                         Number cantidad = (Number) row.get("cantidadClientes");
-                        model.addRow(new Object[]{ nombreSeguro, cantidad.longValue() });
+                        model.addRow(new Object[] { nombreSeguro, cantidad.longValue() });
                     }
 
                     // 4) Crear la JTable y añadirla al panel en el hilo de Swing
@@ -457,29 +445,25 @@ public class AdminVentana {
                     });
                 } else {
                     // Tratamiento de error HTTP
-                    SwingUtilities.invokeLater(() ->
-                        {
-							try {
-								JOptionPane.showMessageDialog(frame,
-								    "Error al obtener datos: HTTP " + conn.getResponseCode(),
-								    "Error", JOptionPane.ERROR_MESSAGE);
-							} catch (HeadlessException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-                    );
+                    SwingUtilities.invokeLater(() -> {
+                        try {
+                            JOptionPane.showMessageDialog(frame,
+                                    "Error al obtener datos: HTTP " + conn.getResponseCode(),
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                        } catch (HeadlessException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                    });
                 }
                 conn.disconnect();
             } catch (Exception ex) {
-                SwingUtilities.invokeLater(() ->
-                    JOptionPane.showMessageDialog(frame,
+                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame,
                         "Error de conexión: " + ex.getMessage(),
-                        "Error", JOptionPane.ERROR_MESSAGE)
-                );
+                        "Error", JOptionPane.ERROR_MESSAGE));
             }
         }).start();
     }
@@ -515,89 +499,143 @@ public class AdminVentana {
         btnEliminar.addActionListener(e -> {
             String seleccionado = listaClientes.getSelectedValue();
             if (seleccionado == null || seleccionado.startsWith("No hay")) {
-                JOptionPane.showMessageDialog(frame, "Selecciona un cliente para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Selecciona un cliente para eliminar.", "Advertencia",
+                        JOptionPane.WARNING_MESSAGE);
                 return;
             }
-        
-            int confirmacion = JOptionPane.showConfirmDialog(frame, "¿Estás seguro de que quieres eliminar este cliente?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+
+            int confirmacion = JOptionPane.showConfirmDialog(frame,
+                    "¿Estás seguro de que quieres eliminar este cliente?", "Confirmar eliminación",
+                    JOptionPane.YES_NO_OPTION);
             if (confirmacion == JOptionPane.YES_OPTION) {
                 Long idCliente = Long.parseLong(seleccionado.split("-")[0].trim());
-        
+
                 new Thread(() -> {
                     try {
                         URL url = new URL("http://localhost:8080/api/clientes/" + idCliente);
                         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                         conn.setRequestMethod("DELETE");
                         int respuesta = conn.getResponseCode();
-        
+
                         SwingUtilities.invokeLater(() -> {
                             if (respuesta == HttpURLConnection.HTTP_OK) {
                                 JOptionPane.showMessageDialog(frame, "Cliente eliminado exitosamente.");
                                 modeloClientes.removeElement(seleccionado);
                             } else if (respuesta == HttpURLConnection.HTTP_NOT_FOUND) {
-                                JOptionPane.showMessageDialog(frame, "Cliente no encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(frame, "Cliente no encontrado.", "Error",
+                                        JOptionPane.ERROR_MESSAGE);
                             } else {
-                                JOptionPane.showMessageDialog(frame, "Error al eliminar cliente. Código: " + respuesta, "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(frame, "Error al eliminar cliente. Código: " + respuesta,
+                                        "Error", JOptionPane.ERROR_MESSAGE);
                             }
                         });
-        
+
                         conn.disconnect();
                     } catch (Exception ex) {
-                        SwingUtilities.invokeLater(() ->
-                            JOptionPane.showMessageDialog(frame, "Error de conexión: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE)
-                        );
+                        SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame,
+                                "Error de conexión: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE));
                     }
                 }).start();
             }
         });
-        
 
-        /*// Cargar los clientes desde el backend
-        new Thread(() -> {
-            try {
-                URL url = new URL("http://localhost:8080/api/clientes");
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("GET");
-                conn.setRequestProperty("Accept", "application/json");
-
-                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    InputStream in = conn.getInputStream();
-                    ObjectMapper mapper = new ObjectMapper();
-                    List<Cliente> clientes = mapper.readValue(in, new TypeReference<List<Cliente>>() {});
-                    in.close();
-
-                    SwingUtilities.invokeLater(() -> {
-                        if (clientes.isEmpty()) {
-                            modeloClientes.addElement("No hay clientes registrados.");
-                        } else {
-                            for (Cliente cliente : clientes) {
-                                modeloClientes.addElement(cliente.getId() + " - " + cliente.getNombre() + " (" + cliente.getEmail() + ")");
-                            }
-                        }
-                    });
-                } else {
-                    SwingUtilities.invokeLater(() -> modeloClientes.addElement("Error HTTP " + conn.getResponseCode()));
-                }
-                conn.disconnect();
-            } catch (Exception ex) {
-                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame,
-                    "Error al cargar clientes: " + ex.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE));
-            }
-        }).start();*/
+        /*
+         * // Cargar los clientes desde el backend
+         * new Thread(() -> {
+         * try {
+         * URL url = new URL("http://localhost:8080/api/clientes");
+         * HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+         * conn.setRequestMethod("GET");
+         * conn.setRequestProperty("Accept", "application/json");
+         * 
+         * if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+         * InputStream in = conn.getInputStream();
+         * ObjectMapper mapper = new ObjectMapper();
+         * List<Cliente> clientes = mapper.readValue(in, new
+         * TypeReference<List<Cliente>>() {});
+         * in.close();
+         * 
+         * SwingUtilities.invokeLater(() -> {
+         * if (clientes.isEmpty()) {
+         * modeloClientes.addElement("No hay clientes registrados.");
+         * } else {
+         * for (Cliente cliente : clientes) {
+         * modeloClientes.addElement(cliente.getId() + " - " + cliente.getNombre() +
+         * " (" + cliente.getEmail() + ")");
+         * }
+         * }
+         * });
+         * } else {
+         * SwingUtilities.invokeLater(() -> modeloClientes.addElement("Error HTTP " +
+         * conn.getResponseCode()));
+         * }
+         * conn.disconnect();
+         * } catch (Exception ex) {
+         * SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame,
+         * "Error al cargar clientes: " + ex.getMessage(),
+         * "Error", JOptionPane.ERROR_MESSAGE));
+         * }
+         * }).start();
+         */
 
         panelBoton.add(btnEliminar);
         panelPrincipal.add(panelBoton, BorderLayout.SOUTH);
-    
+
         panelCentral.add(panelPrincipal, BorderLayout.CENTER);
         panelCentral.revalidate();
         panelCentral.repaint();
     }
 
     public void mostrarContenidoDudas() {
-        JLabel lblDudas = new JLabel("Contenido de la opción 5: Dudas", SwingConstants.CENTER);
-        lblDudas.setFont(new Font("Arial", Font.BOLD, 16)); // Mismo estilo que el original
-        panelCentral.add(lblDudas);
+        // Limpiar el panel central
+        panelCentral.removeAll();
+        panelCentral.setLayout(new BorderLayout());
+
+        // Crear el modelo y la lista para la mitad izquierda
+        DefaultListModel<String> modeloDudas = new DefaultListModel<>();
+        modeloDudas.addElement("Duda 1");
+        modeloDudas.addElement("Duda 2");
+        modeloDudas.addElement("Duda 3");
+        JList<String> listaDudas = new JList<>(modeloDudas);
+        listaDudas.setFont(new Font("Arial", Font.PLAIN, 16));
+        JScrollPane scrollLista = new JScrollPane(listaDudas);
+        scrollLista.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(), "Preguntas Frecuentes",
+                javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP,
+                new Font("Arial", Font.BOLD, 14)));
+
+        // Crear el área de texto para la mitad derecha
+        JTextArea areaTexto = new JTextArea();
+        areaTexto.setEditable(false); // Solo lectura
+        areaTexto.setFont(new Font("Arial", Font.PLAIN, 16));
+        areaTexto.setText("Selecciona una duda para ver más información.");
+        JScrollPane scrollTexto = new JScrollPane(areaTexto);
+        scrollTexto.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(), "Detalles de la Pregunta",
+                javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP,
+                new Font("Arial", Font.BOLD, 14)));
+
+        // Agregar un listener para actualizar el área de texto al seleccionar un
+        // elemento
+        listaDudas.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                String seleccion = listaDudas.getSelectedValue();
+                if (seleccion != null) {
+                    areaTexto.setText("Información sobre " + seleccion + ".");
+                }
+            }
+        });
+
+        // Crear el JSplitPane para dividir el panel en dos mitades
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollLista, scrollTexto);
+        splitPane.setResizeWeight(0.5); // Dividir en mitades iguales
+
+        // Agregar el JSplitPane al panel central
+        panelCentral.add(splitPane, BorderLayout.CENTER);
+
+        // Actualizar la vista
+        panelCentral.revalidate();
+        panelCentral.repaint();
     }
 
     public void mostrarContenidoInvalido() {
