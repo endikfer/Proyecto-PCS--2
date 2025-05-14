@@ -2,6 +2,8 @@ package com.seguros.client;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import java.util.List;
 
@@ -45,6 +47,18 @@ public class PerfilVentana extends JFrame {
         JScrollPane scrollPane = new JScrollPane(segurosArea);
         scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        //Botón imprimir factura
+        JButton imprimirBtn = new JButton("Imprimir Factura");
+        imprimirBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        imprimirBtn.setMnemonic('I');
+        imprimirBtn.setToolTipText("Descarga en PDF la factura de tus seguros contratados");
+        imprimirBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                descargarFactura();
+            }
+        });
+
         // Cargar seguros del cliente
         try {
             SeguroControllerClient seguroClient = new SeguroControllerClient("localhost", "8080"); // Cambia host/puerto si es necesario
@@ -72,8 +86,20 @@ public class PerfilVentana extends JFrame {
         panel.add(segurosLabel);
         panel.add(Box.createVerticalStrut(10));
         panel.add(scrollPane);
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(imprimirBtn);
 
         add(panel);
+    }
+
+    private void descargarFactura() {
+        JOptionPane.showMessageDialog(
+                this,
+                "La descarga de la factura se implementará en la siguiente tarea.",
+                "Funcionalidad pendiente",
+                JOptionPane.INFORMATION_MESSAGE
+        );
+
     }
 
     public void mostrar() {
