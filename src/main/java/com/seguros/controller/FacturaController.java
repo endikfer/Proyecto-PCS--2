@@ -16,6 +16,7 @@ import com.seguros.model.Factura;
 @RestController
 @RequestMapping("/api/facturas")
 public class FacturaController {
+    
     private final FacturaService facturaService;
 
     public FacturaController(FacturaService facturaService) {
@@ -26,7 +27,7 @@ public class FacturaController {
     public ResponseEntity<?> getFacturasByClienteId(@RequestParam Long clienteId) {
         try {
             List<Factura> facturas = facturaService.getFacturasByClienteId(clienteId);
-            if (facturas.isEmpty() || facturas == null) {
+            if (facturas == null || facturas.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No se encontraron facturas para este cliente.");
             }
             return ResponseEntity.ok(facturas);
