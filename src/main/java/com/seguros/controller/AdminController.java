@@ -65,10 +65,11 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/duda/obtenerMensajeByAsunto/{asunto}")
-    public ResponseEntity<String> obtenerMensajeByAsunto(String asunto) {
+    @GetMapping("/duda/obtenerMensajeByAsunto")
+    public ResponseEntity<String> obtenerMensajeByAsunto(@RequestParam String asunto) {
         try {
             System.out.println("Petición recibida para obtener el mensaje del asuntos desde el controller\n");
+            System.out.println("Asunto recibido: " + asunto + "\n");
             String mensaje = adminService.getMensajeByAsuntoDudas(asunto);
 
             if (mensaje == null || mensaje.trim().isEmpty()) {

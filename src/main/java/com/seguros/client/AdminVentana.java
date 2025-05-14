@@ -33,6 +33,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.BadLocationException;
 import java.awt.FlowLayout;
+import java.awt.Color;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -603,6 +604,27 @@ public class AdminVentana {
         }
         JList<String> listaDudas = new JList<>(modeloDudas);
         listaDudas.setFont(new Font("Arial", Font.PLAIN, 16));
+
+        // Configurar un ListCellRenderer para deshabilitar la selección del mensaje "No hay dudas registradas"
+        listaDudas.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
+            JLabel label = new JLabel(value);
+            label.setFont(new Font("Arial", Font.PLAIN, 16));
+            if ("No hay dudas registradas.".equals(value)) {
+                label.setEnabled(false); // Deshabilitar el elemento
+                label.setForeground(Color.GRAY); // Cambiar el color para indicar que está deshabilitado
+            } else {
+                label.setEnabled(true);
+                label.setForeground(Color.BLACK);
+            }
+            if (isSelected) {
+                label.setBackground(list.getSelectionBackground());
+                label.setForeground(list.getSelectionForeground());
+                label.setOpaque(true);
+            }
+            return label;
+        });
+
+
         JScrollPane scrollLista = new JScrollPane(listaDudas);
         scrollLista.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(), "Preguntas Frecuentes",
@@ -625,8 +647,13 @@ public class AdminVentana {
         listaDudas.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 String seleccion = listaDudas.getSelectedValue();
-                if (seleccion != null) {
-                    areaTexto.setText("Información sobre " + seleccion + ".");
+                try {
+                    // Llamar al método obtenerMensajeByAsunto para obtener el mensaje
+                    String mensaje = seguroControllerAdmin.obtenerMensajeByAsunto(seleccion);
+                    areaTexto.setText(mensaje); // Mostrar el mensaje en el JTextArea
+                } catch (RuntimeException ex) {
+                    // Manejar errores y mostrar un mensaje en el JTextArea
+                    areaTexto.setText("Error al obtener el mensaje: " + ex.getMessage());
                 }
             }
         });

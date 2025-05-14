@@ -227,4 +227,36 @@ public class SeguroControllerAdmin {
         }
     }
 
+    public String obtenerMensajeByAsunto(String asunto) {
+        try {
+            String asuntoProcesado = SeguroVentana.sustituirEspacios(asunto);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(BASE_URL + "/api/admin/duda/obtenerMensajeByAsunto?asunto=" + asuntoProcesado))
+                    .header("Content-Type", "application/json")
+                    .GET()
+                    .build();
+
+            System.out.println("URL de la solicitud: " + request.uri()); // Imprimir la URL de la solicitud
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            System.out.println("Código de estado de la respuesta: " + response.statusCode()); // Imprimir el código de
+                                                                                              // estado
+
+            if (response.statusCode() == 200) {
+                // El servidor devuelve el mensaje directamente como un String
+                return response.body();
+            } else if (response.statusCode() == 204) {
+                // No hay contenido, devolver una lista vacía
+                System.out.println("No se encontró un mensaje para el asunto proporcionado.");
+                return "No se encontró un mensaje para el asunto proporcionado.";
+            } else {
+                // Manejar otros errores
+                throw new RuntimeException("Error al obtener el mensaje del asunto: " + asunto + " con código de estado: " + response.statusCode());
+            }
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException("Error obteniendo el mensaje del asuntos: " + asunto +".", e);
+        }
+    }
+
 }

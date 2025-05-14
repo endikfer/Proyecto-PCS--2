@@ -29,7 +29,11 @@ public class AdminService {
     }
 
     public String getMensajeByAsuntoDudas(String asunto ) {
-        String mensaje = dudaRepository.findMensajeByAsunto(asunto);
+        String asuntoProcesado = SeguroService.restaurarEspacios(asunto);
+
+        System.out.println("Asunto procesado: " + asuntoProcesado);
+
+        String mensaje = dudaRepository.findMensajeByAsunto(asuntoProcesado);
 
         if (mensaje == null || mensaje.trim().isEmpty()) {
             System.out.println("No se encontró un mensaje para el asunto proporcionado.");
