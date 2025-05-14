@@ -70,10 +70,17 @@ public class SeguroManager {
         botonCerrarSesion.setFocusPainted(false);
         botonCerrarSesion.addActionListener(e -> llamarLogoutClienteAPI(ventana));
 
+        // Botón dudas
+        JButton botonDudas = new JButton("Dudas");
+        botonDudas.setPreferredSize(new Dimension(100, 40));
+        botonDudas.setFont(new Font("Arial", Font.BOLD, 14));
+        botonDudas.setFocusPainted(false);
+        botonDudas.addActionListener(e -> new DudasVentana().mostrar());
+
         // Panel para posicionar el botón con separación
-        JPanel panelBoton = new JPanel(new BorderLayout());
-        panelBoton.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 10));
-        panelBoton.add(botonCerrarSesion, BorderLayout.EAST);
+        JPanel panelBoton = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        panelBoton.add(botonDudas);
+        panelBoton.add(botonCerrarSesion);
 
         panelSuperior.add(panelBoton, BorderLayout.EAST);
 
