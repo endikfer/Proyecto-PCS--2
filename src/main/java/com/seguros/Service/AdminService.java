@@ -27,4 +27,15 @@ public class AdminService {
 
         return asuntos;
     }
+
+    public String getMensajeByAsuntoDudas(String asunto ) {
+        String mensaje = dudaRepository.findMensajeByAsunto(asunto);
+
+        if (mensaje == null || mensaje.trim().isEmpty()) {
+            System.out.println("No se encontró un mensaje para el asunto proporcionado.");
+            return "No hay mensaje para este asunto.";
+        }
+
+        return mensaje;
+    }
 }

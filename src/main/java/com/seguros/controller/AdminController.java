@@ -64,4 +64,22 @@ public class AdminController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/duda/obtenerMensajeByAsunto/{asunto}")
+    public ResponseEntity<String> obtenerMensajeByAsunto(String asunto) {
+        try {
+            System.out.println("Petición recibida para obtener el mensaje del asuntos desde el controller\n");
+            String mensaje = adminService.getMensajeByAsuntoDudas(asunto);
+
+            if (mensaje == null || mensaje.trim().isEmpty()) {
+                System.out.println("No se encontró un mensaje para el asunto proporcionado.");
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No se encontró un mensaje para el asunto proporcionado.");
+            }
+
+            return new ResponseEntity<>(mensaje, HttpStatus.OK);
+        } catch (Exception e) {
+            System.err.println("Error al obtener el mensaje del asuntos: " + asunto+ "con mensaje de error: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -14,4 +14,7 @@ public interface DudaRepository extends JpaRepository<Duda, Long> {
     @Query("SELECT d.asunto FROM Duda d")
     List<String> findAllAsuntos();
 
+    @Query("SELECT d.mensaje FROM Duda d WHERE d.asunto = :asunto")
+    String findMensajeByAsunto(String asunto);
+
 }
