@@ -7,6 +7,8 @@ import com.github.noconnor.junitperf.JUnitPerfTestRequirement;
 import com.github.noconnor.junitperf.reporting.providers.HtmlReportGenerator;
 import com.seguros.controller.AdminController;
 import com.seguros.model.Administrador;
+import com.seguros.repository.AdministradorRepository;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -27,7 +29,7 @@ public class AdminControllerPerfTest {
     @BeforeEach
     void setUp() {
         // Mockear el repository que el controller usa
-        adminController = new AdminController(null);
+        adminController = new AdminController(null, null);
     }
 
     // Test de rendimiento para login

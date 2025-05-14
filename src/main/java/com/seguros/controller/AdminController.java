@@ -1,6 +1,4 @@
 package com.seguros.controller;
-
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.seguros.Service.AdminService;
-import com.seguros.Service.SeguroService;
 import com.seguros.model.Administrador;
-import com.seguros.model.Seguro;
 import com.seguros.repository.AdministradorRepository;
 
 @RestController
@@ -20,13 +16,13 @@ import com.seguros.repository.AdministradorRepository;
 public class AdminController {
 
     private final AdminService adminService;
+    private final AdministradorRepository administradorRepository;
 
-    public AdminController(AdminService adminService) {
+    // Constructor para inyección de dependencias
+    public AdminController(AdminService adminService, AdministradorRepository administradorRepository) {
         this.adminService = adminService;
+        this.administradorRepository = administradorRepository;
     }
-
-    @Autowired
-    public AdministradorRepository administradorRepository;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Administrador admin) {
