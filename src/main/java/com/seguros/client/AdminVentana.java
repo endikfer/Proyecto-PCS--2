@@ -539,44 +539,42 @@ public class AdminVentana {
             }
         });
 
-        /*
-         * // Cargar los clientes desde el backend
-         * new Thread(() -> {
-         * try {
-         * URL url = new URL("http://localhost:8080/api/clientes");
-         * HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-         * conn.setRequestMethod("GET");
-         * conn.setRequestProperty("Accept", "application/json");
-         * 
-         * if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-         * InputStream in = conn.getInputStream();
-         * ObjectMapper mapper = new ObjectMapper();
-         * List<Cliente> clientes = mapper.readValue(in, new
-         * TypeReference<List<Cliente>>() {});
-         * in.close();
-         * 
-         * SwingUtilities.invokeLater(() -> {
-         * if (clientes.isEmpty()) {
-         * modeloClientes.addElement("No hay clientes registrados.");
-         * } else {
-         * for (Cliente cliente : clientes) {
-         * modeloClientes.addElement(cliente.getId() + " - " + cliente.getNombre() +
-         * " (" + cliente.getEmail() + ")");
-         * }
-         * }
-         * });
-         * } else {
-         * SwingUtilities.invokeLater(() -> modeloClientes.addElement("Error HTTP " +
-         * conn.getResponseCode()));
-         * }
-         * conn.disconnect();
-         * } catch (Exception ex) {
-         * SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame,
-         * "Error al cargar clientes: " + ex.getMessage(),
-         * "Error", JOptionPane.ERROR_MESSAGE));
-         * }
-         * }).start();
-         */
+        // 1) Cargar todos los clientes desde /api/clientes
+        new Thread(() -> {
+            try {
+                URL url = new URL("http://localhost:8080/api/clientes");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("Accept", "application/json");
+                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    InputStream in = conn.getInputStream();
+                    ObjectMapper mapper = new ObjectMapper();
+                    List<Cliente> clientes = mapper.readValue(in, new TypeReference<List<Cliente>>() {});
+                    in.close();
+                    SwingUtilities.invokeLater(() -> {
+                        if (clientes.isEmpty()) {
+                            modeloClientes.addElement("No hay clientes registrados.");
+                        } else {
+                            clientes.forEach(c -> modeloClientes.addElement(c.getId() + " - " + c.getNombre() + " - "
+                                    + c.getEmail()));
+                        }
+                    });
+                } else {
+                    SwingUtilities.invokeLater(() -> {
+                        try {
+                            modeloClientes.addElement("Error HTTP " + conn.getResponseCode());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+                }
+                conn.disconnect();
+            } catch (Exception ex) {
+                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame,
+                        "Error al cargar clientes:\n" + ex.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE));
+            }
+        }).start();
 
         panelBoton.add(btnEliminar);
         panelPrincipal.add(panelBoton, BorderLayout.SOUTH);
