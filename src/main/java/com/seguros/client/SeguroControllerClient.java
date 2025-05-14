@@ -6,7 +6,13 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -33,6 +39,32 @@ public class SeguroControllerClient {
 
     public HttpClient getHttpClient() {
         return httpClient;
+    }
+
+    public void enviarDuda(String email, String mensaje) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, String> body = new HashMap<>();
+            body.put("email", email);
+            body.put("mensaje", mensaje);
+
+            String json = mapper.writeValueAsString(body);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(BASE_URL + "/api/clientes/duda"))  // Ruta al backend
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 200) {
+                throw new RuntimeException("Error al enviar duda. Código: " + response.statusCode());
+            }
+
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException("Error al enviar duda.", e);
+        }
     }
 
     public boolean verificarAdmin(String username) throws IOException, InterruptedException {
@@ -136,6 +168,18 @@ public class SeguroControllerClient {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException("Error obteniendo seguros del cliente.", e);
         }
+    }
+
+    @PostMapping("/duda")
+    public ResponseEntity<String> enviarDuda(@RequestBody Map<String, String> datos) {
+        String email = datos.get("email");
+        String mensaje = datos.get("mensaje");
+        
+        System.out.println("Duda recibida de " + email + ": " + mensaje);
+        System.out.println("Contenido: " + mensaje);
+        
+        return ResponseEntity.ok("Duda recibida correctamente.");
+    
     }
 
 }

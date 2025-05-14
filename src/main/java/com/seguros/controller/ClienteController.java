@@ -1,6 +1,7 @@
 package com.seguros.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,6 +119,18 @@ public class ClienteController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente no encontrado");
         }
+    }
+
+    @PostMapping("/duda")
+    public ResponseEntity<String> enviarDuda(@RequestBody Map<String, String> datos) {
+        String email = datos.get("email");
+        String mensaje = datos.get("mensaje");
+        
+        System.out.println("Duda recibida de " + email + ": " + mensaje);
+        System.out.println("Contenido: " + mensaje);
+        
+        return ResponseEntity.ok("Duda recibida correctamente.");
+    
     }
 
 }

@@ -4,8 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 
 public class DudasVentana extends JFrame {
-
-    public DudasVentana() {
+    private final SeguroControllerClient controller;
+    private final String email;
+    
+    public DudasVentana(SeguroControllerClient controller, String email) {
+        this.controller = null;
+        this.email = "";
         // Configurar la ventana principal
         setTitle("Enviar una Duda");
         setSize(400, 300);
@@ -27,10 +31,24 @@ public class DudasVentana extends JFrame {
         enviar.addActionListener(e -> {
             String duda = areaDuda.getText().trim();
             if (!duda.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Tu duda ha sido enviada:\n" + duda, "Duda Enviada", JOptionPane.INFORMATION_MESSAGE);
-                dispose(); // Cerrar la ventana después de enviar
+                try {
+                    controller.enviarDuda(email, duda);  // Llamada a la API REST
+                    JOptionPane.showMessageDialog(this,
+                            "Tu duda ha sido enviada correctamente.",
+                            "Duda Enviada",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    dispose(); // Cerrar la ventana
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this,
+                            "Error al enviar la duda: " + ex.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             } else {
-                JOptionPane.showMessageDialog(this, "Por favor escribe tu duda.", "Error", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                        "Por favor escribe tu duda antes de enviarla.",
+                        "Campo vacío",
+                        JOptionPane.WARNING_MESSAGE);
             }
         });
 

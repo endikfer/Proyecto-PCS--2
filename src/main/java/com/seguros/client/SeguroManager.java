@@ -75,7 +75,7 @@ public class SeguroManager {
         botonDudas.setPreferredSize(new Dimension(100, 40));
         botonDudas.setFont(new Font("Arial", Font.BOLD, 14));
         botonDudas.setFocusPainted(false);
-        botonDudas.addActionListener(e -> new DudasVentana().mostrar());
+        
 
         // Panel para posicionar el botón con separación
         JPanel panelBoton = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
@@ -154,6 +154,11 @@ public class SeguroManager {
                 }
             }
 
+        });
+
+        botonDudas.addActionListener(e -> {
+            String mail = inicioSesionVentana.emailInicioSesion;
+            new DudasVentana(seguroClient, email).mostrar(); // aquí pasas el controller y el email
         });
 
         panelInferior.add(btnSeleccionar);
