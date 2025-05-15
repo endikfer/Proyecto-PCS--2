@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
 
@@ -61,6 +63,14 @@ public class SeguroCasaTest {
     }
 
     @Test
+    void testToStringWithSeguroNull() {
+        SeguroCasa casa = new SeguroCasa(null, "Calle Falsa", 100000.0, "Piso");
+        casa.setPoliza(1);
+        String str = casa.toString();
+        assertTrue(str.contains("seguro=null"));
+    }
+
+    @Test
     void equalsYHashCodeFuncionanPorPoliza() {
         SeguroCasa casa1 = new SeguroCasa();
         casa1.setPoliza(1);
@@ -81,7 +91,7 @@ public class SeguroCasaTest {
     void equalsDebeRetornarFalseParaNullYClaseDistinta() {
         SeguroCasa casa = new SeguroCasa();
         casa.setPoliza(100);
-        
+
         assertNotEquals(casa, null); // null check
         assertNotEquals(casa, "otro objeto"); // tipo distinto
     }
@@ -95,18 +105,18 @@ public class SeguroCasaTest {
     @Test
     void equalsDebeRetornarFalseSiClaseDistintaONull() {
         SeguroCasa casa = new SeguroCasa();
-        assertNotEquals(casa, null);           // o == null
-        assertNotEquals(casa, new Object());   // clase distinta
+        assertNotEquals(casa, null); // o == null
+        assertNotEquals(casa, new Object()); // clase distinta
     }
 
     @Test
     void equalsDebeRetornarFalseSiPolizasDiferentes() {
         SeguroCasa casa1 = new SeguroCasa();
         casa1.setPoliza(1);
-        
+
         SeguroCasa casa2 = new SeguroCasa();
         casa2.setPoliza(2);
-        
+
         assertNotEquals(casa1, casa2);
     }
 

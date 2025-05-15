@@ -61,6 +61,14 @@ public class SeguroCocheTest {
     }
 
     @Test
+    void testToStringWithSeguroNull() {
+        SeguroCoche coche = new SeguroCoche(null, "1234ABC", "Focus", "Ford");
+        coche.setPoliza(1);
+        String str = coche.toString();
+        assertTrue(str.contains("seguro=null"));
+    }
+
+    @Test
     void equalsYHashCodeFuncionanCorrectamente() {
         SeguroCoche coche1 = new SeguroCoche();
         coche1.setPoliza(1);
@@ -103,10 +111,10 @@ public class SeguroCocheTest {
     void equalsDebeRetornarFalseSiPolizasDiferentes() {
         SeguroCoche coche1 = new SeguroCoche();
         coche1.setPoliza(1);
-        
+
         SeguroCoche coche2 = new SeguroCoche();
         coche2.setPoliza(2);
-        
+
         assertNotEquals(coche1, coche2);
     }
 

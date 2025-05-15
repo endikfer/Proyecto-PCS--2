@@ -58,6 +58,14 @@ public class SeguroVidaTest {
     }
 
     @Test
+    void testToStringWithSeguroNull() {
+        SeguroVida vida = new SeguroVida(null, 35, "Juan, Ana");
+        vida.setPoliza(1);
+        String str = vida.toString();
+        assertTrue(str.contains("seguro=null"));
+    }
+
+    @Test
     void equalsYHashCodeFuncionanPorPoliza() {
         SeguroVida vida1 = new SeguroVida();
         vida1.setPoliza(1);
@@ -78,7 +86,7 @@ public class SeguroVidaTest {
     void equalsDebeRetornarFalseParaNullYClaseDistinta() {
         SeguroVida vida = new SeguroVida();
         vida.setPoliza(300);
-        
+
         assertNotEquals(vida, null);
         assertNotEquals(vida, "otra cosa");
     }
@@ -100,10 +108,10 @@ public class SeguroVidaTest {
     void equalsDebeRetornarFalseSiPolizasDiferentes() {
         SeguroVida vida1 = new SeguroVida();
         vida1.setPoliza(1);
-        
+
         SeguroVida vida2 = new SeguroVida();
         vida2.setPoliza(2);
-        
+
         assertNotEquals(vida1, vida2);
     }
 
