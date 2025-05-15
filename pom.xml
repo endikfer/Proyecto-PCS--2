@@ -25,7 +25,6 @@
         <server.port>8080</server.port>
         <maven.compiler.source>23</maven.compiler.source>  
         <maven.compiler.target>23</maven.compiler.target>
-        <java.awt.headless>true</java.awt.headless>
     </properties>
 
     <dependencies>
@@ -156,9 +155,13 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.2</version>
                 <configuration>
-                    <systemPropertyVariables>
-                        <java.awt.headless>true</java.awt.headless>
-                    </systemPropertyVariables>
+                    <includes>
+                        <include>**/*Test.java</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/integration/**</exclude>
+                        <exclude>**/performance/**</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
 
