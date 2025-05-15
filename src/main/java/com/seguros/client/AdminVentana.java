@@ -287,9 +287,91 @@ public class AdminVentana {
         btnEliminarSeguro.setPreferredSize(new Dimension(250, 40));
         btnEliminarSeguro.setFont(new Font("Arial", Font.BOLD, 14));
 
-        // ActionListener temporal (sin funcionalidad aún)
+        // ActionListener para eliminar el seguro seleccionado del cliente
         btnEliminarSeguro.addActionListener(e -> {
+            String seguroSeleccionado = listaSegurosCliente.getSelectedValue();
+            if (seguroSeleccionado == null || seguroSeleccionado.equals("No tiene pólizas contratadas") || seguroSeleccionado.startsWith("Error")) {
+                JOptionPane.showMessageDialog(frame, "Selecciona un seguro para eliminar.", "Advertencia",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            // Extraer el nombre del seguro (puede ser "NombreSeguro (TIPO)")
+            String nombreSeguro = seguroSeleccionado.split("\\(")[0].trim();
 
+            // Buscar el ID del seguro a eliminar llamando a la API de seguros del cliente
+            int caret = taClientes.getCaretPosition();
+            int row = 0;
+            try {
+                row = taClientes.getLineOfOffset(caret);
+            } catch (Exception ex) {
+                // fallback
+            }
+            String[] lineas = taClientes.getText().split("\\n");
+            if (row < 0 || row >= lineas.length) {
+                JOptionPane.showMessageDialog(frame, "No se pudo determinar el cliente.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            String linea = lineas[row].trim();
+            if (linea.isEmpty()) return;
+            Long clienteId = Long.parseLong(linea.split("-")[0].trim());
+
+            // Buscar el seguro por nombre para ese cliente
+            new Thread(() -> {
+                try {
+                    java.net.URL url = new java.net.URL("http://localhost:8080/api/seguros/porCliente?clienteId=" + clienteId);
+                    java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.setRequestProperty("Accept", "application/json");
+                    int status = conn.getResponseCode();
+                    if (status == java.net.HttpURLConnection.HTTP_OK) {
+                        InputStream in = conn.getInputStream();
+                        com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+                        java.util.List<com.seguros.model.Seguro> seguros = mapper.readValue(
+                                in, new com.fasterxml.jackson.core.type.TypeReference<java.util.List<com.seguros.model.Seguro>>() {});
+                        in.close();
+                        // Buscar el seguro por nombre
+                        com.seguros.model.Seguro seguroAEliminar = null;
+                        for (com.seguros.model.Seguro s : seguros) {
+                            if (s.getNombre().equals(nombreSeguro)) {
+                                seguroAEliminar = s;
+                                break;
+                            }
+                        }
+                        if (seguroAEliminar == null) {
+                            javax.swing.SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame,
+                                    "No se encontró el seguro a eliminar.", "Error", JOptionPane.ERROR_MESSAGE));
+                            return;
+                        }
+                        // Confirmar eliminación
+                        int confirm = javax.swing.JOptionPane.showConfirmDialog(frame,
+                                "¿Seguro que quieres eliminar el seguro '" + nombreSeguro + "' del cliente?",
+                                "Confirmar eliminación", javax.swing.JOptionPane.YES_NO_OPTION);
+                        if (confirm != javax.swing.JOptionPane.YES_OPTION) return;
+
+                        // Llamar a la API para eliminar el seguro
+                        java.net.URL urlDel = new java.net.URL("http://localhost:8080/api/seguros/seguro/eliminar?id=" + seguroAEliminar.getId());
+                        java.net.HttpURLConnection connDel = (java.net.HttpURLConnection) urlDel.openConnection();
+                        connDel.setRequestMethod("DELETE");
+                        int resp = connDel.getResponseCode();
+                        connDel.disconnect();
+                        if (resp == java.net.HttpURLConnection.HTTP_OK) {
+                            javax.swing.SwingUtilities.invokeLater(() -> {
+                                modeloSegurosCliente.removeElement(seguroSeleccionado);
+                                JOptionPane.showMessageDialog(frame, "Seguro eliminado correctamente.");
+                            });
+                        } else {
+                            javax.swing.SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame,
+                                    "Error al eliminar el seguro. Código: " + resp, "Error", JOptionPane.ERROR_MESSAGE));
+                        }
+                    } else {
+                        javax.swing.SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame,
+                                "Error HTTP al buscar seguros del cliente: " + status, "Error", JOptionPane.ERROR_MESSAGE));
+                    }
+                } catch (Exception ex) {
+                    javax.swing.SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame,
+                            "Error al eliminar el seguro: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE));
+                }
+            }).start();
         });
 
         panelBoton.add(btnEliminarSeguro);
