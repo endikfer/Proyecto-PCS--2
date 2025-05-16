@@ -5,6 +5,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.io.File;                                                
+import java.nio.file.Files;                                       
+import java.nio.file.StandardCopyOption; 
+
 import java.util.List;
 
 import com.seguros.model.Cliente;
@@ -12,6 +16,9 @@ import com.seguros.model.Seguro;
 import com.seguros.client.SeguroControllerClient;
 
 public class PerfilVentana extends JFrame {
+	
+	private final Cliente cliente;
+    private JTextArea segurosArea;
 
     public PerfilVentana(Cliente cliente) {
         setTitle("Perfil del Cliente");
@@ -93,12 +100,34 @@ public class PerfilVentana extends JFrame {
     }
 
     private void descargarFactura() {
-        JOptionPane.showMessageDialog(
-                this,
-                "La descarga de la factura se implementará en la siguiente tarea.",
-                "Funcionalidad pendiente",
-                JOptionPane.INFORMATION_MESSAGE
-        );
+    	try {
+            FacturaControllerClient facturaClient = new FacturaControllerClient("localhost", "8080"); // NEW
+            File facturaTmp = facturaClient.descargarFactura(cliente.getId());                             // NEW
+
+            JFileChooser chooser = new JFileChooser();                                                    // NEW
+            chooser.setSelectedFile(new File("factura-" + cliente.getId() + ".txt"));                   // NEW
+            int option = chooser.showSaveDialog(this);                                                    // NEW
+            if (option == JFileChooser.APPROVE_OPTION) {                                                  // NEW
+                Files.copy(facturaTmp.toPath(),                                                           // NEW
+                           chooser.getSelectedFile().toPath(),                                            // NEW
+                           StandardCopyOption.REPLACE_EXISTING);
+                JOptionPane.showMessageDialog(this,                                                       // NEW
+                        "Factura guardada correctamente.",                                               // NEW
+                        "Éxito",                                                                         // NEW
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (IllegalStateException ex) {                                                               // NEW
+            JOptionPane.showMessageDialog(this,                                                            // NEW
+                    "No hay facturas disponibles para este cliente.",                                    // NEW
+                    "Sin facturas",                                                                       // NEW
+                    JOptionPane.WARNING_MESSAGE);
+        } catch (Exception ex) {                                                                           // NEW
+            JOptionPane.showMessageDialog(this,                                                            // NEW
+                    "Error al descargar la factura.",                                                     // NEW
+                    "Error",                                                                              // NEW
+                    JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();                                                                          // NEW
+        }
 
     }
 
