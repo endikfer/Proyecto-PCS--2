@@ -75,10 +75,16 @@ public class SeguroManager {
         botonDudas.setPreferredSize(new Dimension(100, 40));
         botonDudas.setFont(new Font("Arial", Font.BOLD, 14));
         botonDudas.setFocusPainted(false);
+
+        JButton botonFactura = new JButton("Facturas");
+        botonFactura.setPreferredSize(new Dimension(100, 40));
+        botonFactura.setFont(new Font("Arial", Font.BOLD, 14));
+        botonFactura.setFocusPainted(false);
         
 
         // Panel para posicionar el botón con separación
         JPanel panelBoton = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        panelBoton.add(botonFactura);
         panelBoton.add(botonDudas);
         panelBoton.add(botonCerrarSesion);
 
@@ -159,6 +165,10 @@ public class SeguroManager {
         botonDudas.addActionListener(e -> {
             String mail = inicioSesionVentana.emailInicioSesion;
             new DudasVentana(seguroClient, email).mostrar(); // aquí pasas el controller y el email
+        });
+
+        botonFactura.addActionListener(e -> {
+            new FacturaVenatana().mostrar(email);
         });
 
         panelInferior.add(btnSeleccionar);
