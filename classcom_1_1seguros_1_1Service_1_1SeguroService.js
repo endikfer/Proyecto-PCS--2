@@ -1,0 +1,13 @@
+var classcom_1_1seguros_1_1Service_1_1SeguroService =
+[
+    [ "contarClientesPorSeguro", "classcom_1_1seguros_1_1Service_1_1SeguroService.html#afd0e1c3766f6ca565284863224fbe7ce", null ],
+    [ "crearSeguro", "classcom_1_1seguros_1_1Service_1_1SeguroService.html#a0de2a17fb85b55f1f061aac5ebf78940", null ],
+    [ "editarSeguro", "classcom_1_1seguros_1_1Service_1_1SeguroService.html#a25f8e72d08e0bfbae493c641a7e25e8d", null ],
+    [ "eliminarSeguro", "classcom_1_1seguros_1_1Service_1_1SeguroService.html#a3d564ea4b39eaf51913a87fd0e977cf6", null ],
+    [ "obtenerPorCliente", "classcom_1_1seguros_1_1Service_1_1SeguroService.html#a0bc6657f8f433ec095b61067bf055607", null ],
+    [ "obtenerSeguroPorNombre", "classcom_1_1seguros_1_1Service_1_1SeguroService.html#a340c15b4f0120ee3a9bcd3195eb966bf", null ],
+    [ "obtenerSegurosPorTipo", "classcom_1_1seguros_1_1Service_1_1SeguroService.html#a0abb4836fe075a7cde07a5b7f3f160a9", null ],
+    [ "obtenerTodosSeguros", "classcom_1_1seguros_1_1Service_1_1SeguroService.html#a047d194e9dc2969a748863514a2ae141", null ],
+    [ "seleccionarSeguro", "classcom_1_1seguros_1_1Service_1_1SeguroService.html#ab6b3fc576c36e11e0af7efff355d9d3b", null ],
+    [ "segurorepo", "classcom_1_1seguros_1_1Service_1_1SeguroService.html#a981ea6b790800e1b404ba233fbb88a34", null ]
+];
