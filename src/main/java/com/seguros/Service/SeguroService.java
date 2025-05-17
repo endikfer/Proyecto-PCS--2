@@ -13,13 +13,30 @@ import com.seguros.model.TipoSeguro;
 import com.seguros.repository.ClienteRepository;
 import com.seguros.repository.SeguroRepository;
 
+/**
+ * @class SeguroService
+ * @brief Servicio para la gestión de seguros.
+ *
+ *        Proporciona métodos para crear, editar, eliminar, consultar y asociar
+ *        seguros a clientes.
+ */
 @Service
 public class SeguroService {
 
+    /** Repositorio para acceder a los seguros. */
     @Autowired
     public SeguroRepository segurorepo;
-    
 
+    /**
+     * Crea un nuevo seguro y lo guarda en la base de datos.
+     * 
+     * @param nombre      Nombre del seguro.
+     * @param descripcion Descripción del seguro.
+     * @param tipoSeguro  Tipo de seguro (como String).
+     * @param precio      Precio del seguro.
+     * @throws IllegalArgumentException Si el tipo de seguro no es válido.
+     * @throws IllegalStateException    Si el repositorio no está inicializado.
+     */
     public void crearSeguro(String nombre, String descripcion, String tipoSeguro, Double precio) {
         System.out.println("Peticion recibida para crear seguro desde service\n");
 
@@ -44,6 +61,17 @@ public class SeguroService {
         System.out.println("Seguro guardado en la base de datos");
     }
 
+    /**
+     * Edita un seguro existente.
+     * 
+     * @param id          ID del seguro.
+     * @param nombre      Nuevo nombre.
+     * @param descripcion Nueva descripción.
+     * @param tipoSeguro  Nuevo tipo de seguro.
+     * @param precio      Nuevo precio.
+     * @return true si se editó correctamente, false si no se encontró el seguro.
+     * @throws IllegalArgumentException Si el tipo de seguro no es válido.
+     */
     public boolean editarSeguro(Long id, String nombre, String descripcion, String tipoSeguro, Double precio) {
 
         TipoSeguro tipoSeguro1;
@@ -65,10 +93,22 @@ public class SeguroService {
         }).orElse(false);
     }
 
+    /**
+     * Obtiene un seguro por su nombre.
+     * 
+     * @param nombre Nombre del seguro.
+     * @return Seguro correspondiente al nombre.
+     */
     public Seguro obtenerSeguroPorNombre(String nombre) {
         return segurorepo.findByNombre(restaurarEspacios(nombre));
     }
 
+    /**
+     * Restaura los espacios en un texto reemplazando ';' por ' '.
+     * 
+     * @param texto Texto a procesar.
+     * @return Texto con espacios restaurados.
+     */
     public static String restaurarEspacios(String texto) {
         if (texto == null)
             return null;
@@ -77,6 +117,12 @@ public class SeguroService {
         return texto.replace(';', ' ');
     }
 
+    /**
+     * Elimina un seguro por su ID.
+     * 
+     * @param id ID del seguro.
+     * @return true si se eliminó correctamente, false si no se encontró el seguro.
+     */
     public boolean eliminarSeguro(Long id) {
         return segurorepo.findById(id).map(seguro -> {
             segurorepo.delete(seguro);
@@ -84,6 +130,11 @@ public class SeguroService {
         }).orElse(false);
     }
 
+    /**
+     * Obtiene todos los seguros almacenados.
+     * 
+     * @return Lista de todos los seguros.
+     */
     public List<Seguro> obtenerTodosSeguros() {
         List<Seguro> seguros = segurorepo.findAll(); // Obtiene todos los seguros de la base de datos
 
@@ -95,6 +146,13 @@ public class SeguroService {
         return seguros; // Devuelve la lista de seguros
     }
 
+    /**
+     * Obtiene todos los seguros de un tipo específico.
+     * 
+     * @param tipoSeguro Tipo de seguro (como String).
+     * @return Lista de seguros del tipo especificado.
+     * @throws IllegalArgumentException Si el tipo de seguro no es válido.
+     */
     public List<Seguro> obtenerSegurosPorTipo(String tipoSeguro) {
         TipoSeguro tipoSeguroEnum;
         try {
@@ -107,11 +165,21 @@ public class SeguroService {
         return segurorepo.findByTipoSeguro(tipoSeguroEnum);
     }
 
+    /** Repositorio para acceder a los clientes. */
     @Autowired
     private ClienteRepository clienteRepository;
 
+    /**
+     * Asocia un seguro a un cliente.
+     * 
+     * @param seguroId  ID del seguro.
+     * @param clienteId ID del cliente.
+     * @return true si la asociación fue exitosa, false si no se encontró el seguro
+     *         o el cliente.
+     */
     public boolean seleccionarSeguro(Long seguroId, Long clienteId) {
-        System.out.println("Petición recibida para seleccionar seguro. SeguroId: " + seguroId + ", ClienteId: " + clienteId);
+        System.out.println(
+                "Petición recibida para seleccionar seguro. SeguroId: " + seguroId + ", ClienteId: " + clienteId);
 
         var seguroOptional = segurorepo.findById(seguroId);
         var clienteOptional = clienteRepository.findById(clienteId);
@@ -132,11 +200,23 @@ public class SeguroService {
         }
     }
 
+    /**
+     * Obtiene todos los seguros asociados a un cliente.
+     * 
+     * @param clienteId ID del cliente.
+     * @return Lista de seguros asociados al cliente.
+     */
     public List<Seguro> obtenerPorCliente(Long clienteId) {
         // delegamos directamente al repositorio JPA
         return segurorepo.findByClienteId(clienteId);
     }
-    
+
+    /**
+     * Cuenta cuántos clientes tienen asignado cada seguro.
+     * 
+     * @return Lista de objetos ClientesPorSeguro con el nombre del seguro y la
+     *         cantidad de clientes.
+     */
     public List<ClientesPorSeguro> contarClientesPorSeguro() {
         // Primero obtenemos todos los seguros
         List<Seguro> seguros = segurorepo.findAll();

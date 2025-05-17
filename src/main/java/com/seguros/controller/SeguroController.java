@@ -16,16 +16,38 @@ import com.seguros.Service.ClientesPorSeguro;
 import com.seguros.Service.SeguroService;
 import com.seguros.model.Seguro;
 
+/**
+ * @class SeguroController
+ * @brief Controlador REST para la gestión de seguros.
+ *
+ *        Proporciona endpoints para crear, editar, eliminar, consultar y
+ *        asociar seguros a clientes.
+ */
 @RestController
 @RequestMapping("/api/seguros")
 public class SeguroController {
 
+    /** Servicio para la gestión de seguros. */
     private final SeguroService seguroService;
 
+    /**
+     * Constructor para inyección de dependencias.
+     * 
+     * @param seguroService Servicio de seguros.
+     */
     public SeguroController(SeguroService seguroService) {
         this.seguroService = seguroService;
     }
 
+    /**
+     * Endpoint para crear un nuevo seguro.
+     * 
+     * @param nombre      Nombre del seguro.
+     * @param descripcion Descripción del seguro.
+     * @param tipoSeguro  Tipo de seguro.
+     * @param precio      Precio del seguro.
+     * @return Respuesta HTTP indicando el resultado de la operación.
+     */
     @PostMapping("/seguro/crear")
     public ResponseEntity<String> crearSeguro(
             @RequestParam("nombre") String nombre,
@@ -51,6 +73,16 @@ public class SeguroController {
         }
     }
 
+    /**
+     * Endpoint para editar un seguro existente.
+     * 
+     * @param id          ID del seguro.
+     * @param nombre      Nuevo nombre.
+     * @param descripcion Nueva descripción.
+     * @param tipoSeguro  Nuevo tipo de seguro.
+     * @param precio      Nuevo precio.
+     * @return Respuesta HTTP indicando el resultado de la operación.
+     */
     @PostMapping("/seguro/editar")
     public ResponseEntity<String> editarSeguro(
             @RequestParam("id") Long id,
@@ -80,6 +112,12 @@ public class SeguroController {
         }
     }
 
+    /**
+     * Endpoint para obtener un seguro por su nombre.
+     * 
+     * @param nombre Nombre del seguro.
+     * @return Seguro correspondiente al nombre o NOT_FOUND si no existe.
+     */
     @GetMapping("/seguro/obtenerPorNombre")
     public ResponseEntity<Seguro> obtenerSeguroPorNombre(@RequestParam("nombre") String nombre) {
         Seguro seguro = seguroService.obtenerSeguroPorNombre(nombre);
@@ -90,6 +128,12 @@ public class SeguroController {
         }
     }
 
+    /**
+     * Endpoint para eliminar un seguro por su ID.
+     * 
+     * @param id ID del seguro.
+     * @return Respuesta HTTP indicando el resultado de la operación.
+     */
     @DeleteMapping("/seguro/eliminar")
     public ResponseEntity<String> eliminarSeguro(@RequestParam("id") Long id) {
         try {
@@ -107,6 +151,11 @@ public class SeguroController {
         }
     }
 
+    /**
+     * Endpoint para obtener todos los seguros almacenados.
+     * 
+     * @return Lista de seguros o un seguro vacío si no hay resultados.
+     */
     @GetMapping("/seguro/obtenerTodos")
     public ResponseEntity<List<Seguro>> obtenerTodosSeguros() {
         try {
@@ -128,6 +177,13 @@ public class SeguroController {
         }
     }
 
+    /**
+     * Endpoint para obtener todos los seguros de un tipo específico.
+     * 
+     * @param tipoSeguro Tipo de seguro.
+     * @return Lista de seguros del tipo especificado o un seguro vacío si no hay
+     *         resultados.
+     */
     @GetMapping("/seguro/obtenerPorTipo")
     public ResponseEntity<List<Seguro>> obtenerSegurosPorTipo(@RequestParam("tipoSeguro") String tipoSeguro) {
         System.out.println("Petición recibida para obtener seguros por tipo con tipo: " + tipoSeguro);
@@ -149,6 +205,13 @@ public class SeguroController {
         }
     }
 
+    /**
+     * Endpoint para asociar un seguro a un cliente.
+     * 
+     * @param seguroId  ID del seguro.
+     * @param clienteId ID del cliente.
+     * @return Respuesta HTTP indicando el resultado de la operación.
+     */
     @PostMapping("/seguro/seleccionar")
     public ResponseEntity<String> seleccionarSeguro(
             @RequestParam("seguroId") Long seguroId,
@@ -158,7 +221,7 @@ public class SeguroController {
                 return ResponseEntity.badRequest()
                         .body("Los IDs del seguro y del cliente son obligatorios y deben ser mayores a 0.");
             }
-            
+
             boolean seleccionado = seguroService.seleccionarSeguro(seguroId, clienteId);
             if (seleccionado) {
                 return ResponseEntity.ok("Seguro seleccionado correctamente");
@@ -171,7 +234,14 @@ public class SeguroController {
                     .body("Error al seleccionar el seguro: " + e.getMessage());
         }
     }
-    
+
+    /**
+     * Endpoint para obtener todos los seguros asociados a un cliente.
+     * 
+     * @param clienteId ID del cliente.
+     * @return Lista de seguros asociados al cliente o NO_CONTENT si no hay
+     *         resultados.
+     */
     @GetMapping("/porCliente")
     public ResponseEntity<List<Seguro>> getSegurosPorCliente(
             @RequestParam("clienteId") Long clienteId) {
@@ -181,12 +251,17 @@ public class SeguroController {
         }
         return ResponseEntity.ok(lista);
     }
-    
+
+    /**
+     * Endpoint para obtener la cantidad de clientes por seguro.
+     * 
+     * @return Lista de objetos ClientesPorSeguro con el nombre del seguro y la
+     *         cantidad de clientes.
+     */
     @GetMapping("/cantidadClientes")
     public ResponseEntity<List<ClientesPorSeguro>> cantidadClientesPorSeguro() {
         List<ClientesPorSeguro> stats = seguroService.contarClientesPorSeguro();
         return ResponseEntity.ok(stats);
     }
 
-    
 }
