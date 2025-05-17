@@ -1,4 +1,5 @@
 package com.seguros.controller;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,20 +11,40 @@ import com.seguros.Service.AdminService;
 import com.seguros.model.Administrador;
 import com.seguros.repository.AdministradorRepository;
 
+/**
+ * @class AdminController
+ * @brief Controlador REST para operaciones administrativas.
+ *
+ *        Proporciona endpoints para la autenticación de administradores y la
+ *        gestión de dudas.
+ */
 @RestController
 @RequestMapping("/api/admin")
 @CrossOrigin(origins = "*")
 public class AdminController {
 
+    /** Servicio para la gestión de dudas administrativas. */
     private final AdminService adminService;
+    /** Repositorio para acceder a los administradores. */
     private final AdministradorRepository administradorRepository;
 
-    // Constructor para inyección de dependencias
+    /**
+     * Constructor para inyección de dependencias.
+     * 
+     * @param adminService            Servicio de administración.
+     * @param administradorRepository Repositorio de administradores.
+     */
     public AdminController(AdminService adminService, AdministradorRepository administradorRepository) {
         this.adminService = adminService;
         this.administradorRepository = administradorRepository;
     }
 
+    /**
+     * Endpoint para iniciar sesión de administrador.
+     * 
+     * @param admin Objeto Administrador con email y contraseña.
+     * @return Respuesta HTTP con el resultado de la autenticación.
+     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Administrador admin) {
         Administrador administrador = administradorRepository.findByEmail(admin.getEmail());
@@ -36,12 +57,22 @@ public class AdminController {
         }
     }
 
+    /**
+     * Endpoint para cerrar sesión de administrador.
+     * 
+     * @return Respuesta HTTP indicando el cierre de sesión.
+     */
     @PostMapping("/logout")
     public ResponseEntity<String> logout() {
         // Aquí podrías invalidar tokens, sesiones, etc. si tuvieras.
         return ResponseEntity.ok("Sesión cerrada exitosamente.");
     }
 
+    /**
+     * Endpoint para obtener todos los asuntos de dudas almacenadas.
+     * 
+     * @return Lista de asuntos o mensaje si no hay resultados.
+     */
     @GetMapping("/duda/obtenerTodosAsuntos")
     public ResponseEntity<?> obtenerTodosAsuntos() {
         try {
@@ -61,6 +92,12 @@ public class AdminController {
         }
     }
 
+    /**
+     * Endpoint para obtener el mensaje asociado a un asunto de duda.
+     * 
+     * @param asunto Asunto de la duda.
+     * @return Mensaje correspondiente al asunto o mensaje si no existe.
+     */
     @GetMapping("/duda/obtenerMensajeByAsunto")
     public ResponseEntity<String> obtenerMensajeByAsunto(@RequestParam String asunto) {
         try {
@@ -70,12 +107,14 @@ public class AdminController {
 
             if (mensaje == null || mensaje.trim().isEmpty()) {
                 System.out.println("No se encontró un mensaje para el asunto proporcionado.");
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No se encontró un mensaje para el asunto proporcionado.");
+                return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                        .body("No se encontró un mensaje para el asunto proporcionado.");
             }
 
             return new ResponseEntity<>(mensaje, HttpStatus.OK);
         } catch (Exception e) {
-            System.err.println("Error al obtener el mensaje del asuntos: " + asunto+ "con mensaje de error: " + e.getMessage());
+            System.err.println(
+                    "Error al obtener el mensaje del asuntos: " + asunto + "con mensaje de error: " + e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
