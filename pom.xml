@@ -25,6 +25,7 @@
         <server.port>8080</server.port>
         <maven.compiler.source>23</maven.compiler.source>  
         <maven.compiler.target>23</maven.compiler.target>
+        <config.files.dir>${basedir}/src/main/resources</config.files.dir>
     </properties>
 
     <dependencies>
@@ -149,6 +150,15 @@
                     <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
+
+            <plugin>
+				<groupId>com.soebes.maven.plugins</groupId>
+				<artifactId>doxygen-maven-plugin</artifactId>
+				<version>1.1.0</version>
+				<configuration>
+					<configurationFile>${doxygen.config.file}</configurationFile>
+				</configuration>
+			</plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
