@@ -5,9 +5,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import java.io.File;                                                
-import java.nio.file.Files;                                       
-import java.nio.file.StandardCopyOption; 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import java.util.List;
 
@@ -16,8 +16,8 @@ import com.seguros.model.Seguro;
 import com.seguros.client.SeguroControllerClient;
 
 public class PerfilVentana extends JFrame {
-	
-	private final Cliente cliente;
+
+    private final Cliente cliente;
     private JTextArea segurosArea;
 
     public PerfilVentana(Cliente cliente) {
@@ -54,21 +54,22 @@ public class PerfilVentana extends JFrame {
         JScrollPane scrollPane = new JScrollPane(segurosArea);
         scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        //Botón imprimir factura
+        // Botón imprimir factura
         JButton imprimirBtn = new JButton("Imprimir Factura");
         imprimirBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         imprimirBtn.setMnemonic('I');
         imprimirBtn.setToolTipText("Descarga en PDF la factura de tus seguros contratados");
-        imprimirBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                descargarFactura();
-            }
-        });
+        // imprimirBtn.addActionListener(new ActionListener() {
+        // @Override
+        // public void actionPerformed(ActionEvent e) {
+        // descargarFactura();
+        // }
+        // });
 
         // Cargar seguros del cliente
         try {
-            SeguroControllerClient seguroClient = new SeguroControllerClient("localhost", "8080"); // Cambia host/puerto si es necesario
+            SeguroControllerClient seguroClient = new SeguroControllerClient("localhost", "8080"); // Cambia host/puerto
+                                                                                                   // si es necesario
             List<Seguro> segurosCliente = seguroClient.obtenerSegurosPorCliente(cliente.getId());
 
             if (segurosCliente.isEmpty()) {
@@ -97,39 +98,42 @@ public class PerfilVentana extends JFrame {
         panel.add(imprimirBtn);
 
         add(panel);
+        this.cliente = null;
     }
 
-    private void descargarFactura() {
-    	try {
-            FacturaControllerClient facturaClient = new FacturaControllerClient("localhost", "8080"); // NEW
-            File facturaTmp = facturaClient.descargarFactura(cliente.getId());                             // NEW
+    // private void descargarFactura() {
+    // try {
+    // FacturaControllerClient facturaClient = new
+    // FacturaControllerClient("localhost", "8080"); // NEW
+    // File facturaTmp = facturaClient.descargarFactura(cliente.getId()); // NEW
 
-            JFileChooser chooser = new JFileChooser();                                                    // NEW
-            chooser.setSelectedFile(new File("factura-" + cliente.getId() + ".txt"));                   // NEW
-            int option = chooser.showSaveDialog(this);                                                    // NEW
-            if (option == JFileChooser.APPROVE_OPTION) {                                                  // NEW
-                Files.copy(facturaTmp.toPath(),                                                           // NEW
-                           chooser.getSelectedFile().toPath(),                                            // NEW
-                           StandardCopyOption.REPLACE_EXISTING);
-                JOptionPane.showMessageDialog(this,                                                       // NEW
-                        "Factura guardada correctamente.",                                               // NEW
-                        "Éxito",                                                                         // NEW
-                        JOptionPane.INFORMATION_MESSAGE);
-            }
-        } catch (IllegalStateException ex) {                                                               // NEW
-            JOptionPane.showMessageDialog(this,                                                            // NEW
-                    "No hay facturas disponibles para este cliente.",                                    // NEW
-                    "Sin facturas",                                                                       // NEW
-                    JOptionPane.WARNING_MESSAGE);
-        } catch (Exception ex) {                                                                           // NEW
-            JOptionPane.showMessageDialog(this,                                                            // NEW
-                    "Error al descargar la factura.",                                                     // NEW
-                    "Error",                                                                              // NEW
-                    JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();                                                                          // NEW
-        }
+    // JFileChooser chooser = new JFileChooser(); // NEW
+    // chooser.setSelectedFile(new File("factura-" + cliente.getId() + ".txt")); //
+    // NEW
+    // int option = chooser.showSaveDialog(this); // NEW
+    // if (option == JFileChooser.APPROVE_OPTION) { // NEW
+    // Files.copy(facturaTmp.toPath(), // NEW
+    // chooser.getSelectedFile().toPath(), // NEW
+    // StandardCopyOption.REPLACE_EXISTING);
+    // JOptionPane.showMessageDialog(this, // NEW
+    // "Factura guardada correctamente.", // NEW
+    // "Éxito", // NEW
+    // JOptionPane.INFORMATION_MESSAGE);
+    // }
+    // } catch (IllegalStateException ex) { // NEW
+    // JOptionPane.showMessageDialog(this, // NEW
+    // "No hay facturas disponibles para este cliente.", // NEW
+    // "Sin facturas", // NEW
+    // JOptionPane.WARNING_MESSAGE);
+    // } catch (Exception ex) { // NEW
+    // JOptionPane.showMessageDialog(this, // NEW
+    // "Error al descargar la factura.", // NEW
+    // "Error", // NEW
+    // JOptionPane.ERROR_MESSAGE);
+    // ex.printStackTrace(); // NEW
+    // }
 
-    }
+    // }
 
     public void mostrar() {
         setVisible(true);
