@@ -136,4 +136,24 @@ class ClienteControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("Sesión de cliente cerrada correctamente"));
     }
+
+    @Test
+    void testEliminarCliente_Existe() throws Exception {
+        Cliente cliente = new Cliente("user06", "user06@gmail.com", "123456");
+        when(clienteRepository.findById(1L)).thenReturn(Optional.of(cliente));
+
+        mockMvc.perform(delete("/api/clientes/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Cliente eliminado correctamente"));
+    }
+
+    @Test
+    void testEliminarCliente_NoExiste() throws Exception {
+        when(clienteRepository.findById(1L)).thenReturn(Optional.empty());
+
+        mockMvc.perform(delete("/api/clientes/1"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Cliente no encontrado"));
+    }
+
 }
