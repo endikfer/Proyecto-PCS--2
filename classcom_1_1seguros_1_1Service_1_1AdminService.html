@@ -101,6 +101,9 @@ $(document).ready(function(){initNavTree('classcom_1_1seguros_1_1Service_1_1Admi
   <div class="headertitle"><div class="title">com.seguros.Service.AdminService Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Servicio para la gestión de dudas administrativas.  
+ <a href="classcom_1_1seguros_1_1Service_1_1AdminService.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -111,7 +114,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a92641b896250d24a41b62a2b605309d8" id="r_a92641b896250d24a41b62a2b605309d8"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1Service_1_1AdminService.html#a92641b896250d24a41b62a2b605309d8">getMensajeByAsuntoDudas</a> (String asunto)</td></tr>
 <tr class="separator:a92641b896250d24a41b62a2b605309d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Servicio para la gestión de dudas administrativas. </p>
+<pre class="fragment">   Proporciona métodos para consultar asuntos y mensajes de dudas
+   almacenadas en la base de datos.
+</pre> </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a731a9c7c99f950122f35c137bd48e686" name="a731a9c7c99f950122f35c137bd48e686"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a731a9c7c99f950122f35c137bd48e686">&#9670;&#160;</a></span>AdminService()</h2>
 
@@ -127,6 +134,13 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Constructor que inyecta el repositorio de dudas.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dudaRepository</td><td>Repositorio de dudas. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -145,6 +159,8 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Obtiene todos los asuntos de las dudas almacenadas.</p>
+<dl class="section return"><dt>Returns</dt><dd>Lista de asuntos de dudas. </dd></dl>
 
 </div>
 </div>
@@ -163,6 +179,14 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Obtiene el mensaje asociado a un asunto de duda.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">asunto</td><td>Asunto de la duda. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Mensaje correspondiente al asunto, o mensaje por defecto si no existe. </dd></dl>
 
 </div>
 </div>

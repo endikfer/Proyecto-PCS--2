@@ -103,6 +103,9 @@ $(document).ready(function(){initNavTree('classcom_1_1seguros_1_1Service_1_1Segu
   <div class="headertitle"><div class="title">com.seguros.Service.SeguroService Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Servicio para la gestión de seguros.  
+ <a href="classcom_1_1seguros_1_1Service_1_1SeguroService.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -135,7 +138,11 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a981ea6b790800e1b404ba233fbb88a34" id="r_a981ea6b790800e1b404ba233fbb88a34"><td class="memItemLeft" align="right" valign="top">SeguroRepository&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1Service_1_1SeguroService.html#a981ea6b790800e1b404ba233fbb88a34">segurorepo</a></td></tr>
 <tr class="separator:a981ea6b790800e1b404ba233fbb88a34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Servicio para la gestión de seguros. </p>
+<pre class="fragment">   Proporciona métodos para crear, editar, eliminar, consultar y asociar
+   seguros a clientes.
+</pre> </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="afd0e1c3766f6ca565284863224fbe7ce" name="afd0e1c3766f6ca565284863224fbe7ce"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afd0e1c3766f6ca565284863224fbe7ce">&#9670;&#160;</a></span>contarClientesPorSeguro()</h2>
 
@@ -150,6 +157,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Cuenta cuántos clientes tienen asignado cada seguro.</p>
+<dl class="section return"><dt>Returns</dt><dd>Lista de objetos ClientesPorSeguro con el nombre del seguro y la cantidad de clientes. </dd></dl>
 
 </div>
 </div>
@@ -190,6 +199,23 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Crea un nuevo seguro y lo guarda en la base de datos.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nombre</td><td>Nombre del seguro. </td></tr>
+    <tr><td class="paramname">descripcion</td><td>Descripción del seguro. </td></tr>
+    <tr><td class="paramname">tipoSeguro</td><td>Tipo de seguro (como String). </td></tr>
+    <tr><td class="paramname">precio</td><td>Precio del seguro. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">IllegalArgumentException</td><td>Si el tipo de seguro no es válido. </td></tr>
+    <tr><td class="paramname">IllegalStateException</td><td>Si el repositorio no está inicializado. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -236,6 +262,24 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Edita un seguro existente.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>ID del seguro. </td></tr>
+    <tr><td class="paramname">nombre</td><td>Nuevo nombre. </td></tr>
+    <tr><td class="paramname">descripcion</td><td>Nueva descripción. </td></tr>
+    <tr><td class="paramname">tipoSeguro</td><td>Nuevo tipo de seguro. </td></tr>
+    <tr><td class="paramname">precio</td><td>Nuevo precio. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true si se editó correctamente, false si no se encontró el seguro. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">IllegalArgumentException</td><td>Si el tipo de seguro no es válido. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -254,6 +298,14 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Elimina un seguro por su ID.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>ID del seguro. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true si se eliminó correctamente, false si no se encontró el seguro. </dd></dl>
 
 </div>
 </div>
@@ -272,6 +324,14 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Obtiene todos los seguros asociados a un cliente.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clienteId</td><td>ID del cliente. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Lista de seguros asociados al cliente. </dd></dl>
 
 </div>
 </div>
@@ -290,6 +350,14 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Obtiene un seguro por su nombre.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nombre</td><td>Nombre del seguro. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Seguro correspondiente al nombre. </dd></dl>
 
 </div>
 </div>
@@ -308,6 +376,20 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Obtiene todos los seguros de un tipo específico.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tipoSeguro</td><td>Tipo de seguro (como String). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Lista de seguros del tipo especificado. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">IllegalArgumentException</td><td>Si el tipo de seguro no es válido. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -325,6 +407,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Obtiene todos los seguros almacenados.</p>
+<dl class="section return"><dt>Returns</dt><dd>Lista de todos los seguros. </dd></dl>
 
 </div>
 </div>
@@ -351,6 +435,14 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Restaura los espacios en un texto reemplazando ';' por ' '.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">texto</td><td>Texto a procesar. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Texto con espacios restaurados. </dd></dl>
 
 </div>
 </div>
@@ -379,6 +471,15 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Asocia un seguro a un cliente.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">seguroId</td><td>ID del seguro. </td></tr>
+    <tr><td class="paramname">clienteId</td><td>ID del cliente. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true si la asociación fue exitosa, false si no se encontró el seguro o el cliente. </dd></dl>
 
 </div>
 </div>
@@ -394,6 +495,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Repositorio para acceder a los seguros. </p>
 
 </div>
 </div>

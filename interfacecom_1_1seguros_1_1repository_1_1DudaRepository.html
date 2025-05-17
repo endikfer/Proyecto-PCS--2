@@ -101,6 +101,9 @@ $(document).ready(function(){initNavTree('interfacecom_1_1seguros_1_1repository_
   <div class="headertitle"><div class="title">com.seguros.repository.DudaRepository Interface Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Repositorio JPA para la entidad Duda.  
+ <a href="interfacecom_1_1seguros_1_1repository_1_1DudaRepository.html#details">More...</a></p>
 <div class="dynheader">
 Inheritance diagram for com.seguros.repository.DudaRepository:</div>
 <div class="dyncontent">
@@ -115,7 +118,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a88c5f13657462cbbdf053d2590d1d6c8" id="r_a88c5f13657462cbbdf053d2590d1d6c8"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacecom_1_1seguros_1_1repository_1_1DudaRepository.html#a88c5f13657462cbbdf053d2590d1d6c8">findMensajeByAsunto</a> (String asunto)</td></tr>
 <tr class="separator:a88c5f13657462cbbdf053d2590d1d6c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Repositorio JPA para la entidad Duda. </p>
+<pre class="fragment">   Proporciona métodos para acceder y consultar dudas en la base de
+   datos.
+</pre> </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a6e4d8d4dfc9fe895037a936464891161" name="a6e4d8d4dfc9fe895037a936464891161"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6e4d8d4dfc9fe895037a936464891161">&#9670;&#160;</a></span>findAllAsuntos()</h2>
 
@@ -130,6 +137,8 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Obtiene una lista con todos los asuntos de las dudas.</p>
+<dl class="section return"><dt>Returns</dt><dd>Lista de asuntos. </dd></dl>
 
 </div>
 </div>
@@ -148,6 +157,14 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Busca el mensaje de una duda dado su asunto.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">asunto</td><td>Asunto de la duda. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Mensaje correspondiente al asunto. </dd></dl>
 
 </div>
 </div>

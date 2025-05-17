@@ -101,6 +101,9 @@ $(document).ready(function(){initNavTree('interfacecom_1_1seguros_1_1repository_
   <div class="headertitle"><div class="title">com.seguros.repository.SeguroRepository Interface Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Repositorio JPA para la entidad Seguro.  
+ <a href="interfacecom_1_1seguros_1_1repository_1_1SeguroRepository.html#details">More...</a></p>
 <div class="dynheader">
 Inheritance diagram for com.seguros.repository.SeguroRepository:</div>
 <div class="dyncontent">
@@ -117,7 +120,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a427b0e1fddc6dbab522e91b761c53830" id="r_a427b0e1fddc6dbab522e91b761c53830"><td class="memItemLeft" align="right" valign="top">List&lt; Seguro &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacecom_1_1seguros_1_1repository_1_1SeguroRepository.html#a427b0e1fddc6dbab522e91b761c53830">findByClienteId</a> (Long clienteID)</td></tr>
 <tr class="separator:a427b0e1fddc6dbab522e91b761c53830"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Repositorio JPA para la entidad Seguro. </p>
+<pre class="fragment">   Proporciona métodos para acceder y consultar seguros en la base de
+   datos.
+</pre> </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a427b0e1fddc6dbab522e91b761c53830" name="a427b0e1fddc6dbab522e91b761c53830"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a427b0e1fddc6dbab522e91b761c53830">&#9670;&#160;</a></span>findByClienteId()</h2>
 
@@ -133,6 +140,14 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Busca todos los seguros asociados a un cliente por su ID.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clienteID</td><td>ID del cliente. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Lista de seguros asociados al cliente. </dd></dl>
 
 </div>
 </div>
@@ -151,6 +166,14 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Busca un seguro por su nombre.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nombre</td><td>Nombre del seguro. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Seguro correspondiente al nombre. </dd></dl>
 
 </div>
 </div>
@@ -169,6 +192,14 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Busca todos los seguros de un tipo específico.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tipoSeguro</td><td>Tipo de seguro. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Lista de seguros del tipo especificado. </dd></dl>
 
 </div>
 </div>
