@@ -38,6 +38,7 @@ var annotated_dup =
           [ "Duda", "classcom_1_1seguros_1_1model_1_1Duda.html", "classcom_1_1seguros_1_1model_1_1Duda" ],
           [ "DudaTest", "classcom_1_1seguros_1_1model_1_1DudaTest.html", null ],
           [ "Factura", "classcom_1_1seguros_1_1model_1_1Factura.html", "classcom_1_1seguros_1_1model_1_1Factura" ],
+          [ "FacturaTest", "classcom_1_1seguros_1_1model_1_1FacturaTest.html", null ],
           [ "Seguro", "classcom_1_1seguros_1_1model_1_1Seguro.html", "classcom_1_1seguros_1_1model_1_1Seguro" ],
           [ "SeguroCasa", "classcom_1_1seguros_1_1model_1_1SeguroCasa.html", "classcom_1_1seguros_1_1model_1_1SeguroCasa" ],
           [ "SeguroCasaTest", "classcom_1_1seguros_1_1model_1_1SeguroCasaTest.html", null ],
@@ -74,6 +75,7 @@ var annotated_dup =
           [ "ClientesPorSeguro", "classcom_1_1seguros_1_1Service_1_1ClientesPorSeguro.html", "classcom_1_1seguros_1_1Service_1_1ClientesPorSeguro" ],
           [ "ClientesPorSeguroTest", "classcom_1_1seguros_1_1Service_1_1ClientesPorSeguroTest.html", null ],
           [ "FacturaService", "classcom_1_1seguros_1_1Service_1_1FacturaService.html", "classcom_1_1seguros_1_1Service_1_1FacturaService" ],
+          [ "FacturaServiceTest", "classcom_1_1seguros_1_1Service_1_1FacturaServiceTest.html", null ],
           [ "SeguroService", "classcom_1_1seguros_1_1Service_1_1SeguroService.html", "classcom_1_1seguros_1_1Service_1_1SeguroService" ],
           [ "SeguroServiceTest", "classcom_1_1seguros_1_1Service_1_1SeguroServiceTest.html", null ],
           [ "UsuarioService", "classcom_1_1seguros_1_1Service_1_1UsuarioService.html", "classcom_1_1seguros_1_1Service_1_1UsuarioService" ]
