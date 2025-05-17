@@ -156,4 +156,15 @@ class ClienteControllerTest {
                 .andExpect(content().string("Cliente no encontrado"));
     }
 
+    @Test
+    void testEnviarDuda_OK() throws Exception {
+        String json = "{ \"email\": \"user07@gmail.com\", \"mensaje\": \"Tengo una duda sobre mi póliza.\" }";
+
+        mockMvc.perform(post("/api/clientes/duda")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Duda recibida correctamente."));
+    }
+
 }
