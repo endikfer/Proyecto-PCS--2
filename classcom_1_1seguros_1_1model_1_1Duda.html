@@ -101,6 +101,9 @@ $(document).ready(function(){initNavTree('classcom_1_1seguros_1_1model_1_1Duda.h
   <div class="headertitle"><div class="title">com.seguros.model.Duda Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Representa una duda enviada por un usuario.  
+ <a href="classcom_1_1seguros_1_1model_1_1Duda.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -127,7 +130,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aeec9748061a15836eb54ae6555c18ea2" id="r_aeec9748061a15836eb54ae6555c18ea2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1model_1_1Duda.html#aeec9748061a15836eb54ae6555c18ea2">hashCode</a> ()</td></tr>
 <tr class="separator:aeec9748061a15836eb54ae6555c18ea2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Representa una duda enviada por un usuario. </p>
+<pre class="fragment">   Esta clase es una entidad JPA que mapea la tabla "dudas" en la base de
+   datos.
+   Contiene información sobre el asunto y el mensaje de la duda.
+</pre> </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a664370074ad0f209e5ba4034949aa196" name="a664370074ad0f209e5ba4034949aa196"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a664370074ad0f209e5ba4034949aa196">&#9670;&#160;</a></span>Duda() <span class="overload">[1/2]</span></h2>
 
@@ -142,6 +150,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Constructor por defecto. </p>
 
 </div>
 </div>
@@ -170,6 +179,14 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Constructor con parámetros.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">asunto</td><td>Asunto de la duda. </td></tr>
+    <tr><td class="paramname">mensaje</td><td>Mensaje de la duda. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -189,6 +206,14 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Compara si dos dudas son iguales según su id.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">o</td><td>Objeto a comparar. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true si los ids son iguales, false en caso contrario. </dd></dl>
 
 </div>
 </div>
@@ -206,6 +231,8 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Obtiene el asunto de la duda.</p>
+<dl class="section return"><dt>Returns</dt><dd>asunto de la duda. </dd></dl>
 
 </div>
 </div>
@@ -223,6 +250,8 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Obtiene el identificador de la duda.</p>
+<dl class="section return"><dt>Returns</dt><dd>id de la duda. </dd></dl>
 
 </div>
 </div>
@@ -240,6 +269,8 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Obtiene el mensaje de la duda.</p>
+<dl class="section return"><dt>Returns</dt><dd>mensaje de la duda. </dd></dl>
 
 </div>
 </div>
@@ -257,6 +288,8 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Calcula el hashcode de la duda según su id.</p>
+<dl class="section return"><dt>Returns</dt><dd>hashcode de la duda. </dd></dl>
 
 </div>
 </div>
@@ -275,6 +308,13 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Establece el asunto de la duda.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">asunto</td><td>Asunto a establecer. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -293,6 +333,13 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Establece el identificador de la duda.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>Identificador a establecer. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -311,6 +358,13 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Establece el mensaje de la duda.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mensaje</td><td>Mensaje a establecer. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -328,6 +382,8 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Devuelve una representación en cadena de la duda.</p>
+<dl class="section return"><dt>Returns</dt><dd>Cadena con los datos de la duda. </dd></dl>
 
 </div>
 </div>
