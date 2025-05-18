@@ -1,5 +1,6 @@
 package com.seguros.controller;
 
+import com.seguros.Service.ClientesPorSeguro;
 import com.seguros.Service.SeguroService;
 import com.seguros.model.Seguro;
 import com.seguros.model.TipoSeguro;
@@ -340,7 +341,7 @@ class SeguroControllerTest {
     @Test
     public void testEditarSeguro_SeguroNoEncontrado() {
         when(seguroService.editarSeguro(anyLong(), anyString(), anyString(), anyString(), anyDouble()))
-            .thenReturn(false);
+                .thenReturn(false);
         ResponseEntity<String> response = seguroController.editarSeguro(999L, "Seguro", "Desc", "TIPO", 100.0);
         assertEquals(NOT_FOUND, response.getStatusCode());
         assertEquals("Seguro no encontrado.", response.getBody());
@@ -349,7 +350,7 @@ class SeguroControllerTest {
     @Test
     public void testEditarSeguro_ConflictoDuplicado() {
         when(seguroService.editarSeguro(anyLong(), anyString(), anyString(), anyString(), anyDouble()))
-            .thenThrow(new org.springframework.dao.DataIntegrityViolationException("Duplicado"));
+                .thenThrow(new org.springframework.dao.DataIntegrityViolationException("Duplicado"));
         ResponseEntity<String> response = seguroController.editarSeguro(2L, "Seguro", "Desc", "TIPO", 100.0);
         assertEquals(CONFLICT, response.getStatusCode());
         assertEquals("Seguro existente con el mismo nombre. Por favor, elija otro nombre.", response.getBody());
@@ -358,7 +359,7 @@ class SeguroControllerTest {
     @Test
     public void testEditarSeguro_ErrorInterno() {
         when(seguroService.editarSeguro(anyLong(), anyString(), anyString(), anyString(), anyDouble()))
-            .thenThrow(new RuntimeException("Error inesperado"));
+                .thenThrow(new RuntimeException("Error inesperado"));
         ResponseEntity<String> response = seguroController.editarSeguro(3L, "Seguro", "Desc", "TIPO", 150.0);
         assertEquals(INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
@@ -386,9 +387,6 @@ class SeguroControllerTest {
         assertEquals("Todos los campos son obligatorios y el precio debe ser mayor a 0.", response.getBody());
         verify(seguroService, never()).editarSeguro(any(), any(), any(), any(), any());
     }
-
-
-
 
     // ----------------- TESTS PARA obtenerSeguroPorNombre -----------------
 
@@ -447,7 +445,6 @@ class SeguroControllerTest {
         assertEquals(INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
 
-
     // ----------------- TESTS PARA sleccionarSeguro -----------------
 
     @Test
@@ -488,7 +485,8 @@ class SeguroControllerTest {
 
     @Test
     void testSeleccionarSeguro_NoEncontrado() {
-        // Simula que el servicio devuelve false, indicando que no se pudo seleccionar el seguro
+        // Simula que el servicio devuelve false, indicando que no se pudo seleccionar
+        // el seguro
         when(seguroService.seleccionarSeguro(1L, 1L)).thenReturn(false);
 
         // Llama al método del controlador
@@ -512,6 +510,75 @@ class SeguroControllerTest {
         assertEquals(INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertEquals("Error al seleccionar el seguro: Error inesperado", response.getBody());
         verify(seguroService, times(1)).seleccionarSeguro(1L, 1L);
+    }
+
+    @Test
+    void testSeleccionarSeguro_SeguroIdNull() {
+        ResponseEntity<String> response = seguroController.seleccionarSeguro(null, 1L);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Los IDs del seguro y del cliente son obligatorios y deben ser mayores a 0.", response.getBody());
+        verify(seguroService, never()).seleccionarSeguro(any(), any());
+    }
+
+    @Test
+    void testSeleccionarSeguro_ClienteIdNull() {
+        ResponseEntity<String> response = seguroController.seleccionarSeguro(1L, null);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Los IDs del seguro y del cliente son obligatorios y deben ser mayores a 0.", response.getBody());
+        verify(seguroService, never()).seleccionarSeguro(any(), any());
+    }
+
+    @Test
+    void testCantidadClientesPorSeguro() {
+        List<ClientesPorSeguro> stats = Arrays.asList(
+                new ClientesPorSeguro("Seguro1", 2),
+                new ClientesPorSeguro("Seguro2", 0));
+        when(seguroService.contarClientesPorSeguro()).thenReturn(stats);
+
+        ResponseEntity<List<ClientesPorSeguro>> response = seguroController.cantidadClientesPorSeguro();
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(stats, response.getBody());
+        verify(seguroService).contarClientesPorSeguro();
+    }
+
+    @Test
+    void testGetSegurosPorCliente_ConResultados() {
+        Long clienteId = 1L;
+        List<Seguro> seguros = Arrays.asList(new Seguro(), new Seguro());
+        when(seguroService.obtenerPorCliente(clienteId)).thenReturn(seguros);
+
+        ResponseEntity<List<Seguro>> response = seguroController.getSegurosPorCliente(clienteId);
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(seguros, response.getBody());
+        verify(seguroService).obtenerPorCliente(clienteId);
+    }
+
+    @Test
+    void testGetSegurosPorCliente_SinResultados() {
+        Long clienteId = 2L;
+        when(seguroService.obtenerPorCliente(clienteId)).thenReturn(Collections.emptyList());
+
+        ResponseEntity<List<Seguro>> response = seguroController.getSegurosPorCliente(clienteId);
+
+        assertEquals(204, response.getStatusCodeValue());
+        assertNull(response.getBody());
+        verify(seguroService).obtenerPorCliente(clienteId);
+    }
+
+    @Test
+    void testGetSegurosPorCliente_Null() {
+        Long clienteId = 3L;
+        when(seguroService.obtenerPorCliente(clienteId)).thenReturn(null);
+
+        ResponseEntity<List<Seguro>> response = seguroController.getSegurosPorCliente(clienteId);
+
+        assertEquals(204, response.getStatusCodeValue());
+        assertNull(response.getBody());
+        verify(seguroService).obtenerPorCliente(clienteId);
     }
 
 }

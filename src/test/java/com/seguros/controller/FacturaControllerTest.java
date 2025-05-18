@@ -46,7 +46,7 @@ public class FacturaControllerTest {
         when(facturaService.getFacturasByClienteId(1L)).thenReturn(facturas);
 
         mockMvc.perform(get("/api/facturas/cliente")
-                        .param("gmail", "cliente@gmail.com"))
+                .param("gmail", "cliente@gmail.com"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2));
     }
@@ -60,7 +60,7 @@ public class FacturaControllerTest {
         when(facturaService.getFacturasByClienteId(1L)).thenReturn(Collections.emptyList());
 
         mockMvc.perform(get("/api/facturas/cliente")
-                        .param("gmail", "cliente@gmail.com"))
+                .param("gmail", "cliente@gmail.com"))
                 .andExpect(status().isNoContent())
                 .andExpect(content().string("No se encontraron facturas para este cliente."));
     }
@@ -70,7 +70,7 @@ public class FacturaControllerTest {
         when(clienteRepository.findByEmail("desconocido@gmail.com")).thenReturn(null);
 
         mockMvc.perform(get("/api/facturas/cliente")
-                        .param("gmail", "desconocido@gmail.com"))
+                .param("gmail", "desconocido@gmail.com"))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("Cliente no encontrado con el email proporcionado."));
     }
@@ -80,9 +80,23 @@ public class FacturaControllerTest {
         when(clienteRepository.findByEmail("error@gmail.com")).thenThrow(new RuntimeException("DB crash"));
 
         mockMvc.perform(get("/api/facturas/cliente")
-                        .param("gmail", "error@gmail.com"))
+                .param("gmail", "error@gmail.com"))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().string("Error al obtener las facturas."));
     }
-    
+
+    @Test
+    void testGetFacturasByClienteEmail_FacturasNull() throws Exception {
+        Cliente cliente = new Cliente();
+        cliente.setId(1L);
+
+        when(clienteRepository.findByEmail("cliente@gmail.com")).thenReturn(cliente);
+        when(facturaService.getFacturasByClienteId(1L)).thenReturn(null);
+
+        mockMvc.perform(get("/api/facturas/cliente")
+                .param("gmail", "cliente@gmail.com"))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string("No se encontraron facturas para este cliente."));
+    }
+
 }

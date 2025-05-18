@@ -41,7 +41,7 @@ public class ClienteController {
 
     // Registrar nuevo cliente
     @PostMapping
-    public ResponseEntity<?> createCliente(@Valid @RequestBody Cliente cliente) {
+    public ResponseEntity<?> createCliente(@RequestBody Cliente cliente) {
         try {
             if (clienteRepository.existsByEmail(cliente.getEmail())) {
                 return ResponseEntity

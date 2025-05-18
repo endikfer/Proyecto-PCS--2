@@ -80,6 +80,20 @@ class ClienteControllerTest {
     }
 
     @Test
+    void testCreateCliente_PasswordCorta() throws Exception {
+        Cliente cliente = new Cliente("user01", "user01@gmail.com", "123"); // Contraseña corta
+
+        when(clienteRepository.existsByEmail(cliente.getEmail())).thenReturn(false);
+
+        mockMvc.perform(post("/api/clientes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(cliente)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(
+                        org.hamcrest.Matchers.containsString("Error: La contraseña debe tener al menos 6 caracteres")));
+    }
+
+    @Test
     void testGetAllClientes() throws Exception {
         Cliente cliente1 = new Cliente("user02", "user02@gmail.com", "123456");
         Cliente cliente2 = new Cliente("user03", "user03@gmail.com", "abcdef");
