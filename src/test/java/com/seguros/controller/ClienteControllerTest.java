@@ -1,6 +1,7 @@
 package com.seguros.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seguros.Service.AdminService;
 import com.seguros.Service.UsuarioService;
 import com.seguros.model.Cliente;
 import com.seguros.repository.ClienteRepository;
@@ -31,6 +32,9 @@ class ClienteControllerTest {
     @MockBean
     private UsuarioService usuarioService;
 
+    @MockBean
+    private AdminService adminService;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -42,8 +46,8 @@ class ClienteControllerTest {
         when(clienteRepository.save(any(Cliente.class))).thenReturn(cliente);
 
         mockMvc.perform(post("/api/clientes")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(cliente)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(cliente)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.email").value("user01@gmail.com"));
     }
@@ -55,8 +59,8 @@ class ClienteControllerTest {
         when(clienteRepository.existsByEmail(cliente.getEmail())).thenReturn(true);
 
         mockMvc.perform(post("/api/clientes")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(cliente)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(cliente)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Error: El email ya está registrado"));
     }
@@ -69,8 +73,8 @@ class ClienteControllerTest {
         when(clienteRepository.save(any(Cliente.class))).thenThrow(new RuntimeException("Fallo DB"));
 
         mockMvc.perform(post("/api/clientes")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(cliente)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(cliente)))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("Error al registrar")));
     }
@@ -105,7 +109,7 @@ class ClienteControllerTest {
         when(clienteRepository.findByEmail("user05@gmail.com")).thenReturn(cliente);
 
         mockMvc.perform(get("/api/clientes/perfil")
-                        .param("email", "user05@gmail.com"))
+                .param("email", "user05@gmail.com"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nombre").value("user05"));
     }
@@ -115,7 +119,7 @@ class ClienteControllerTest {
         when(clienteRepository.findByEmail("noexiste@gmail.com")).thenReturn(null);
 
         mockMvc.perform(get("/api/clientes/perfil")
-                        .param("email", "noexiste@gmail.com"))
+                .param("email", "noexiste@gmail.com"))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("Cliente no encontrado"));
     }
@@ -125,7 +129,7 @@ class ClienteControllerTest {
         when(usuarioService.esAdmin("admin@gmail.com")).thenReturn(true);
 
         mockMvc.perform(get("/api/clientes/esAdmin")
-                        .param("username", "admin@gmail.com"))
+                .param("username", "admin@gmail.com"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"));
     }
@@ -161,8 +165,8 @@ class ClienteControllerTest {
         String json = "{ \"email\": \"user07@gmail.com\", \"mensaje\": \"Tengo una duda sobre mi póliza.\" }";
 
         mockMvc.perform(post("/api/clientes/duda")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Duda recibida correctamente."));
     }

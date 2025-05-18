@@ -3,7 +3,9 @@ package com.seguros.Service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -114,6 +116,18 @@ public class AdminServiceTest {
             assertEquals("No hay mensaje para este asunto.", result);
             verify(dudaRepository).findMensajeByAsunto(asuntoProcesado);
         }
+    }
+
+    @Test
+    void testEnviarDuda() {
+        String asunto = "Prueba";
+        String mensaje = "Este es un mensaje de prueba";
+
+        adminService.enviarDuda(asunto, mensaje);
+
+        // Verifica que se haya creado una Duda y se haya guardado
+        verify(dudaRepository, times(1)).save(argThat(duda -> duda.getAsunto().equals(asunto) &&
+                duda.getMensaje().equals(mensaje)));
     }
 
 }

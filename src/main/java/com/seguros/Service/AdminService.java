@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.seguros.model.Duda;
 import com.seguros.repository.DudaRepository;
 
 /**
@@ -68,6 +69,7 @@ public class AdminService {
     }
 
     public void enviarDuda(String asunto, String mensaje) {
-        dudaRepository.save(asunto, mensaje);
+        Duda duda = new Duda(asunto, mensaje);
+        dudaRepository.save(duda);
     }
 }

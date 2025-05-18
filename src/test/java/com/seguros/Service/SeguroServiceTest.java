@@ -2,6 +2,7 @@ package com.seguros.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -9,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,9 +22,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 import java.util.Optional;
@@ -45,9 +49,9 @@ public class SeguroServiceTest {
     private SeguroService seguroService;
 
     @BeforeEach
-    @SuppressWarnings("unused")
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        segurorepo = mock(SeguroRepository.class);
+        clienterepo = mock(ClienteRepository.class);
         seguroService = new SeguroService(segurorepo, clienterepo);
     }
 
@@ -84,13 +88,13 @@ public class SeguroServiceTest {
 
     @Test
     void testCrearSeguro_RepositorioNoInicializado() {
-    	SeguroService servicioSinRepo = new SeguroService(null, clienterepo);	
+        SeguroService servicioSinRepo = new SeguroService(null, clienterepo);
 
-    	Exception ex = assertThrows(IllegalStateException.class,
-                () -> servicioSinRepo.crearSeguro("Seguro de Hogar",     // ← usa servicioSinRepo
-                                                  "Protección contra incendios",
-                                                  "CASA",
-                                                  1200.0));
+        Exception ex = assertThrows(IllegalStateException.class,
+                () -> servicioSinRepo.crearSeguro("Seguro de Hogar", // ← usa servicioSinRepo
+                        "Protección contra incendios",
+                        "CASA",
+                        1200.0));
 
         assertEquals("El repositorio segurorepo no está inicializado", ex.getMessage());
     }
@@ -222,7 +226,7 @@ public class SeguroServiceTest {
         assertEquals(1500.0, seguro.getPrecio());
         verify(segurorepo).save(seguro);
     }
-    
+
     @Test
     void testEditarSeguro_SeguroNoExiste() {
         when(segurorepo.findById(99L)).thenReturn(java.util.Optional.empty());
@@ -233,8 +237,8 @@ public class SeguroServiceTest {
     @Test
     void testEditarSeguro_TipoInvalido() {
         when(segurorepo.findById(1L)).thenReturn(java.util.Optional.of(new Seguro()));
-        assertThrows(IllegalArgumentException.class, () ->
-                seguroService.editarSeguro(1L, "Nombre", "Desc", "INVALIDO", 100.0));
+        assertThrows(IllegalArgumentException.class,
+                () -> seguroService.editarSeguro(1L, "Nombre", "Desc", "INVALIDO", 100.0));
     }
 
     // ----------------- TESTS PARA obtenerSeguroPorNombre -----------------
@@ -259,7 +263,6 @@ public class SeguroServiceTest {
 
     // ----------------- TESTS PARA eliminarSeguro -----------------
 
-
     @Test
     void testEliminarSeguro_NoExiste() {
         when(segurorepo.existsById(999L)).thenReturn(false);
@@ -269,6 +272,7 @@ public class SeguroServiceTest {
         assertFalse(resultado);
         verify(segurorepo, never()).deleteById(anyLong());
     }
+
     @Test
     void testEliminarSeguro_Exitoso() {
         Seguro seguro = new Seguro("Auto", "Cobertura completa", TipoSeguro.COCHE, 800.0);
@@ -280,9 +284,7 @@ public class SeguroServiceTest {
         verify(segurorepo, times(1)).delete(seguro);
     }
 
-
     // ----------------- TESTS PARA seleccionarSeguro -----------------
-
 
     @Test
     void testSeleccionarSeguro_Exitoso() {
@@ -366,5 +368,91 @@ public class SeguroServiceTest {
         verify(clienterepo, never()).save(any(Cliente.class));
     }
 
-    
+    @Test
+    void testObtenerPorCliente_ReturnsSeguros() {
+        Long clienteId = 1L;
+        Seguro seguro1 = new Seguro("Seguro1", "Desc1", TipoSeguro.CASA, 100.0);
+        Seguro seguro2 = new Seguro("Seguro2", "Desc2", TipoSeguro.VIDA, 200.0);
+        List<Seguro> seguros = Arrays.asList(seguro1, seguro2);
+
+        when(segurorepo.findByClienteId(clienteId)).thenReturn(seguros);
+
+        List<Seguro> result = seguroService.obtenerPorCliente(clienteId);
+
+        assertEquals(2, result.size());
+        assertSame(seguro1, result.get(0));
+        assertSame(seguro2, result.get(1));
+        verify(segurorepo).findByClienteId(clienteId);
+    }
+
+    @Test
+    void testObtenerPorCliente_ReturnsEmptyList() {
+        Long clienteId = 2L;
+        when(segurorepo.findByClienteId(clienteId)).thenReturn(Collections.emptyList());
+
+        List<Seguro> result = seguroService.obtenerPorCliente(clienteId);
+
+        assertTrue(result.isEmpty());
+        verify(segurorepo).findByClienteId(clienteId);
+    }
+
+    @Test
+    void testContarClientesPorSeguro_ReturnsCounts() {
+        Seguro seguro1 = new Seguro("Seguro1", "Desc1", TipoSeguro.CASA, 100.0);
+        seguro1.setId(1L);
+        Seguro seguro2 = new Seguro("Seguro2", "Desc2", TipoSeguro.VIDA, 200.0);
+        seguro2.setId(2L);
+
+        when(segurorepo.findAll()).thenReturn(Arrays.asList(seguro1, seguro2));
+        when(clienterepo.countBySeguroSeleccionado_Id(1L)).thenReturn(3L);
+        when(clienterepo.countBySeguroSeleccionado_Id(2L)).thenReturn(0L);
+
+        List<ClientesPorSeguro> result = seguroService.contarClientesPorSeguro();
+
+        assertEquals(2, result.size());
+        assertEquals("Seguro1", result.get(0).getNombreSeguro());
+        assertEquals(3L, result.get(0).getCantidadClientes());
+        assertEquals("Seguro2", result.get(1).getNombreSeguro());
+        assertEquals(0L, result.get(1).getCantidadClientes());
+        verify(segurorepo).findAll();
+        verify(clienterepo).countBySeguroSeleccionado_Id(1L);
+        verify(clienterepo).countBySeguroSeleccionado_Id(2L);
+    }
+
+    @Test
+    void testContarClientesPorSeguro_EmptySeguros() {
+        when(segurorepo.findAll()).thenReturn(Collections.emptyList());
+
+        List<ClientesPorSeguro> result = seguroService.contarClientesPorSeguro();
+
+        assertTrue(result.isEmpty());
+        verify(segurorepo).findAll();
+        verifyNoInteractions(clienterepo);
+    }
+
+    @Test
+    void testObtenerSegurosPorCliente_ReturnsSeguros() {
+        Long clienteId = 5L;
+        Seguro seguro = new Seguro("SeguroX", "DescX", TipoSeguro.COCHE, 300.0);
+        List<Seguro> seguros = Collections.singletonList(seguro);
+
+        when(segurorepo.findByClienteId(clienteId)).thenReturn(seguros);
+
+        List<Seguro> result = seguroService.obtenerSegurosPorCliente(clienteId);
+
+        assertEquals(1, result.size());
+        assertSame(seguro, result.get(0));
+        verify(segurorepo).findByClienteId(clienteId);
+    }
+
+    @Test
+    void testObtenerSegurosPorCliente_ReturnsEmptyList() {
+        Long clienteId = 6L;
+        when(segurorepo.findByClienteId(clienteId)).thenReturn(Collections.emptyList());
+
+        List<Seguro> result = seguroService.obtenerSegurosPorCliente(clienteId);
+
+        assertTrue(result.isEmpty());
+        verify(segurorepo).findByClienteId(clienteId);
+    }
 }
