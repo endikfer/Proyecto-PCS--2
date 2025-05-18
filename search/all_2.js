@@ -6,7 +6,7 @@ var searchData=
   ['duda_2ejava_3',['Duda.java',['../Duda_8java.html',1,'']]],
   ['dudarepository_4',['DudaRepository',['../interfacecom_1_1seguros_1_1repository_1_1DudaRepository.html',1,'com::seguros::repository']]],
   ['dudarepository_2ejava_5',['DudaRepository.java',['../DudaRepository_8java.html',1,'']]],
-  ['dudasventana_6',['dudasventana',['../classcom_1_1seguros_1_1client_1_1DudasVentana.html',1,'com.seguros.client.DudasVentana'],['../classcom_1_1seguros_1_1client_1_1DudasVentana.html#a2c96a914ccc7ba28c0ed77e6e414f9ba',1,'com.seguros.client.DudasVentana.DudasVentana()']]],
+  ['dudasventana_6',['dudasventana',['../classcom_1_1seguros_1_1client_1_1DudasVentana.html',1,'com.seguros.client.DudasVentana'],['../classcom_1_1seguros_1_1client_1_1DudasVentana.html#a5ca24af5d311533fc91e8a500e75b639',1,'com.seguros.client.DudasVentana.DudasVentana()']]],
   ['dudasventana_2ejava_7',['DudasVentana.java',['../DudasVentana_8java.html',1,'']]],
   ['dudatest_8',['DudaTest',['../classcom_1_1seguros_1_1model_1_1DudaTest.html',1,'com::seguros::model']]],
   ['dudatest_2ejava_9',['DudaTest.java',['../DudaTest_8java.html',1,'']]]

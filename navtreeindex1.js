@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"classcom_1_1seguros_1_1model_1_1Administrador.html#a672a030ad7dfe895cc2e9590868e80d2":[1,0,0,0,2,0,3],
 "classcom_1_1seguros_1_1model_1_1Administrador.html#aac83c431d20d0336515cd519e4aa023e":[1,0,0,0,2,0,1],
 "classcom_1_1seguros_1_1model_1_1Administrador.html#ac4b50c0e15eb0b51a2b3ab1c3d7985eb":[1,0,0,0,2,0,8],
 "classcom_1_1seguros_1_1model_1_1Administrador.html#afcee438bb33ee26740147ca643544aeb":[1,0,0,0,2,0,0],

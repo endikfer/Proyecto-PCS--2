@@ -6,7 +6,7 @@ var searchData=
   ['casa_3',['CASA',['../enumcom_1_1seguros_1_1model_1_1TipoSeguro.html#a82b729b5ccae3f2fc179e9963dd5a1c0',1,'com::seguros::model::TipoSeguro']]],
   ['cliente_4',['cliente',['../classcom_1_1seguros_1_1model_1_1Cliente.html#ab3074750145876e4b0d518c09a485e17',1,'com.seguros.model.Cliente.Cliente(String nombre, String email, String password)'],['../classcom_1_1seguros_1_1model_1_1Cliente.html#a1ae81e09dddfd139c46c1cdd25130be0',1,'com.seguros.model.Cliente.Cliente()'],['../classcom_1_1seguros_1_1model_1_1Cliente.html',1,'com.seguros.model.Cliente']]],
   ['cliente_2ejava_5',['Cliente.java',['../Cliente_8java.html',1,'']]],
-  ['clientecontroller_6',['clientecontroller',['../classcom_1_1seguros_1_1controller_1_1ClienteController.html',1,'com.seguros.controller.ClienteController'],['../classcom_1_1seguros_1_1controller_1_1ClienteController.html#a8ee2a8ab2969afee51879e4d00f9d309',1,'com.seguros.controller.ClienteController.ClienteController()']]],
+  ['clientecontroller_6',['clientecontroller',['../classcom_1_1seguros_1_1controller_1_1ClienteController.html',1,'com.seguros.controller.ClienteController'],['../classcom_1_1seguros_1_1controller_1_1ClienteController.html#a2691c863962e53b0dae0b4496ae0898a',1,'com.seguros.controller.ClienteController.ClienteController()']]],
   ['clientecontroller_2ejava_7',['ClienteController.java',['../ClienteController_8java.html',1,'']]],
   ['clientecontrollertest_2ejava_8',['ClienteControllerTest.java',['../ClienteControllerTest_8java.html',1,'']]],
   ['clienterepo_9',['clienterepo',['../classcom_1_1seguros_1_1Service_1_1SeguroService.html#a1d3b311076e42f8e4b841f7328a9ae92',1,'com::seguros::Service::SeguroService']]],
