@@ -1,7 +1,7 @@
 var classcom_1_1seguros_1_1controller_1_1ClienteController =
 [
     [ "ClienteController", "classcom_1_1seguros_1_1controller_1_1ClienteController.html#a2691c863962e53b0dae0b4496ae0898a", null ],
-    [ "createCliente", "classcom_1_1seguros_1_1controller_1_1ClienteController.html#a4f057527f34aaecb84cbfdeb2fbf70fe", null ],
+    [ "createCliente", "classcom_1_1seguros_1_1controller_1_1ClienteController.html#a5fe0da1f7a6e020d19d0d981102c4e03", null ],
     [ "eliminarCliente", "classcom_1_1seguros_1_1controller_1_1ClienteController.html#a039a9884442c89a8992d6ad394bf2a15", null ],
     [ "enviarDuda", "classcom_1_1seguros_1_1controller_1_1ClienteController.html#a9f109e00c7d80d07eb60362e4b500e51", null ],
     [ "esAdmin", "classcom_1_1seguros_1_1controller_1_1ClienteController.html#a878d3ac6a831fcf4c1afa351efacc664", null ],
