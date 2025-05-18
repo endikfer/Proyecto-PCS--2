@@ -26,6 +26,10 @@ public class SeguroService {
     /** Repositorio para acceder a los seguros. */
     @Autowired
     public SeguroRepository segurorepo;
+    
+    public SeguroService(SeguroRepository segurorepo) {
+        this.segurorepo = segurorepo;      // ← se inyecta aquí
+    }
 
     /**
      * Crea un nuevo seguro y lo guarda en la base de datos.
@@ -227,6 +231,10 @@ public class SeguroService {
             resultado.add(new ClientesPorSeguro(s.getNombre(), count));
         }
         return resultado;
+    }
+    
+    public List<Seguro> obtenerSegurosPorCliente(Long clienteId) {
+        return segurorepo.findByClienteId(clienteId);
     }
 
 }

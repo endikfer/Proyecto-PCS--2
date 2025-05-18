@@ -15,16 +15,19 @@ import org.junit.jupiter.api.Test;
 
 import com.seguros.model.Factura;
 import com.seguros.repository.FacturaRepository;
+import com.seguros.repository.SeguroRepository;
 
 public class FacturaServiceTest {
 
     private FacturaRepository facturaRepository;
     private FacturaService facturaService;
+    private SeguroService seguroService;
+    
 
     @BeforeEach
     void setUp() {
         facturaRepository = mock(FacturaRepository.class);
-        facturaService = new FacturaService();
+        facturaService = new FacturaService(facturaRepository, seguroService);
         // Usamos reflexión para inyectar el mock porque no hay constructor
         try {
             java.lang.reflect.Field field = FacturaService.class.getDeclaredField("facturaRepository");
