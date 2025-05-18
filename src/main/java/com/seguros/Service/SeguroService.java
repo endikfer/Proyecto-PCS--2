@@ -24,11 +24,13 @@ import com.seguros.repository.SeguroRepository;
 public class SeguroService {
 
     /** Repositorio para acceder a los seguros. */
-    @Autowired
-    public SeguroRepository segurorepo;
     
-    public SeguroService(SeguroRepository segurorepo) {
+    public final SeguroRepository segurorepo;
+    public final ClienteRepository clienterepo;
+    
+    public SeguroService(SeguroRepository segurorepo, ClienteRepository clienterepo) {
         this.segurorepo = segurorepo;      // ← se inyecta aquí
+        this.clienterepo = clienterepo;
     }
 
     /**
@@ -171,7 +173,6 @@ public class SeguroService {
 
     /** Repositorio para acceder a los clientes. */
     @Autowired
-    private ClienteRepository clienteRepository;
 
     /**
      * Asocia un seguro a un cliente.
@@ -186,7 +187,7 @@ public class SeguroService {
                 "Petición recibida para seleccionar seguro. SeguroId: " + seguroId + ", ClienteId: " + clienteId);
 
         var seguroOptional = segurorepo.findById(seguroId);
-        var clienteOptional = clienteRepository.findById(clienteId);
+        var clienteOptional = clienterepo.findById(clienteId);
 
         if (seguroOptional.isPresent() && clienteOptional.isPresent()) {
             Seguro seguro = seguroOptional.get();
@@ -194,7 +195,7 @@ public class SeguroService {
 
             cliente.setSeguroSeleccionado(seguro);
 
-            clienteRepository.save(cliente);
+            clienterepo.save(cliente);
 
             System.out.println("Seguro seleccionado y asociado al cliente correctamente");
             return true;
@@ -227,7 +228,7 @@ public class SeguroService {
         // Para cada uno contamos cuántos clientes lo tienen asignado
         List<ClientesPorSeguro> resultado = new ArrayList<>();
         for (Seguro s : seguros) {
-            long count = clienteRepository.countBySeguroSeleccionado_Id(s.getId());
+            long count = clienterepo.countBySeguroSeleccionado_Id(s.getId());
             resultado.add(new ClientesPorSeguro(s.getNombre(), count));
         }
         return resultado;

@@ -36,10 +36,10 @@ import com.seguros.repository.ClienteRepository;
 public class SeguroServiceTest {
 
     @Mock
-    private SeguroRepository seguroRepository;
+    private SeguroRepository segurorepo;
 
     @Mock
-    private ClienteRepository clienteRepository;
+    private ClienteRepository clienterepo;
 
     @InjectMocks
     private SeguroService seguroService;
@@ -48,6 +48,7 @@ public class SeguroServiceTest {
     @SuppressWarnings("unused")
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        seguroService = new SeguroService(segurorepo, clienterepo);
     }
 
     @Test
@@ -59,13 +60,13 @@ public class SeguroServiceTest {
         Double precio = 1000.0;
 
         // Simulación del método save en el repositorio
-        doAnswer(invocation -> null).when(seguroRepository).save(any(Seguro.class));
+        doAnswer(invocation -> null).when(segurorepo).save(any(Seguro.class));
 
         // Ejecución del método a probar
         assertDoesNotThrow(() -> seguroService.crearSeguro(nombre, descripcion, tipoSeguro, precio));
 
         // Verificación de que el seguro fue guardado correctamente
-        verify(seguroRepository, times(1)).save(any(Seguro.class));
+        verify(segurorepo, times(1)).save(any(Seguro.class));
     }
 
     @Test
@@ -83,17 +84,15 @@ public class SeguroServiceTest {
 
     @Test
     void testCrearSeguro_RepositorioNoInicializado() {
-        seguroService.segurorepo = null;
+    	SeguroService servicioSinRepo = new SeguroService(null, clienterepo);	
 
-        String nombre = "Seguro de Hogar";
-        String descripcion = "Protección contra incendios";
-        String tipoSeguro = "CASA";
-        Double precio = 1200.0;
+    	Exception ex = assertThrows(IllegalStateException.class,
+                () -> servicioSinRepo.crearSeguro("Seguro de Hogar",     // ← usa servicioSinRepo
+                                                  "Protección contra incendios",
+                                                  "CASA",
+                                                  1200.0));
 
-        Exception exception = assertThrows(IllegalStateException.class,
-                () -> seguroService.crearSeguro(nombre, descripcion, tipoSeguro, precio));
-
-        assertEquals("El repositorio segurorepo no está inicializado", exception.getMessage());
+        assertEquals("El repositorio segurorepo no está inicializado", ex.getMessage());
     }
 
     @Test
@@ -141,7 +140,7 @@ public class SeguroServiceTest {
         segurosMock.add(new Seguro("Seguro de Auto", "Cobertura contra daños", TipoSeguro.COCHE, 500.0));
 
         // Simulación del método findAll en el repositorio
-        when(seguroRepository.findAll()).thenReturn(segurosMock);
+        when(segurorepo.findAll()).thenReturn(segurosMock);
 
         // Ejecución del método a probar
         List<Seguro> result = seguroService.obtenerTodosSeguros();
@@ -151,13 +150,13 @@ public class SeguroServiceTest {
         assertEquals(2, result.size());
         assertEquals("Seguro de Vida", result.get(0).getNombre());
         assertEquals("Seguro de Auto", result.get(1).getNombre());
-        verify(seguroRepository, times(1)).findAll();
+        verify(segurorepo, times(1)).findAll();
     }
 
     @Test
     void testObtenerTodosSeguros_ListaVacia() {
         // Simulación del método findAll en el repositorio con una lista vacía
-        when(seguroRepository.findAll()).thenReturn(new ArrayList<>());
+        when(segurorepo.findAll()).thenReturn(new ArrayList<>());
 
         // Ejecución del método a probar
         List<Seguro> result = seguroService.obtenerTodosSeguros();
@@ -165,13 +164,13 @@ public class SeguroServiceTest {
         // Verificaciones
         assertNotNull(result);
         assertTrue(result.isEmpty());
-        verify(seguroRepository, times(1)).findAll();
+        verify(segurorepo, times(1)).findAll();
     }
 
     @Test
     void testObtenerTodosSeguros_RepositorioNulo() {
         // Simulación del método findAll en el repositorio devolviendo null
-        when(seguroRepository.findAll()).thenReturn(null);
+        when(segurorepo.findAll()).thenReturn(null);
 
         // Ejecución del método a probar
         List<Seguro> result = seguroService.obtenerTodosSeguros();
@@ -179,7 +178,7 @@ public class SeguroServiceTest {
         // Verificaciones
         assertNotNull(result);
         assertTrue(result.isEmpty());
-        verify(seguroRepository, times(1)).findAll();
+        verify(segurorepo, times(1)).findAll();
     }
 
     @Test
@@ -187,14 +186,14 @@ public class SeguroServiceTest {
         // Mock del repositorio
         TipoSeguro tipoSeguro = TipoSeguro.VIDA;
         List<Seguro> mockSeguros = Arrays.asList(new Seguro(), new Seguro());
-        when(seguroRepository.findByTipoSeguro(tipoSeguro)).thenReturn(mockSeguros);
+        when(segurorepo.findByTipoSeguro(tipoSeguro)).thenReturn(mockSeguros);
 
         // Prueba
         List<Seguro> resultado = seguroService.obtenerSegurosPorTipo("VIDA");
         assertEquals(mockSeguros, resultado);
 
         // Verificación de interacción
-        verify(seguroRepository, times(1)).findByTipoSeguro(tipoSeguro);
+        verify(segurorepo, times(1)).findByTipoSeguro(tipoSeguro);
     }
 
     @Test
@@ -212,7 +211,7 @@ public class SeguroServiceTest {
     @Test
     void testEditarSeguro_Exitoso() {
         Seguro seguro = new Seguro("Antiguo", "Vieja desc", TipoSeguro.COCHE, 500.0);
-        when(seguroRepository.findById(anyLong())).thenReturn(Optional.of(seguro));
+        when(segurorepo.findById(anyLong())).thenReturn(Optional.of(seguro));
 
         boolean resultado = seguroService.editarSeguro(1L, "Nuevo", "Nueva desc", "VIDA", 1500.0);
 
@@ -221,19 +220,19 @@ public class SeguroServiceTest {
         assertEquals("Nueva desc", seguro.getDescripcion());
         assertEquals(TipoSeguro.VIDA, seguro.getTipoSeguro());
         assertEquals(1500.0, seguro.getPrecio());
-        verify(seguroRepository).save(seguro);
+        verify(segurorepo).save(seguro);
     }
     
     @Test
     void testEditarSeguro_SeguroNoExiste() {
-        when(seguroRepository.findById(99L)).thenReturn(java.util.Optional.empty());
+        when(segurorepo.findById(99L)).thenReturn(java.util.Optional.empty());
         boolean resultado = seguroService.editarSeguro(99L, "Nombre", "Desc", "VIDA", 100.0);
         assertFalse(resultado);
     }
 
     @Test
     void testEditarSeguro_TipoInvalido() {
-        when(seguroRepository.findById(1L)).thenReturn(java.util.Optional.of(new Seguro()));
+        when(segurorepo.findById(1L)).thenReturn(java.util.Optional.of(new Seguro()));
         assertThrows(IllegalArgumentException.class, () ->
                 seguroService.editarSeguro(1L, "Nombre", "Desc", "INVALIDO", 100.0));
     }
@@ -243,7 +242,7 @@ public class SeguroServiceTest {
     @Test
     void testObtenerSeguroPorNombre_Encontrado() {
         Seguro seguro = new Seguro("Vida", "Cobertura", TipoSeguro.VIDA, 1000.0);
-        when(seguroRepository.findByNombre("Vida")).thenReturn(seguro);
+        when(segurorepo.findByNombre("Vida")).thenReturn(seguro);
 
         Seguro resultado = seguroService.obtenerSeguroPorNombre("Vida");
 
@@ -253,7 +252,7 @@ public class SeguroServiceTest {
 
     @Test
     void testObtenerSeguroPorNombre_NoEncontrado() {
-        when(seguroRepository.findByNombre("Inexistente")).thenReturn(null);
+        when(segurorepo.findByNombre("Inexistente")).thenReturn(null);
         Seguro resultado = seguroService.obtenerSeguroPorNombre("Inexistente");
         assertNull(resultado);
     }
@@ -263,22 +262,22 @@ public class SeguroServiceTest {
 
     @Test
     void testEliminarSeguro_NoExiste() {
-        when(seguroRepository.existsById(999L)).thenReturn(false);
+        when(segurorepo.existsById(999L)).thenReturn(false);
 
         boolean resultado = seguroService.eliminarSeguro(999L);
 
         assertFalse(resultado);
-        verify(seguroRepository, never()).deleteById(anyLong());
+        verify(segurorepo, never()).deleteById(anyLong());
     }
     @Test
     void testEliminarSeguro_Exitoso() {
         Seguro seguro = new Seguro("Auto", "Cobertura completa", TipoSeguro.COCHE, 800.0);
-        when(seguroRepository.findById(1L)).thenReturn(java.util.Optional.of(seguro));
+        when(segurorepo.findById(1L)).thenReturn(java.util.Optional.of(seguro));
 
         boolean resultado = seguroService.eliminarSeguro(1L);
 
         assertTrue(resultado);
-        verify(seguroRepository, times(1)).delete(seguro);
+        verify(segurorepo, times(1)).delete(seguro);
     }
 
 
@@ -297,8 +296,8 @@ public class SeguroServiceTest {
         cliente.setId(clienteId);
 
         // Simulación de los métodos findById en los repositorios
-        when(seguroRepository.findById(seguroId)).thenReturn(Optional.of(seguro));
-        when(clienteRepository.findById(clienteId)).thenReturn(Optional.of(cliente));
+        when(segurorepo.findById(seguroId)).thenReturn(Optional.of(seguro));
+        when(clienterepo.findById(clienteId)).thenReturn(Optional.of(cliente));
 
         // Ejecución del método a probar
         boolean resultado = seguroService.seleccionarSeguro(seguroId, clienteId);
@@ -306,7 +305,7 @@ public class SeguroServiceTest {
         // Verificación
         assertTrue(resultado);
         assertEquals(seguro, cliente.getSeguroSeleccionado());
-        verify(clienteRepository, times(1)).save(cliente);
+        verify(clienterepo, times(1)).save(cliente);
     }
 
     @Test
@@ -319,15 +318,15 @@ public class SeguroServiceTest {
         cliente.setId(clienteId);
 
         // Simulación del método findById en el repositorio de seguro
-        when(seguroRepository.findById(seguroId)).thenReturn(Optional.empty());
-        when(clienteRepository.findById(clienteId)).thenReturn(Optional.of(cliente));
+        when(segurorepo.findById(seguroId)).thenReturn(Optional.empty());
+        when(clienterepo.findById(clienteId)).thenReturn(Optional.of(cliente));
 
         // Ejecución del método a probar
         boolean resultado = seguroService.seleccionarSeguro(seguroId, clienteId);
 
         // Verificación
         assertFalse(resultado);
-        verify(clienteRepository, never()).save(any(Cliente.class));
+        verify(clienterepo, never()).save(any(Cliente.class));
     }
 
     @Test
@@ -339,15 +338,15 @@ public class SeguroServiceTest {
         Seguro seguro = new Seguro("Seguro de Auto", "Cobertura contra daños", TipoSeguro.COCHE, 500.0);
 
         // Simulación del método findById en el repositorio de cliente
-        when(seguroRepository.findById(seguroId)).thenReturn(Optional.of(seguro));
-        when(clienteRepository.findById(clienteId)).thenReturn(Optional.empty());
+        when(segurorepo.findById(seguroId)).thenReturn(Optional.of(seguro));
+        when(clienterepo.findById(clienteId)).thenReturn(Optional.empty());
 
         // Ejecución del método a probar
         boolean resultado = seguroService.seleccionarSeguro(seguroId, clienteId);
 
         // Verificación
         assertFalse(resultado);
-        verify(clienteRepository, never()).save(any(Cliente.class));
+        verify(clienterepo, never()).save(any(Cliente.class));
     }
 
     @Test
@@ -356,15 +355,15 @@ public class SeguroServiceTest {
         Long clienteId = 1L;
 
         // Simulación del método findById en los repositorios
-        when(seguroRepository.findById(seguroId)).thenReturn(Optional.empty());
-        when(clienteRepository.findById(clienteId)).thenReturn(Optional.empty());
+        when(segurorepo.findById(seguroId)).thenReturn(Optional.empty());
+        when(clienterepo.findById(clienteId)).thenReturn(Optional.empty());
 
         // Ejecución del método a probar
         boolean resultado = seguroService.seleccionarSeguro(seguroId, clienteId);
 
         // Verificación
         assertFalse(resultado);
-        verify(clienteRepository, never()).save(any(Cliente.class));
+        verify(clienterepo, never()).save(any(Cliente.class));
     }
 
     
