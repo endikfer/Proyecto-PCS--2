@@ -66,4 +66,8 @@ public class AdminService {
 
         return mensaje;
     }
+
+    public void enviarDuda(String asunto, String mensaje) {
+        dudaRepository.save(asunto, mensaje);
+    }
 }

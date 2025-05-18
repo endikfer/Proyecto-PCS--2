@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
+import com.seguros.Service.AdminService;
 import com.seguros.Service.UsuarioService;
 import com.seguros.model.Cliente;
 import com.seguros.repository.ClienteRepository;
@@ -31,8 +32,10 @@ public class ClienteController {
     @Autowired
     private ClienteRepository clienteRepository;
     private final UsuarioService usuarioService;
+    private final AdminService adminService;
 
-    public ClienteController(UsuarioService usuarioService) {
+    public ClienteController(UsuarioService usuarioService, AdminService adminService) {
+        this.adminService = adminService;
         this.usuarioService = usuarioService;
     }
 
@@ -123,14 +126,16 @@ public class ClienteController {
 
     @PostMapping("/duda")
     public ResponseEntity<String> enviarDuda(@RequestBody Map<String, String> datos) {
-        String email = datos.get("email");
+        String asunto = datos.get("asunto");
         String mensaje = datos.get("mensaje");
-        
-        System.out.println("Duda recibida de " + email + ": " + mensaje);
+
+        adminService.enviarDuda(asunto, mensaje);
+
+        System.out.println("Duda recibida de " + asunto + ": " + mensaje);
         System.out.println("Contenido: " + mensaje);
-        
+
         return ResponseEntity.ok("Duda recibida correctamente.");
-    
+
     }
 
 }
