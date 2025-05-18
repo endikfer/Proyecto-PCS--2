@@ -41,27 +41,27 @@ public class SeguroControllerClient {
         return httpClient;
     }
 
-    public void enviarDuda(String email, String mensaje) {
+    public void enviarDuda(String asunto, String mensaje) {
         try {
             ObjectMapper mapper = new ObjectMapper();
             Map<String, String> body = new HashMap<>();
-            body.put("email", email);
+            body.put("asunto", asunto);
             body.put("mensaje", mensaje);
-
+    
             String json = mapper.writeValueAsString(body);
-
+    
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(BASE_URL + "/api/clientes/duda"))  // Ruta al backend
+                    .uri(URI.create(BASE_URL + "/api/clientes/duda")) // o /api/dudas si usas DudaController
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(json))
                     .build();
-
+    
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
+    
             if (response.statusCode() != 200) {
                 throw new RuntimeException("Error al enviar duda. Código: " + response.statusCode());
             }
-
+    
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException("Error al enviar duda.", e);
         }
@@ -172,10 +172,8 @@ public class SeguroControllerClient {
 
     @PostMapping("/duda")
     public ResponseEntity<String> enviarDuda(@RequestBody Map<String, String> datos) {
-        String email = datos.get("email");
         String mensaje = datos.get("mensaje");
         
-        System.out.println("Duda recibida de " + email + ": " + mensaje);
         System.out.println("Contenido: " + mensaje);
         
         return ResponseEntity.ok("Duda recibida correctamente.");

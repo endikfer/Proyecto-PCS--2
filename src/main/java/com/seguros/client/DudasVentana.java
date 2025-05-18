@@ -4,64 +4,81 @@ import javax.swing.*;
 import java.awt.*;
 
 public class DudasVentana extends JFrame {
+
     private final SeguroControllerClient controller;
-    private final String email;
-    
-    public DudasVentana(SeguroControllerClient controller, String email) {
-        this.controller = null;
-        this.email = "";
-        // Configurar la ventana principal
+
+    public DudasVentana(SeguroControllerClient controller) {
+        this.controller = controller;
+
         setTitle("Enviar una Duda");
-        setSize(400, 300);
+        setSize(400, 350);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // Crear panel principal
-        JPanel panel = new JPanel(new BorderLayout(10, 10));
+        // Panel principal
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Crear área de texto para escribir la duda
-        JTextArea areaDuda = new JTextArea();
+        // Campo asunto
+        JLabel labelAsunto = new JLabel("Asunto:");
+        labelAsunto.setAlignmentX(Component.LEFT_ALIGNMENT);
+        
+        JTextField campoAsunto = new JTextField();
+        campoAsunto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+        campoAsunto.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        // Campo mensaje de la duda
+        JLabel labelDuda = new JLabel("Escribe tu duda:");
+        labelDuda.setAlignmentX(Component.LEFT_ALIGNMENT);
+        
+        JTextArea areaDuda = new JTextArea(7, 20);
         areaDuda.setLineWrap(true);
         areaDuda.setWrapStyleWord(true);
         JScrollPane scroll = new JScrollPane(areaDuda);
+        scroll.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        // Crear botón para enviar la duda
+        // Botón enviar
         JButton enviar = new JButton("Enviar Duda");
         enviar.addActionListener(e -> {
-            String duda = areaDuda.getText().trim();
-            if (!duda.isEmpty()) {
-                try {
-                    controller.enviarDuda(email, duda);  // Llamada a la API REST
-                    JOptionPane.showMessageDialog(this,
-                            "Tu duda ha sido enviada correctamente.",
-                            "Duda Enviada",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    dispose(); // Cerrar la ventana
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this,
-                            "Error al enviar la duda: " + ex.getMessage(),
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                }
-            } else {
+            String asunto = campoAsunto.getText().trim();
+            String mensaje = areaDuda.getText().trim();
+
+            if (asunto.isEmpty() || mensaje.isEmpty()) {
                 JOptionPane.showMessageDialog(this,
-                        "Por favor escribe tu duda antes de enviarla.",
-                        "Campo vacío",
+                        "Por favor completa el asunto y la duda.",
+                        "Campos incompletos",
                         JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            try {
+                controller.enviarDuda(asunto, mensaje);
+                JOptionPane.showMessageDialog(this,
+                        "Tu duda ha sido enviada correctamente.",
+                        "Duda Enviada",
+                        JOptionPane.INFORMATION_MESSAGE);
+                dispose();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this,
+                        "Error al enviar la duda: " + ex.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
 
         // Añadir componentes al panel
-        panel.add(new JLabel("Escribe tu duda:"), BorderLayout.NORTH);
-        panel.add(scroll, BorderLayout.CENTER);
-        panel.add(enviar, BorderLayout.SOUTH);
+        panel.add(labelAsunto);
+        panel.add(campoAsunto);
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(labelDuda);
+        panel.add(scroll);
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(enviar);
 
-        // Añadir panel a la ventana
         add(panel);
     }
 
-    // Método para mostrar la ventana
     public void mostrar() {
         setVisible(true);
     }

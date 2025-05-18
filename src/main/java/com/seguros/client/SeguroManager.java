@@ -163,8 +163,7 @@ public class SeguroManager {
         });
 
         botonDudas.addActionListener(e -> {
-            String mail = inicioSesionVentana.emailInicioSesion;
-            new DudasVentana(seguroClient, email).mostrar(); // aquí pasas el controller y el email
+            new DudasVentana(seguroClient).mostrar(); // ✅ ya no pasas email
         });
 
         botonFactura.addActionListener(e -> {
