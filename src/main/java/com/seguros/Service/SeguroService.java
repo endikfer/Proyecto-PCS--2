@@ -24,7 +24,7 @@ import com.seguros.repository.SeguroRepository;
 public class SeguroService {
 
     /** Repositorio para acceder a los seguros. */
-    
+    @Autowired
     public final SeguroRepository segurorepo;
     public final ClienteRepository clienterepo;
     
@@ -172,7 +172,7 @@ public class SeguroService {
     }
 
     /** Repositorio para acceder a los clientes. */
-    @Autowired
+    //@Autowired
 
     /**
      * Asocia un seguro a un cliente.
