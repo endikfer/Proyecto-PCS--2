@@ -104,10 +104,75 @@ $(document).ready(function(){initNavTree('classcom_1_1seguros_1_1Service_1_1Fact
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a388ecc635259c52dc05e93d47bd3d35b" id="r_a388ecc635259c52dc05e93d47bd3d35b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1Service_1_1FacturaService.html#a388ecc635259c52dc05e93d47bd3d35b">FacturaService</a> (FacturaRepository facturaRepository, <a class="el" href="classcom_1_1seguros_1_1Service_1_1SeguroService.html">SeguroService</a> seguroService)</td></tr>
+<tr class="separator:a388ecc635259c52dc05e93d47bd3d35b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c02b1fe229bb94c7083fbff7e432b8e" id="r_a2c02b1fe229bb94c7083fbff7e432b8e"><td class="memItemLeft" align="right" valign="top">List&lt; Factura &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1Service_1_1FacturaService.html#a2c02b1fe229bb94c7083fbff7e432b8e">getFacturasByClienteId</a> (Long clienteId)</td></tr>
 <tr class="separator:a2c02b1fe229bb94c7083fbff7e432b8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05aee3b89b180ba9bc0da47dcdeaadac" id="r_a05aee3b89b180ba9bc0da47dcdeaadac"><td class="memItemLeft" align="right" valign="top">Path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1Service_1_1FacturaService.html#a05aee3b89b180ba9bc0da47dcdeaadac">generarFacturaParaCliente</a> (Long clienteId)  throws IOException </td></tr>
+<tr class="separator:a05aee3b89b180ba9bc0da47dcdeaadac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a388ecc635259c52dc05e93d47bd3d35b" name="a388ecc635259c52dc05e93d47bd3d35b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a388ecc635259c52dc05e93d47bd3d35b">&#9670;&#160;</a></span>FacturaService()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">com.seguros.Service.FacturaService.FacturaService </td>
+          <td>(</td>
+          <td class="paramtype">FacturaRepository&#160;</td>
+          <td class="paramname"><em>facturaRepository</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcom_1_1seguros_1_1Service_1_1SeguroService.html">SeguroService</a>&#160;</td>
+          <td class="paramname"><em>seguroService</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a05aee3b89b180ba9bc0da47dcdeaadac" name="a05aee3b89b180ba9bc0da47dcdeaadac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05aee3b89b180ba9bc0da47dcdeaadac">&#9670;&#160;</a></span>generarFacturaParaCliente()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Path com.seguros.Service.FacturaService.generarFacturaParaCliente </td>
+          <td>(</td>
+          <td class="paramtype">Long&#160;</td>
+          <td class="paramname"><em>clienteId</em></td><td>)</td>
+          <td> throws IOException</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Genera una factura para el cliente especificado, la persiste y crea un archivo .txt con el detalle.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clienteId</td><td>id del cliente </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Factura creada (el campo contenido guarda la ruta del archivo) </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">IOException</td><td>si falla la escritura del fichero </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a2c02b1fe229bb94c7083fbff7e432b8e" name="a2c02b1fe229bb94c7083fbff7e432b8e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2c02b1fe229bb94c7083fbff7e432b8e">&#9670;&#160;</a></span>getFacturasByClienteId()</h2>
 

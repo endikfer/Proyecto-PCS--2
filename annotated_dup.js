@@ -27,6 +27,7 @@ var annotated_dup =
           [ "ClienteController", "classcom_1_1seguros_1_1controller_1_1ClienteController.html", "classcom_1_1seguros_1_1controller_1_1ClienteController" ],
           [ "FacturaController", "classcom_1_1seguros_1_1controller_1_1FacturaController.html", "classcom_1_1seguros_1_1controller_1_1FacturaController" ],
           [ "FacturaControllerTest", "classcom_1_1seguros_1_1controller_1_1FacturaControllerTest.html", null ],
+          [ "FacturaRestController", "classcom_1_1seguros_1_1controller_1_1FacturaRestController.html", "classcom_1_1seguros_1_1controller_1_1FacturaRestController" ],
           [ "SeguroController", "classcom_1_1seguros_1_1controller_1_1SeguroController.html", "classcom_1_1seguros_1_1controller_1_1SeguroController" ]
         ] ],
         [ "model", "namespacecom_1_1seguros_1_1model.html", [

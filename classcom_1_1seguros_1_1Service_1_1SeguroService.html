@@ -109,6 +109,8 @@ $(document).ready(function(){initNavTree('classcom_1_1seguros_1_1Service_1_1Segu
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:aa90dc2d92359a7d26b183fa49f74ea10" id="r_aa90dc2d92359a7d26b183fa49f74ea10"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1Service_1_1SeguroService.html#aa90dc2d92359a7d26b183fa49f74ea10">SeguroService</a> (SeguroRepository <a class="el" href="classcom_1_1seguros_1_1Service_1_1SeguroService.html#a07e382ed1b6aef55d0e1fcae514254ab">segurorepo</a>, ClienteRepository <a class="el" href="classcom_1_1seguros_1_1Service_1_1SeguroService.html#a1d3b311076e42f8e4b841f7328a9ae92">clienterepo</a>)</td></tr>
+<tr class="separator:aa90dc2d92359a7d26b183fa49f74ea10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0de2a17fb85b55f1f061aac5ebf78940" id="r_a0de2a17fb85b55f1f061aac5ebf78940"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1Service_1_1SeguroService.html#a0de2a17fb85b55f1f061aac5ebf78940">crearSeguro</a> (String nombre, String descripcion, String tipoSeguro, Double precio)</td></tr>
 <tr class="separator:a0de2a17fb85b55f1f061aac5ebf78940"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25f8e72d08e0bfbae493c641a7e25e8d" id="r_a25f8e72d08e0bfbae493c641a7e25e8d"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1Service_1_1SeguroService.html#a25f8e72d08e0bfbae493c641a7e25e8d">editarSeguro</a> (Long id, String nombre, String descripcion, String tipoSeguro, Double precio)</td></tr>
@@ -127,6 +129,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a0bc6657f8f433ec095b61067bf055607"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd0e1c3766f6ca565284863224fbe7ce" id="r_afd0e1c3766f6ca565284863224fbe7ce"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="classcom_1_1seguros_1_1Service_1_1ClientesPorSeguro.html">ClientesPorSeguro</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1Service_1_1SeguroService.html#afd0e1c3766f6ca565284863224fbe7ce">contarClientesPorSeguro</a> ()</td></tr>
 <tr class="separator:afd0e1c3766f6ca565284863224fbe7ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45c32294548b4286a6dec72e0d7443b7" id="r_a45c32294548b4286a6dec72e0d7443b7"><td class="memItemLeft" align="right" valign="top">List&lt; Seguro &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1Service_1_1SeguroService.html#a45c32294548b4286a6dec72e0d7443b7">obtenerSegurosPorCliente</a> (Long clienteId)</td></tr>
+<tr class="separator:a45c32294548b4286a6dec72e0d7443b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -135,14 +139,45 @@ Static Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a981ea6b790800e1b404ba233fbb88a34" id="r_a981ea6b790800e1b404ba233fbb88a34"><td class="memItemLeft" align="right" valign="top">SeguroRepository&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1Service_1_1SeguroService.html#a981ea6b790800e1b404ba233fbb88a34">segurorepo</a></td></tr>
-<tr class="separator:a981ea6b790800e1b404ba233fbb88a34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07e382ed1b6aef55d0e1fcae514254ab" id="r_a07e382ed1b6aef55d0e1fcae514254ab"><td class="memItemLeft" align="right" valign="top">final SeguroRepository&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1Service_1_1SeguroService.html#a07e382ed1b6aef55d0e1fcae514254ab">segurorepo</a></td></tr>
+<tr class="separator:a07e382ed1b6aef55d0e1fcae514254ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d3b311076e42f8e4b841f7328a9ae92" id="r_a1d3b311076e42f8e4b841f7328a9ae92"><td class="memItemLeft" align="right" valign="top">final ClienteRepository&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1Service_1_1SeguroService.html#a1d3b311076e42f8e4b841f7328a9ae92">clienterepo</a></td></tr>
+<tr class="separator:a1d3b311076e42f8e4b841f7328a9ae92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Servicio para la gestión de seguros. </p>
 <pre class="fragment">   Proporciona métodos para crear, editar, eliminar, consultar y asociar
    seguros a clientes.
-</pre> </div><h2 class="groupheader">Member Function Documentation</h2>
+</pre> </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aa90dc2d92359a7d26b183fa49f74ea10" name="aa90dc2d92359a7d26b183fa49f74ea10"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa90dc2d92359a7d26b183fa49f74ea10">&#9670;&#160;</a></span>SeguroService()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">com.seguros.Service.SeguroService.SeguroService </td>
+          <td>(</td>
+          <td class="paramtype">SeguroRepository&#160;</td>
+          <td class="paramname"><em>segurorepo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ClienteRepository&#160;</td>
+          <td class="paramname"><em>clienterepo</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a id="afd0e1c3766f6ca565284863224fbe7ce" name="afd0e1c3766f6ca565284863224fbe7ce"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afd0e1c3766f6ca565284863224fbe7ce">&#9670;&#160;</a></span>contarClientesPorSeguro()</h2>
 
@@ -361,6 +396,24 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a45c32294548b4286a6dec72e0d7443b7" name="a45c32294548b4286a6dec72e0d7443b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45c32294548b4286a6dec72e0d7443b7">&#9670;&#160;</a></span>obtenerSegurosPorCliente()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">List&lt; Seguro &gt; com.seguros.Service.SeguroService.obtenerSegurosPorCliente </td>
+          <td>(</td>
+          <td class="paramtype">Long&#160;</td>
+          <td class="paramname"><em>clienteId</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a0abb4836fe075a7cde07a5b7f3f160a9" name="a0abb4836fe075a7cde07a5b7f3f160a9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0abb4836fe075a7cde07a5b7f3f160a9">&#9670;&#160;</a></span>obtenerSegurosPorTipo()</h2>
 
@@ -471,7 +524,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Asocia un seguro a un cliente.</p>
+<p>Repositorio para acceder a los clientes. Asocia un seguro a un cliente.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">seguroId</td><td>ID del seguro. </td></tr>
@@ -484,14 +537,28 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a981ea6b790800e1b404ba233fbb88a34" name="a981ea6b790800e1b404ba233fbb88a34"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a981ea6b790800e1b404ba233fbb88a34">&#9670;&#160;</a></span>segurorepo</h2>
+<a id="a1d3b311076e42f8e4b841f7328a9ae92" name="a1d3b311076e42f8e4b841f7328a9ae92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d3b311076e42f8e4b841f7328a9ae92">&#9670;&#160;</a></span>clienterepo</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">SeguroRepository com.seguros.Service.SeguroService.segurorepo</td>
+          <td class="memname">final ClienteRepository com.seguros.Service.SeguroService.clienterepo</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a07e382ed1b6aef55d0e1fcae514254ab" name="a07e382ed1b6aef55d0e1fcae514254ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07e382ed1b6aef55d0e1fcae514254ab">&#9670;&#160;</a></span>segurorepo</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">final SeguroRepository com.seguros.Service.SeguroService.segurorepo</td>
         </tr>
       </table>
 </div><div class="memdoc">

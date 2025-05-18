@@ -20,6 +20,7 @@ var hierarchy =
     [ "com.seguros.controller.FacturaController", "classcom_1_1seguros_1_1controller_1_1FacturaController.html", null ],
     [ "com.seguros.client.FacturaControllerClient", "classcom_1_1seguros_1_1client_1_1FacturaControllerClient.html", null ],
     [ "com.seguros.controller.FacturaControllerTest", "classcom_1_1seguros_1_1controller_1_1FacturaControllerTest.html", null ],
+    [ "com.seguros.controller.FacturaRestController", "classcom_1_1seguros_1_1controller_1_1FacturaRestController.html", null ],
     [ "com.seguros.Service.FacturaService", "classcom_1_1seguros_1_1Service_1_1FacturaService.html", null ],
     [ "com.seguros.Service.FacturaServiceTest", "classcom_1_1seguros_1_1Service_1_1FacturaServiceTest.html", null ],
     [ "com.seguros.model.FacturaTest", "classcom_1_1seguros_1_1model_1_1FacturaTest.html", null ],
