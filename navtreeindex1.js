@@ -1,5 +1,9 @@
 var NAVTREEINDEX1 =
 {
+"classcom_1_1seguros_1_1model_1_1Administrador.html#a48a3f9de580f7adb82e9489dc39e55cc":[1,0,0,0,2,0,5],
+"classcom_1_1seguros_1_1model_1_1Administrador.html#a4955a31551fa62653547a97293608a30":[1,0,0,0,2,0,6],
+"classcom_1_1seguros_1_1model_1_1Administrador.html#a4e16186bc3cda4e0ce7c0fef9cf11fe7":[1,0,0,0,2,0,2],
+"classcom_1_1seguros_1_1model_1_1Administrador.html#a5c4c107b4b2bab32dc895765df131e89":[1,0,0,0,2,0,4],
 "classcom_1_1seguros_1_1model_1_1Administrador.html#a672a030ad7dfe895cc2e9590868e80d2":[1,0,0,0,2,0,3],
 "classcom_1_1seguros_1_1model_1_1Administrador.html#aac83c431d20d0336515cd519e4aa023e":[1,0,0,0,2,0,1],
 "classcom_1_1seguros_1_1model_1_1Administrador.html#ac4b50c0e15eb0b51a2b3ab1c3d7985eb":[1,0,0,0,2,0,8],
@@ -167,8 +171,8 @@ var NAVTREEINDEX1 =
 "enumcom_1_1seguros_1_1model_1_1TipoSeguro.html#a82b729b5ccae3f2fc179e9963dd5a1c0":[1,0,0,0,2,16,0],
 "enumcom_1_1seguros_1_1model_1_1TipoSeguro.html#a879a237e9b5e99abd2e3fd00f76f985d":[1,0,0,0,2,16,2],
 "files.html":[2,0],
-"functions.html":[1,3,0],
 "functions.html":[1,3,0,0],
+"functions.html":[1,3,0],
 "functions_c.html":[1,3,0,1],
 "functions_d.html":[1,3,0,2],
 "functions_e.html":[1,3,0,3],

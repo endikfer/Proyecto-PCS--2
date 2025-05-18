@@ -47,7 +47,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "AdminControllerPerfTest_8java.html",
-"classcom_1_1seguros_1_1model_1_1Administrador.html#a672a030ad7dfe895cc2e9590868e80d2"
+"classcom_1_1seguros_1_1model_1_1Administrador.html#a48a3f9de580f7adb82e9489dc39e55cc"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
