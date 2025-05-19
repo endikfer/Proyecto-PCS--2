@@ -45,67 +45,46 @@ public class SeguroVidaVentana {
     }
 
     private void contratarSeguro() {
-        String edadTexto = txtEdad.getText().trim();
-        String beneficiarios = txtBeneficiarios.getText().trim();
+    String edadTexto = txtEdad.getText().trim();
+    String beneficiarios = txtBeneficiarios.getText().trim();
 
-        if (edadTexto.isEmpty() || beneficiarios.isEmpty()) {
-            JOptionPane.showMessageDialog(frame,
-                    "Todos los campos son obligatorios.",
-                    "Campos incompletos",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        try {
-            int edad = Integer.parseInt(edadTexto);
-            if (edad <= 0) {
-                throw new NumberFormatException("La edad debe ser un número positivo");
-            }
-
-            // Aquí debes obtener el clienteId real según tu lógica de aplicación
-            Long clienteId = 1L; // Ejemplo, reemplaza por el id real del cliente
-            Long seguroId = seguro.getId(); // Suponiendo que Seguro tiene getId()
-
-            // Realizar la llamada al endpoint REST
-            String url = client.getBaseUrl() + "/guardarVida"
-                    + "?clienteId=" + clienteId
-                    + "&seguroId=" + seguroId
-                    + "&edad=" + edad
-                    + "&beneficiarios=" + beneficiarios;
-
-            java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder()
-                    .uri(java.net.URI.create(url))
-                    .POST(java.net.http.HttpRequest.BodyPublishers.noBody())
-                    .build();
-
-            java.net.http.HttpResponse<String> response = client.getHttpClient()
-                    .send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200) {
-                JOptionPane.showMessageDialog(frame,
-                        "Seguro de vida contratado exitosamente!\n" +
-                                "Seguro: " + seguro.getNombre() + "\n" +
-                                "Edad: " + edad + "\n" +
-                                "Beneficiarios: " + beneficiarios);
-                frame.dispose();
-            } else {
-                JOptionPane.showMessageDialog(frame,
-                        "Error al contratar el seguro: " + response.body(),
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(frame,
-                    "La edad debe ser un número válido.",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(frame,
-                    "Error al contratar el seguro: " + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-        }
+    if (edadTexto.isEmpty() || beneficiarios.isEmpty()) {
+        JOptionPane.showMessageDialog(frame,
+                "Todos los campos son obligatorios.",
+                "Campos incompletos",
+                JOptionPane.WARNING_MESSAGE);
+        return;
     }
+
+    try {
+        int edad = Integer.parseInt(edadTexto);
+        if (edad <= 0) {
+            throw new NumberFormatException("La edad debe ser un número positivo");
+        }
+
+        Long clienteId = 1L; // ⚠️ TODO: Obtener dinámicamente si es necesario
+        Long seguroId = seguro.getId();
+
+        String resultado = client.contratarSeguroVida(clienteId, seguroId, edad, beneficiarios);
+
+        JOptionPane.showMessageDialog(frame,
+                "Seguro contratado exitosamente:\n" + resultado,
+                "Éxito",
+                JOptionPane.INFORMATION_MESSAGE);
+        frame.dispose();
+
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(frame,
+                "La edad debe ser un número válido.",
+                "Error de formato",
+                JOptionPane.ERROR_MESSAGE);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(frame,
+                "Error al contratar el seguro: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+    }
+}
 
     public void mostrar() {
         frame.setVisible(true);

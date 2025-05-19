@@ -193,42 +193,29 @@ public class SeguroControllerClient {
     @Autowired
 private RestTemplate restTemplate;
 
-@PostMapping("/guardarVida")
-public ResponseEntity<String> contratarSeguroVida(
-        @RequestParam Long clienteId,
-        @RequestParam Long seguroId,
-        @RequestParam int edad,
-        @RequestParam String beneficiarios) {
+public String contratarSeguroVida(Long clienteId, Long seguroId, int edad, String beneficiarios) {
     try {
-        if (edad <= 0 || beneficiarios == null || beneficiarios.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("Edad y beneficiarios son obligatorios y válidos.");
+        String url = BASE_URL + "/api/seguros/guardarVida";
+
+        String formParams = String.format("clienteId=%d&seguroId=%d&edad=%d&beneficiarios=%s",
+                clienteId, seguroId, edad, java.net.URLEncoder.encode(beneficiarios, java.nio.charset.StandardCharsets.UTF_8));
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .POST(HttpRequest.BodyPublishers.ofString(formParams))
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200 || response.statusCode() == 201) {
+            return response.body(); // OK
+        } else {
+            throw new RuntimeException("Error al contratar seguro. Código: " + response.statusCode());
         }
 
-        String url = "http://localhost:8080/api/seguros/guardarVida";
-
-
-        // Construir los parámetros
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("clienteId", clienteId.toString());
-        params.add("seguroId", seguroId.toString());
-        params.add("edadAsegurado", String.valueOf(edad));
-        params.add("beneficiarios", beneficiarios);
-
-        // Encabezados de la petición
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-        // Cuerpo de la solicitud
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
-
-        // Realizar la solicitud POST
-        ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
-
-        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
-
-    } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Error al contratar el seguro de vida: " + e.getMessage());
+    } catch (IOException | InterruptedException e) {
+        throw new RuntimeException("Error al conectar con el servidor para contratar seguro.", e);
     }
 }
 
