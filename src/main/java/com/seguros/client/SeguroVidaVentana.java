@@ -62,8 +62,6 @@ public class SeguroVidaVentana {
                 throw new NumberFormatException("La edad debe ser un número positivo");
             }
 
-            // Llamada al SeguroControllerClient
-            SeguroControllerClient client = new SeguroControllerClient("localhost", "8080");
             // Aquí debes obtener el clienteId real según tu lógica de aplicación
             Long clienteId = 1L; // Ejemplo, reemplaza por el id real del cliente
             Long seguroId = seguro.getId(); // Suponiendo que Seguro tiene getId()
@@ -72,7 +70,7 @@ public class SeguroVidaVentana {
             String url = client.getBaseUrl() + "/guardarVida"
                     + "?clienteId=" + clienteId
                     + "&seguroId=" + seguroId
-                    + "&edad=" + edad
+                    + "&edadAsegurado=" + edad
                     + "&beneficiarios=" + beneficiarios;
 
             java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder()
