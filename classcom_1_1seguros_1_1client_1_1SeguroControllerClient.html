@@ -126,6 +126,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab8c66114fad508437c9f4ef602daf2b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae66e8d9d086fae383cc10a26ccc77cb8" id="r_ae66e8d9d086fae383cc10a26ccc77cb8"><td class="memItemLeft" align="right" valign="top">ResponseEntity&lt; String &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1client_1_1SeguroControllerClient.html#ae66e8d9d086fae383cc10a26ccc77cb8">enviarDuda</a> (@RequestBody Map&lt; String, String &gt; datos)</td></tr>
 <tr class="separator:ae66e8d9d086fae383cc10a26ccc77cb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbcbca2a949024460df5085bd4cf2bae" id="r_afbcbca2a949024460df5085bd4cf2bae"><td class="memItemLeft" align="right" valign="top">ResponseEntity&lt; String &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1client_1_1SeguroControllerClient.html#afbcbca2a949024460df5085bd4cf2bae">contratarSeguroVida</a> ( @RequestParam Long clienteId, @RequestParam Long seguroId, @RequestParam int edad, @RequestParam String beneficiarios)</td></tr>
+<tr class="separator:afbcbca2a949024460df5085bd4cf2bae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abdfc8d9d7e1582916b6d6cfd9ccecf29" id="r_abdfc8d9d7e1582916b6d6cfd9ccecf29"><td class="memItemLeft" align="right" valign="top">ResponseEntity&lt; String &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1client_1_1SeguroControllerClient.html#abdfc8d9d7e1582916b6d6cfd9ccecf29">contratarSeguroCoche</a> ( @RequestParam Long clienteId, @RequestParam Long seguroId, @RequestParam String matricula, @RequestParam String modelo, @RequestParam String marca)</td></tr>
+<tr class="separator:abdfc8d9d7e1582916b6d6cfd9ccecf29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6d81d576d9d10037c70d5aa0ae21619" id="r_aa6d81d576d9d10037c70d5aa0ae21619"><td class="memItemLeft" align="right" valign="top">ResponseEntity&lt; String &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1client_1_1SeguroControllerClient.html#aa6d81d576d9d10037c70d5aa0ae21619">contratarSeguroCasa</a> ( @RequestParam Long clienteId, @RequestParam Long seguroId, @RequestParam String direccion, @RequestParam double valorInmueble, @RequestParam String tipoVivienda)</td></tr>
+<tr class="separator:aa6d81d576d9d10037c70d5aa0ae21619"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="acad2b0c194315c7f05e0c55122f8e46b" name="acad2b0c194315c7f05e0c55122f8e46b"></a>
@@ -191,6 +197,138 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="aa6d81d576d9d10037c70d5aa0ae21619" name="aa6d81d576d9d10037c70d5aa0ae21619"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6d81d576d9d10037c70d5aa0ae21619">&#9670;&#160;</a></span>contratarSeguroCasa()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ResponseEntity&lt; String &gt; com.seguros.client.SeguroControllerClient.contratarSeguroCasa </td>
+          <td>(</td>
+          <td class="paramtype">@RequestParam Long&#160;</td>
+          <td class="paramname"><em>clienteId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">@RequestParam Long&#160;</td>
+          <td class="paramname"><em>seguroId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">@RequestParam String&#160;</td>
+          <td class="paramname"><em>direccion</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">@RequestParam double&#160;</td>
+          <td class="paramname"><em>valorInmueble</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">@RequestParam String&#160;</td>
+          <td class="paramname"><em>tipoVivienda</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abdfc8d9d7e1582916b6d6cfd9ccecf29" name="abdfc8d9d7e1582916b6d6cfd9ccecf29"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abdfc8d9d7e1582916b6d6cfd9ccecf29">&#9670;&#160;</a></span>contratarSeguroCoche()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ResponseEntity&lt; String &gt; com.seguros.client.SeguroControllerClient.contratarSeguroCoche </td>
+          <td>(</td>
+          <td class="paramtype">@RequestParam Long&#160;</td>
+          <td class="paramname"><em>clienteId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">@RequestParam Long&#160;</td>
+          <td class="paramname"><em>seguroId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">@RequestParam String&#160;</td>
+          <td class="paramname"><em>matricula</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">@RequestParam String&#160;</td>
+          <td class="paramname"><em>modelo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">@RequestParam String&#160;</td>
+          <td class="paramname"><em>marca</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afbcbca2a949024460df5085bd4cf2bae" name="afbcbca2a949024460df5085bd4cf2bae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbcbca2a949024460df5085bd4cf2bae">&#9670;&#160;</a></span>contratarSeguroVida()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ResponseEntity&lt; String &gt; com.seguros.client.SeguroControllerClient.contratarSeguroVida </td>
+          <td>(</td>
+          <td class="paramtype">@RequestParam Long&#160;</td>
+          <td class="paramname"><em>clienteId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">@RequestParam Long&#160;</td>
+          <td class="paramname"><em>seguroId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">@RequestParam int&#160;</td>
+          <td class="paramname"><em>edad</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">@RequestParam String&#160;</td>
+          <td class="paramname"><em>beneficiarios</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ae66e8d9d086fae383cc10a26ccc77cb8" name="ae66e8d9d086fae383cc10a26ccc77cb8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae66e8d9d086fae383cc10a26ccc77cb8">&#9670;&#160;</a></span>enviarDuda() <span class="overload">[1/2]</span></h2>
 

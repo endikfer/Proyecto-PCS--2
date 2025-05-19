@@ -127,6 +127,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a14c4b592495b510c1643cac418f73f68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6676cb179bd023dd6313b1258a9c142e" id="r_a6676cb179bd023dd6313b1258a9c142e"><td class="memItemLeft" align="right" valign="top">ResponseEntity&lt; List&lt; ClientesPorSeguro &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1controller_1_1SeguroController.html#a6676cb179bd023dd6313b1258a9c142e">cantidadClientesPorSeguro</a> ()</td></tr>
 <tr class="separator:a6676cb179bd023dd6313b1258a9c142e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e7f0964675a6008ae66cfdd34f46907" id="r_a0e7f0964675a6008ae66cfdd34f46907"><td class="memItemLeft" align="right" valign="top">ResponseEntity&lt;?&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1controller_1_1SeguroController.html#a0e7f0964675a6008ae66cfdd34f46907">guardarSeguroCoche</a> ( @RequestParam(&quot;seguroId&quot;) Long seguroId, @RequestParam(&quot;matricula&quot;) String matricula, @RequestParam(&quot;modelo&quot;) String modelo, @RequestParam(&quot;marca&quot;) String marca)</td></tr>
+<tr class="separator:a0e7f0964675a6008ae66cfdd34f46907"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0e3e576c9c8662037927760c6772d0b" id="r_ae0e3e576c9c8662037927760c6772d0b"><td class="memItemLeft" align="right" valign="top">ResponseEntity&lt;?&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1controller_1_1SeguroController.html#ae0e3e576c9c8662037927760c6772d0b">guardarSeguroVida</a> ( @RequestParam(&quot;seguroId&quot;) Long seguroId, @RequestParam(&quot;edadAsegurado&quot;) Integer edadAsegurado, @RequestParam(&quot;beneficiarios&quot;) String beneficiarios)</td></tr>
+<tr class="separator:ae0e3e576c9c8662037927760c6772d0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25f37a69dc1a41cf09aa0444cf8b850f" id="r_a25f37a69dc1a41cf09aa0444cf8b850f"><td class="memItemLeft" align="right" valign="top">ResponseEntity&lt;?&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1controller_1_1SeguroController.html#a25f37a69dc1a41cf09aa0444cf8b850f">guardarSeguroCasa</a> ( @RequestParam(&quot;seguroId&quot;) Long seguroId, @RequestParam(&quot;direccion&quot;) String direccion, @RequestParam(&quot;valorInmueble&quot;) Double valorInmueble, @RequestParam(&quot;tipoVivienda&quot;) String tipoVivienda)</td></tr>
+<tr class="separator:a25f37a69dc1a41cf09aa0444cf8b850f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Controlador REST para la gestión de seguros. </p>
@@ -336,6 +342,120 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Lista de seguros asociados al cliente o NO_CONTENT si no hay resultados. </dd></dl>
+
+</div>
+</div>
+<a id="a25f37a69dc1a41cf09aa0444cf8b850f" name="a25f37a69dc1a41cf09aa0444cf8b850f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25f37a69dc1a41cf09aa0444cf8b850f">&#9670;&#160;</a></span>guardarSeguroCasa()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ResponseEntity&lt;?&gt; com.seguros.controller.SeguroController.guardarSeguroCasa </td>
+          <td>(</td>
+          <td class="paramtype">@RequestParam(&quot;seguroId&quot;) Long&#160;</td>
+          <td class="paramname"><em>seguroId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">@RequestParam(&quot;direccion&quot;) String&#160;</td>
+          <td class="paramname"><em>direccion</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">@RequestParam(&quot;valorInmueble&quot;) Double&#160;</td>
+          <td class="paramname"><em>valorInmueble</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">@RequestParam(&quot;tipoVivienda&quot;) String&#160;</td>
+          <td class="paramname"><em>tipoVivienda</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0e7f0964675a6008ae66cfdd34f46907" name="a0e7f0964675a6008ae66cfdd34f46907"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e7f0964675a6008ae66cfdd34f46907">&#9670;&#160;</a></span>guardarSeguroCoche()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ResponseEntity&lt;?&gt; com.seguros.controller.SeguroController.guardarSeguroCoche </td>
+          <td>(</td>
+          <td class="paramtype">@RequestParam(&quot;seguroId&quot;) Long&#160;</td>
+          <td class="paramname"><em>seguroId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">@RequestParam(&quot;matricula&quot;) String&#160;</td>
+          <td class="paramname"><em>matricula</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">@RequestParam(&quot;modelo&quot;) String&#160;</td>
+          <td class="paramname"><em>modelo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">@RequestParam(&quot;marca&quot;) String&#160;</td>
+          <td class="paramname"><em>marca</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae0e3e576c9c8662037927760c6772d0b" name="ae0e3e576c9c8662037927760c6772d0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0e3e576c9c8662037927760c6772d0b">&#9670;&#160;</a></span>guardarSeguroVida()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ResponseEntity&lt;?&gt; com.seguros.controller.SeguroController.guardarSeguroVida </td>
+          <td>(</td>
+          <td class="paramtype">@RequestParam(&quot;seguroId&quot;) Long&#160;</td>
+          <td class="paramname"><em>seguroId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">@RequestParam(&quot;edadAsegurado&quot;) Integer&#160;</td>
+          <td class="paramname"><em>edadAsegurado</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">@RequestParam(&quot;beneficiarios&quot;) String&#160;</td>
+          <td class="paramname"><em>beneficiarios</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
