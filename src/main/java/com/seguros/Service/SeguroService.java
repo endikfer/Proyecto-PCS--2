@@ -9,9 +9,15 @@ import org.springframework.stereotype.Service;
 
 import com.seguros.model.Cliente;
 import com.seguros.model.Seguro;
+import com.seguros.model.SeguroCasa;
+import com.seguros.model.SeguroCoche;
+import com.seguros.model.SeguroVida;
 import com.seguros.model.TipoSeguro;
 import com.seguros.repository.ClienteRepository;
+import com.seguros.repository.SeguroCasaRepository;
+import com.seguros.repository.SeguroCocheRepository;
 import com.seguros.repository.SeguroRepository;
+import com.seguros.repository.SeguroVidaRepository;
 
 /**
  * @class SeguroService
@@ -27,10 +33,16 @@ public class SeguroService {
     @Autowired
     public final SeguroRepository segurorepo;
     public final ClienteRepository clienterepo;
+    public final SeguroCocheRepository seguroCocheRepository;
+    public final SeguroVidaRepository seguroVidaRepository;
+    public final SeguroCasaRepository seguroCasaRepository;
     
-    public SeguroService(SeguroRepository segurorepo, ClienteRepository clienterepo) {
-        this.segurorepo = segurorepo;      // ← se inyecta aquí
+    public SeguroService(SeguroRepository segurorepo, ClienteRepository clienterepo, SeguroCocheRepository seguroCocheRepository,SeguroCasaRepository seguroCasaRepository, SeguroVidaRepository seguroVidaRepository) {
+        this.segurorepo = segurorepo;
         this.clienterepo = clienterepo;
+        this.seguroCocheRepository = seguroCocheRepository;
+        this.seguroCasaRepository = seguroCasaRepository;
+        this.seguroVidaRepository = seguroVidaRepository;
     }
 
     /**
@@ -238,4 +250,39 @@ public class SeguroService {
         return segurorepo.findByClienteId(clienteId);
     }
 
+    /**
+     * Guarda un SeguroCoche en la base de datos.
+     * 
+     * @param seguro    El seguro asociado.
+     * @param matricula Matrícula del coche.
+     * @param modelo    Modelo del coche.
+     * @param marca     Marca del coche.
+     * @return El SeguroCoche guardado.
+     */
+    public SeguroCoche guardarSeguroCoche(Seguro seguro, String matricula, String modelo, String marca) {
+        SeguroCoche seguroCoche = new SeguroCoche(seguro, matricula, modelo, marca);
+        return seguroCocheRepository.save(seguroCoche);
+    }
+
+    public Seguro obtenerSeguroPorId(Long id) {
+        return segurorepo.findById(id).orElse(null);
+    }
+
+    /**
+     * Guarda un SeguroVida en la base de datos.
+     *
+     * @param seguro         El seguro asociado.
+     * @param edadAsegurado  Edad del asegurado.
+     * @param beneficiarios  Beneficiarios.
+     * @return El SeguroVida guardado.
+     */
+    public SeguroVida guardarSeguroVida(Seguro seguro, Integer edadAsegurado, String beneficiarios) {
+        SeguroVida seguroVida = new SeguroVida(seguro, edadAsegurado, beneficiarios);
+        return seguroVidaRepository.save(seguroVida);
+    }
+
+    public SeguroCasa guardarSeguroCasa(Seguro seguro, String direccion, Double valorInmueble, String tipoVivienda) {
+        SeguroCasa seguroCasa = new SeguroCasa(seguro, direccion, valorInmueble, tipoVivienda);
+        return seguroCasaRepository.save(seguroCasa);
+    }
 }

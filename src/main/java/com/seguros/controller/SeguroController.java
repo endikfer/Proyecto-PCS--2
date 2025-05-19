@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.seguros.Service.ClientesPorSeguro;
 import com.seguros.Service.SeguroService;
 import com.seguros.model.Seguro;
+import com.seguros.model.SeguroCasa;
+import com.seguros.model.SeguroCoche;
+import com.seguros.model.SeguroVida;
 
 /**
  * @class SeguroController
@@ -264,4 +267,81 @@ public class SeguroController {
         return ResponseEntity.ok(stats);
     }
 
+    @PostMapping("/guardarCoche")
+    public ResponseEntity<?> guardarSeguroCoche(
+            @RequestParam("seguroId") Long seguroId,
+            @RequestParam("matricula") String matricula,
+            @RequestParam("modelo") String modelo,
+            @RequestParam("marca") String marca) {
+        try {
+            // Validaciones básicas
+            if (seguroId == null || seguroId <= 0 || matricula == null || matricula.isBlank()
+                    || modelo == null || modelo.isBlank() || marca == null || marca.isBlank()) {
+                return ResponseEntity.badRequest().body("Todos los campos son obligatorios.");
+            }
+
+            Seguro seguro = seguroService.obtenerSeguroPorId(seguroId);
+            if (seguro == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Seguro no encontrado.");
+            }
+
+            SeguroCoche seguroCoche = seguroService.guardarSeguroCoche(seguro, matricula, modelo, marca);
+            return ResponseEntity.ok(seguroCoche);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al guardar el seguro de coche: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/guardarVida")
+    public ResponseEntity<?> guardarSeguroVida(
+            @RequestParam("seguroId") Long seguroId,
+            @RequestParam("edadAsegurado") Integer edadAsegurado,
+            @RequestParam("beneficiarios") String beneficiarios) {
+        try {
+            if (seguroId == null || seguroId <= 0 ||
+                edadAsegurado == null || edadAsegurado <= 0 ||
+                beneficiarios == null || beneficiarios.isBlank()) {
+                return ResponseEntity.badRequest().body("Todos los campos son obligatorios.");
+            }
+
+            Seguro seguro = seguroService.obtenerSeguroPorId(seguroId);
+            if (seguro == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Seguro no encontrado.");
+            }
+
+            SeguroVida seguroVida = seguroService.guardarSeguroVida(seguro, edadAsegurado, beneficiarios);
+            return ResponseEntity.ok(seguroVida);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al guardar el seguro de vida: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/guardarCasa")
+    public ResponseEntity<?> guardarSeguroCasa(
+            @RequestParam("seguroId") Long seguroId,
+            @RequestParam("direccion") String direccion,
+            @RequestParam("valorInmueble") Double valorInmueble,
+            @RequestParam("tipoVivienda") String tipoVivienda) {
+        try {
+            if (seguroId == null || seguroId <= 0 ||
+                direccion == null || direccion.isBlank() ||
+                valorInmueble == null || valorInmueble <= 0 ||
+                tipoVivienda == null || tipoVivienda.isBlank()) {
+                return ResponseEntity.badRequest().body("Todos los campos son obligatorios.");
+            }
+
+            Seguro seguro = seguroService.obtenerSeguroPorId(seguroId);
+            if (seguro == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Seguro no encontrado.");
+            }
+
+            SeguroCasa seguroCasa = seguroService.guardarSeguroCasa(seguro, direccion, valorInmueble, tipoVivienda);
+            return ResponseEntity.ok(seguroCasa);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al guardar el seguro de casa: " + e.getMessage());
+        }
+    }
 }
