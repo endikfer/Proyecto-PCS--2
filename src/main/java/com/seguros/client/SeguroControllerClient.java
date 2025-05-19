@@ -209,6 +209,7 @@ public ResponseEntity<String> contratarSeguroVida(
 
         // Construir los parámetros
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("clienteId", clienteId.toString());
         params.add("seguroId", seguroId.toString());
         params.add("edadAsegurado", String.valueOf(edad));
         params.add("beneficiarios", beneficiarios);
