@@ -10,9 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -179,5 +181,74 @@ public class SeguroControllerClient {
         return ResponseEntity.ok("Duda recibida correctamente.");
     
     }
+
+    @PostMapping("/guardarVida")
+    public ResponseEntity<String> contratarSeguroVida(
+            @RequestParam Long clienteId,
+            @RequestParam Long seguroId,
+            @RequestParam int edad,
+            @RequestParam String beneficiarios) {
+        try {
+            if (edad <= 0 || beneficiarios == null || beneficiarios.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("Edad y beneficiarios son obligatorios y válidos.");
+            }
+
+            // Aquí iría la lógica para guardar el seguro de vida en la base de datos.
+            // Por ejemplo: seguroService.contratarSeguroVida(clienteId, edad, beneficiarios);
+
+            return ResponseEntity.ok("Seguro de vida contratado exitosamente para el cliente " + clienteId);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al contratar el seguro de vida: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/guardarCoche")
+public ResponseEntity<String> contratarSeguroCoche(
+        @RequestParam Long clienteId,
+        @RequestParam Long seguroId,
+        @RequestParam String matricula,
+        @RequestParam String modelo,
+        @RequestParam String marca) {
+    try {
+        if (matricula == null || matricula.trim().isEmpty() ||
+            modelo == null || modelo.trim().isEmpty() ||
+            marca == null || marca.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Matrícula, modelo y marca son obligatorios y válidos.");
+        }
+
+        // Aquí iría la lógica para guardar el seguro de coche en la base de datos.
+        // Por ejemplo: seguroService.contratarSeguroCoche(clienteId, seguroId, matricula, modelo, marca);
+
+        return ResponseEntity.ok("Seguro de coche contratado exitosamente para el cliente " + clienteId);
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error al contratar el seguro de coche: " + e.getMessage());
+    }
+}
+
+@PostMapping("/guardarCasa")
+public ResponseEntity<String> contratarSeguroCasa(
+        @RequestParam Long clienteId,
+        @RequestParam Long seguroId,
+        @RequestParam String direccion,
+        @RequestParam double valorInmueble,
+        @RequestParam String tipoVivienda) {
+    try {
+        if (direccion == null || direccion.trim().isEmpty() ||
+            tipoVivienda == null || tipoVivienda.trim().isEmpty() ||
+            valorInmueble <= 0) {
+            return ResponseEntity.badRequest().body("Dirección, tipo de vivienda y valor del inmueble válidos son obligatorios.");
+        }
+
+        // Aquí iría la lógica para guardar el seguro de casa en la base de datos.
+        // Por ejemplo: seguroService.contratarSeguroCasa(clienteId, seguroId, direccion, valorInmueble, tipoVivienda);
+
+        return ResponseEntity.ok("Seguro de casa contratado exitosamente para el cliente " + clienteId);
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error al contratar el seguro de casa: " + e.getMessage());
+    }
+}
 
 }

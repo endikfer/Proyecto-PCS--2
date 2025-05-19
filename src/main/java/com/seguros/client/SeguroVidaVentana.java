@@ -9,6 +9,7 @@ public class SeguroVidaVentana {
     private JTextField txtEdad;
     private JTextField txtBeneficiarios;
     private Seguro seguro;
+    SeguroControllerClient client = new SeguroControllerClient("localhost", "8080");
 
     public SeguroVidaVentana(Seguro seguro) {
         this.seguro = seguro;
@@ -61,14 +62,40 @@ public class SeguroVidaVentana {
                 throw new NumberFormatException("La edad debe ser un número positivo");
             }
 
-            
+            // Llamada al SeguroControllerClient
+            SeguroControllerClient client = new SeguroControllerClient("localhost", "8080");
+            // Aquí debes obtener el clienteId real según tu lógica de aplicación
+            Long clienteId = 1L; // Ejemplo, reemplaza por el id real del cliente
+            Long seguroId = seguro.getId(); // Suponiendo que Seguro tiene getId()
 
-            JOptionPane.showMessageDialog(frame,
-                    "Seguro de vida contratado exitosamente!\n" +
-                            "Seguro: " + seguro.getNombre() + "\n" +
-                            "Edad: " + edad + "\n" +
-                            "Beneficiarios: " + beneficiarios);
-            frame.dispose();
+            // Realizar la llamada al endpoint REST
+            String url = client.getBaseUrl() + "/guardarVida"
+                    + "?clienteId=" + clienteId
+                    + "&seguroId=" + seguroId
+                    + "&edad=" + edad
+                    + "&beneficiarios=" + beneficiarios;
+
+            java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder()
+                    .uri(java.net.URI.create(url))
+                    .POST(java.net.http.HttpRequest.BodyPublishers.noBody())
+                    .build();
+
+            java.net.http.HttpResponse<String> response = client.getHttpClient()
+                    .send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                JOptionPane.showMessageDialog(frame,
+                        "Seguro de vida contratado exitosamente!\n" +
+                                "Seguro: " + seguro.getNombre() + "\n" +
+                                "Edad: " + edad + "\n" +
+                                "Beneficiarios: " + beneficiarios);
+                frame.dispose();
+            } else {
+                JOptionPane.showMessageDialog(frame,
+                        "Error al contratar el seguro: " + response.body(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(frame,
                     "La edad debe ser un número válido.",
