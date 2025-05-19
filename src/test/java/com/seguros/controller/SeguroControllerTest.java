@@ -2,6 +2,7 @@ package com.seguros.controller;
 
 import com.seguros.Service.ClientesPorSeguro;
 import com.seguros.Service.SeguroService;
+import com.seguros.model.Cliente;
 import com.seguros.model.Seguro;
 import com.seguros.model.SeguroCasa;
 import com.seguros.model.SeguroCoche;
@@ -684,12 +685,13 @@ class SeguroControllerTest {
     @Test
     void testGuardarSeguroVida_Exitoso() {
         Seguro seguro = new Seguro("Vida", "Cobertura vida", TipoSeguro.VIDA, 2000.0);
-        SeguroVida vida = new SeguroVida(seguro, 35, "Juan, Ana");
-
+        Cliente cliente = new Cliente(); // Crea un cliente de prueba
         when(seguroService.obtenerSeguroPorId(2L)).thenReturn(seguro);
-        when(seguroService.guardarSeguroVida(any(), anyInt(), anyString())).thenReturn(vida);
+        when(seguroService.clienterepo.findById(1L)).thenReturn(java.util.Optional.of(cliente));
+        SeguroVida vida = new SeguroVida(seguro, cliente, 35, "Juan, Ana");
+        when(seguroService.guardarSeguroVida(any(), any(), anyInt(), anyString())).thenReturn(vida);
 
-        ResponseEntity<?> response = seguroController.guardarSeguroVida(2L, 35, "Juan, Ana");
+        ResponseEntity<?> response = seguroController.guardarSeguroVida(1L, 2L, 35, "Juan, Ana");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(vida, response.getBody());
@@ -699,50 +701,55 @@ class SeguroControllerTest {
     void testGuardarSeguroVida_SeguroNoEncontrado() {
         when(seguroService.obtenerSeguroPorId(99L)).thenReturn(null);
 
-        ResponseEntity<?> response = seguroController.guardarSeguroVida(99L, 35, "Juan, Ana");
+        ResponseEntity<?> response = seguroController.guardarSeguroVida(1L, 99L, 35, "Juan, Ana");
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertEquals("Seguro no encontrado.", response.getBody());
     }
 
     @Test
+    void testGuardarSeguroVida_ClienteNoEncontrado() {
+        Seguro seguro = new Seguro("Vida", "Cobertura vida", TipoSeguro.VIDA, 2000.0);
+        when(seguroService.obtenerSeguroPorId(2L)).thenReturn(seguro);
+        when(seguroService.clienterepo.findById(1L)).thenReturn(java.util.Optional.empty());
+
+        ResponseEntity<?> response = seguroController.guardarSeguroVida(1L, 2L, 35, "Juan, Ana");
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals("Cliente no encontrado.", response.getBody());
+    }
+
+    @Test
     void testGuardarSeguroVida_SeguroIdNull() {
-        ResponseEntity<?> response = seguroController.guardarSeguroVida(null, 35, "Juan, Ana");
+        ResponseEntity<?> response = seguroController.guardarSeguroVida(1L, null, 35, "Juan, Ana");
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("Todos los campos son obligatorios.", response.getBody());
     }
 
     @Test
-    void testGuardarSeguroVida_SeguroIdMenorIgualCero() {
-        ResponseEntity<?> response = seguroController.guardarSeguroVida(0L, 35, "Juan, Ana");
+    void testGuardarSeguroVida_ClienteIdNull() {
+        ResponseEntity<?> response = seguroController.guardarSeguroVida(null, 2L, 35, "Juan, Ana");
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("Todos los campos son obligatorios.", response.getBody());
     }
 
     @Test
     void testGuardarSeguroVida_EdadAseguradoNull() {
-        ResponseEntity<?> response = seguroController.guardarSeguroVida(2L, null, "Juan, Ana");
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("Todos los campos son obligatorios.", response.getBody());
-    }
-
-    @Test
-    void testGuardarSeguroVida_EdadAseguradoMenorIgualCero() {
-        ResponseEntity<?> response = seguroController.guardarSeguroVida(2L, 0, "Juan, Ana");
+        ResponseEntity<?> response = seguroController.guardarSeguroVida(1L, 2L, null, "Juan, Ana");
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("Todos los campos son obligatorios.", response.getBody());
     }
 
     @Test
     void testGuardarSeguroVida_BeneficiariosNull() {
-        ResponseEntity<?> response = seguroController.guardarSeguroVida(2L, 35, null);
+        ResponseEntity<?> response = seguroController.guardarSeguroVida(1L, 2L, 35, null);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("Todos los campos son obligatorios.", response.getBody());
     }
 
     @Test
     void testGuardarSeguroVida_BeneficiariosBlank() {
-        ResponseEntity<?> response = seguroController.guardarSeguroVida(2L, 35, "   ");
+        ResponseEntity<?> response = seguroController.guardarSeguroVida(1L, 2L, 35, "   ");
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("Todos los campos son obligatorios.", response.getBody());
     }
@@ -750,11 +757,13 @@ class SeguroControllerTest {
     @Test
     void testGuardarSeguroVida_Exception() {
         Seguro seguro = new Seguro("Vida", "Cobertura vida", TipoSeguro.VIDA, 2000.0);
+        Cliente cliente = new Cliente();
         when(seguroService.obtenerSeguroPorId(2L)).thenReturn(seguro);
-        when(seguroService.guardarSeguroVida(any(), anyInt(), anyString()))
+        when(seguroService.clienterepo.findById(1L)).thenReturn(java.util.Optional.of(cliente));
+        when(seguroService.guardarSeguroVida(any(), any(), anyInt(), anyString()))
                 .thenThrow(new RuntimeException("DB error"));
 
-        ResponseEntity<?> response = seguroController.guardarSeguroVida(2L, 35, "Juan, Ana");
+        ResponseEntity<?> response = seguroController.guardarSeguroVida(1L, 2L, 35, "Juan, Ana");
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertEquals("Error al guardar el seguro de vida: DB error", response.getBody());

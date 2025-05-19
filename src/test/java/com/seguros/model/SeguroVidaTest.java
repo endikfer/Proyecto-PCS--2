@@ -17,9 +17,11 @@ public class SeguroVidaTest {
     @Test
     void constructorCompletoDebeInicializarCampos() {
         Seguro seguro = new Seguro("Vida Básico", "Cobertura total por fallecimiento", TipoSeguro.VIDA, 250.0);
-        SeguroVida vida = new SeguroVida(seguro, 35, "Familia directa");
+        Cliente cliente = new Cliente();
+        SeguroVida vida = new SeguroVida(seguro, cliente, 35, "Familia directa");
 
         assertEquals(seguro, vida.getSeguro());
+        assertEquals(cliente, vida.getCliente());
         assertEquals(35, vida.getEdadAsegurado());
         assertEquals("Familia directa", vida.getBeneficiarios());
     }
@@ -35,18 +37,25 @@ public class SeguroVidaTest {
         Seguro seguro = new Seguro("Vida Plus", "Cobertura ampliada", TipoSeguro.VIDA, 320.0);
         vida.setSeguro(seguro);
 
+        Cliente cliente = new Cliente();
+        cliente.setId(123L);
+        vida.setCliente(cliente);
+
         assertEquals(1010, vida.getPoliza());
         assertEquals(40, vida.getEdadAsegurado());
         assertEquals("Cónyuge e hijos", vida.getBeneficiarios());
         assertEquals(seguro, vida.getSeguro());
+        assertEquals(cliente, vida.getCliente());
     }
 
     @Test
     void toStringDebeIncluirDatosEsperados() {
         Seguro seguro = new Seguro("Vida Senior", "Protección avanzada", TipoSeguro.VIDA, 450.0);
         seguro.setId(9L); // Asegúrate de que Seguro tenga setId()
+        Cliente cliente = new Cliente();
+        cliente.setId(5L);
 
-        SeguroVida vida = new SeguroVida(seguro, 60, "Hijos");
+        SeguroVida vida = new SeguroVida(seguro, cliente, 60, "Hijos");
         vida.setPoliza(3030);
 
         String toString = vida.toString();
@@ -55,14 +64,16 @@ public class SeguroVidaTest {
         assertTrue(toString.contains("60"));
         assertTrue(toString.contains("Hijos"));
         assertTrue(toString.contains("9"));
+        assertTrue(toString.contains("5"));
     }
 
     @Test
-    void testToStringWithSeguroNull() {
-        SeguroVida vida = new SeguroVida(null, 35, "Juan, Ana");
+    void testToStringWithSeguroNullYClienteNull() {
+        SeguroVida vida = new SeguroVida(null, null, 35, "Juan, Ana");
         vida.setPoliza(1);
         String str = vida.toString();
         assertTrue(str.contains("seguro=null"));
+        assertTrue(str.contains("cliente=null"));
     }
 
     @Test

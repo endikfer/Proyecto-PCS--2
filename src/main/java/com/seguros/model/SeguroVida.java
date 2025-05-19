@@ -17,15 +17,20 @@ public class SeguroVida {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int poliza;
 
-    @ManyToOne
-    @JoinColumn(name = "seguro_id", nullable = false)
-    private Seguro seguro;
-
     @Column(nullable = false)
     private Integer edadAsegurado;
 
     @Column(nullable = false)
     private String beneficiarios;
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private Cliente cliente;
+
+    @ManyToOne
+    @JoinColumn(name = "seguro_id", nullable = false)
+    private Seguro seguro;
+    
 
     // Constructor vacío
     public SeguroVida() {
@@ -33,8 +38,9 @@ public class SeguroVida {
     }
 
     // Constructor completo
-    public SeguroVida(Seguro seguro, Integer edadAsegurado, String beneficiarios) {
+    public SeguroVida(Seguro seguro, Cliente cliente, Integer edadAsegurado, String beneficiarios) {
         this.seguro = seguro;
+        this.cliente = cliente;
         this.edadAsegurado = edadAsegurado;
         this.beneficiarios = beneficiarios;
     }
@@ -70,6 +76,15 @@ public class SeguroVida {
 
     public void setBeneficiarios(String beneficiarios) {
         this.beneficiarios = beneficiarios;
+    }
+
+    // Getter y Setter para cliente
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
     @Override

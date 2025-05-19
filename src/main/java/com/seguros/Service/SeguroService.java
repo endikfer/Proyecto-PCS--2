@@ -272,12 +272,13 @@ public class SeguroService {
      * Guarda un SeguroVida en la base de datos.
      *
      * @param seguro         El seguro asociado.
+     * @param cliente        El cliente asociado.
      * @param edadAsegurado  Edad del asegurado.
      * @param beneficiarios  Beneficiarios.
      * @return El SeguroVida guardado.
      */
-    public SeguroVida guardarSeguroVida(Seguro seguro, Integer edadAsegurado, String beneficiarios) {
-        SeguroVida seguroVida = new SeguroVida(seguro, edadAsegurado, beneficiarios);
+    public SeguroVida guardarSeguroVida(Seguro seguro, Cliente cliente, Integer edadAsegurado, String beneficiarios) {
+        SeguroVida seguroVida = new SeguroVida(seguro, cliente, edadAsegurado, beneficiarios);
         return seguroVidaRepository.save(seguroVida);
     }
 

@@ -494,16 +494,18 @@ public class SeguroServiceTest {
     @Test
     void testGuardarSeguroVida() {
         Seguro seguro = new Seguro("Vida", "Cobertura vida", TipoSeguro.VIDA, 2000.0);
-        SeguroVida seguroVida = new SeguroVida(seguro, 35, "Juan, Ana");
+        Cliente cliente = new Cliente();
+        SeguroVida seguroVida = new SeguroVida(seguro, cliente, 35, "Juan, Ana");
 
         when(seguroVidaRepository.save(any(SeguroVida.class))).thenReturn(seguroVida);
 
-        SeguroVida result = seguroService.guardarSeguroVida(seguro, 35, "Juan, Ana");
+        SeguroVida result = seguroService.guardarSeguroVida(seguro, cliente, 35, "Juan, Ana");
 
         assertNotNull(result);
         assertEquals(35, result.getEdadAsegurado());
         assertEquals("Juan, Ana", result.getBeneficiarios());
         assertEquals(seguro, result.getSeguro());
+        assertEquals(cliente, result.getCliente());
         verify(seguroVidaRepository, times(1)).save(any(SeguroVida.class));
     }
 

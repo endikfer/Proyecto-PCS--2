@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.seguros.Service.ClientesPorSeguro;
 import com.seguros.Service.SeguroService;
+import com.seguros.model.Cliente;
 import com.seguros.model.Seguro;
 import com.seguros.model.SeguroCasa;
 import com.seguros.model.SeguroCoche;
@@ -294,30 +295,38 @@ public class SeguroController {
     }
 
     @PostMapping("/guardarVida")
-    public ResponseEntity<?> guardarSeguroVida(
-            @RequestParam("seguroId") Long seguroId,
-            @RequestParam("edadAsegurado") Integer edadAsegurado,
-            @RequestParam("beneficiarios") String beneficiarios) {
-        try {
-            if (seguroId == null || seguroId <= 0 ||
-                edadAsegurado == null || edadAsegurado <= 0 ||
-                beneficiarios == null || beneficiarios.isBlank()) {
-                return ResponseEntity.badRequest().body("Todos los campos son obligatorios.");
-            }
-
-            System.out.println("Petición recibida para guardar seguro de vida con ID: " + seguroId);
-            Seguro seguro = seguroService.obtenerSeguroPorId(seguroId);
-            if (seguro == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Seguro no encontrado.");
-            }
-
-            SeguroVida seguroVida = seguroService.guardarSeguroVida(seguro, edadAsegurado, beneficiarios);
-            return ResponseEntity.ok(seguroVida);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al guardar el seguro de vida: " + e.getMessage());
+public ResponseEntity<?> guardarSeguroVida(
+        @RequestParam("clienteId") Long clienteId,
+        @RequestParam("seguroId") Long seguroId,
+        @RequestParam("edadAsegurado") Integer edadAsegurado,
+        @RequestParam("beneficiarios") String beneficiarios) {
+    try {
+        if (clienteId == null || clienteId <= 0 ||
+            seguroId == null || seguroId <= 0 ||
+            edadAsegurado == null || edadAsegurado <= 0 ||
+            beneficiarios == null || beneficiarios.isBlank()) {
+            return ResponseEntity.badRequest().body("Todos los campos son obligatorios.");
         }
+
+        System.out.println("Petición recibida para guardar seguro de vida con ID: " + seguroId);
+
+        Seguro seguro = seguroService.obtenerSeguroPorId(seguroId);
+        if (seguro == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Seguro no encontrado.");
+        }
+
+        Cliente cliente = seguroService.clienterepo.findById(clienteId).orElse(null);
+        if (cliente == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente no encontrado.");
+        }
+
+        SeguroVida seguroVida = seguroService.guardarSeguroVida(seguro, cliente, edadAsegurado, beneficiarios);
+        return ResponseEntity.ok(seguroVida);
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error al guardar el seguro de vida: " + e.getMessage());
     }
+}
 
     @PostMapping("/guardarCasa")
     public ResponseEntity<?> guardarSeguroCasa(
