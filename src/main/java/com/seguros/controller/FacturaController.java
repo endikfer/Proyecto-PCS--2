@@ -15,17 +15,37 @@ import com.seguros.model.Cliente;
 import com.seguros.model.Factura;
 import com.seguros.repository.ClienteRepository;
 
+/**
+ * @file FacturaController.java
+ * @brief Controlador REST para la gestión de facturas.
+ * 
+ * Este controlador expone endpoints para consultar facturas asociadas a clientes.
+ * 
+ * @author [Tu Nombre]
+ * @date 2025-05-19
+ */
 @RestController
 @RequestMapping("/api/facturas")
 public class FacturaController {
     private final FacturaService facturaService;
     private final ClienteRepository clienteRepository;
 
+    /**
+     * @brief Constructor de FacturaController.
+     * @param facturaService Servicio para la gestión de facturas.
+     * @param clienteRepository Repositorio para la gestión de clientes.
+     */
     public FacturaController(FacturaService facturaService, ClienteRepository clienteRepository) {
         this.facturaService = facturaService;
         this.clienteRepository = clienteRepository;
     }
 
+    /**
+     * @brief Obtiene las facturas asociadas a un cliente por su email.
+     * 
+     * @param gmail Email del cliente a buscar.
+     * @return ResponseEntity con la lista de facturas o un mensaje de error.
+     */
     @GetMapping("/cliente")
     public ResponseEntity<?> getFacturasByClienteEmail(@RequestParam String gmail) {
         try {

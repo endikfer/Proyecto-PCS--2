@@ -18,35 +18,61 @@ import com.seguros.model.Seguro;
 import com.seguros.repository.FacturaRepository;
 import com.seguros.repository.SeguroRepository;
 
-
-
+/**
+ * @file FacturaService.java
+ * @brief Servicio para la gestión de facturas.
+ * 
+ * Esta clase proporciona métodos para obtener facturas asociadas a clientes,
+ * generar nuevas facturas y crear archivos de detalle de factura.
+ * 
+ * @author [Tu Nombre]
+ * @date 2025-05-19
+ */
 @Service
 public class FacturaService {
+    /**
+     * Repositorio para operaciones CRUD sobre facturas.
+     */
     @Autowired
     private FacturaRepository facturaRepository;
+
+    /**
+     * Servicio para la gestión de seguros.
+     */
     private final SeguroService seguroService;
+
+    /**
+     * Repositorio para operaciones sobre seguros.
+     */
     private SeguroRepository segurorepo;
     
-    
+    /**
+     * Constructor de FacturaService.
+     * @param facturaRepository Repositorio de facturas.
+     * @param seguroService Servicio de seguros.
+     */
     public FacturaService(FacturaRepository facturaRepository,
             SeguroService seguroService) {
-		this.facturaRepository = facturaRepository;
-		this.seguroService    = seguroService;
-		}    
+        this.facturaRepository = facturaRepository;
+        this.seguroService    = seguroService;
+        }    
     
-    
-
-	public List<Factura> getFacturasByClienteId(Long clienteId) {
+    /**
+     * Obtiene la lista de facturas asociadas a un cliente.
+     * @param clienteId Identificador del cliente.
+     * @return Lista de facturas del cliente.
+     */
+    public List<Factura> getFacturasByClienteId(Long clienteId) {
         return facturaRepository.findByIdCliente(clienteId);
     }
     
     /* ---------- NUEVA LÓGICA ---------- */
     /**
-     * Genera una factura para el cliente especificado, la persiste
+     * @brief Genera una factura para el cliente especificado, la persiste
      * y crea un archivo .txt con el detalle.
      *
      * @param clienteId id del cliente
-     * @return Factura creada (el campo contenido guarda la ruta del archivo)
+     * @return Ruta absoluta del archivo de factura generado
      * @throws IOException si falla la escritura del fichero
      */
     public Path generarFacturaParaCliente(Long clienteId) throws IOException {
