@@ -109,6 +109,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2c02b1fe229bb94c7083fbff7e432b8e" id="r_a2c02b1fe229bb94c7083fbff7e432b8e"><td class="memItemLeft" align="right" valign="top">List&lt; Factura &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1Service_1_1FacturaService.html#a2c02b1fe229bb94c7083fbff7e432b8e">getFacturasByClienteId</a> (Long clienteId)</td></tr>
 <tr class="separator:a2c02b1fe229bb94c7083fbff7e432b8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a05aee3b89b180ba9bc0da47dcdeaadac" id="r_a05aee3b89b180ba9bc0da47dcdeaadac"><td class="memItemLeft" align="right" valign="top">Path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1Service_1_1FacturaService.html#a05aee3b89b180ba9bc0da47dcdeaadac">generarFacturaParaCliente</a> (Long clienteId)  throws IOException </td></tr>
+<tr class="memdesc:a05aee3b89b180ba9bc0da47dcdeaadac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Genera una factura para el cliente especificado, la persiste y crea un archivo .txt con el detalle.  <br /></td></tr>
 <tr class="separator:a05aee3b89b180ba9bc0da47dcdeaadac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
@@ -137,6 +138,13 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Constructor de FacturaService. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">facturaRepository</td><td>Repositorio de facturas. </td></tr>
+    <tr><td class="paramname">seguroService</td><td>Servicio de seguros. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -156,14 +164,15 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Genera una factura para el cliente especificado, la persiste y crea un archivo .txt con el detalle.</p>
+
+<p>Genera una factura para el cliente especificado, la persiste y crea un archivo .txt con el detalle. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">clienteId</td><td>id del cliente </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Factura creada (el campo contenido guarda la ruta del archivo) </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Ruta absoluta del archivo de factura generado </dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname">IOException</td><td>si falla la escritura del fichero </td></tr>
@@ -188,6 +197,13 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Obtiene la lista de facturas asociadas a un cliente. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clienteId</td><td>Identificador del cliente. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Lista de facturas del cliente. </dd></dl>
 
 </div>
 </div>
