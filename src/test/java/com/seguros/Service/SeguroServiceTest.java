@@ -523,4 +523,27 @@ public class SeguroServiceTest {
         assertEquals(seguro, result.getSeguro());
         verify(seguroCasaRepository, times(1)).save(any(SeguroCasa.class));
     }
+
+    @Test
+    void testObtenerSeguroPorId_Existe() {
+        Seguro seguro = new Seguro("Seguro Hogar", "Cobertura completa", TipoSeguro.CASA, 1500.0);
+        when(segurorepo.findById(1L)).thenReturn(java.util.Optional.of(seguro));
+
+        Seguro result = seguroService.obtenerSeguroPorId(1L);
+
+        assertNotNull(result);
+        assertEquals("Seguro Hogar", result.getNombre());
+        assertEquals(TipoSeguro.CASA, result.getTipoSeguro());
+        verify(segurorepo, times(1)).findById(1L);
+    }
+
+    @Test
+    void testObtenerSeguroPorId_NoExiste() {
+        when(segurorepo.findById(2L)).thenReturn(java.util.Optional.empty());
+
+        Seguro result = seguroService.obtenerSeguroPorId(2L);
+
+        assertNull(result);
+        verify(segurorepo, times(1)).findById(2L);
+    }
 }

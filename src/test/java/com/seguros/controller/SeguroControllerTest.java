@@ -3,12 +3,16 @@ package com.seguros.controller;
 import com.seguros.Service.ClientesPorSeguro;
 import com.seguros.Service.SeguroService;
 import com.seguros.model.Seguro;
+import com.seguros.model.SeguroCasa;
+import com.seguros.model.SeguroCoche;
+import com.seguros.model.SeguroVida;
 import com.seguros.model.TipoSeguro;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -581,4 +586,272 @@ class SeguroControllerTest {
         verify(seguroService).obtenerPorCliente(clienteId);
     }
 
+    @Test
+    void testGuardarSeguroCoche_Exitoso() {
+        Seguro seguro = new Seguro("Auto", "Cobertura total", TipoSeguro.COCHE, 1000.0);
+        SeguroCoche coche = new SeguroCoche(seguro, "1234ABC", "ModelX", "Tesla");
+
+        when(seguroService.obtenerSeguroPorId(1L)).thenReturn(seguro);
+        when(seguroService.guardarSeguroCoche(any(), anyString(), anyString(), anyString())).thenReturn(coche);
+
+        ResponseEntity<?> response = seguroController.guardarSeguroCoche(1L, "1234ABC", "ModelX", "Tesla");
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(coche, response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroCoche_SeguroNoEncontrado() {
+        when(seguroService.obtenerSeguroPorId(99L)).thenReturn(null);
+
+        ResponseEntity<?> response = seguroController.guardarSeguroCoche(99L, "1234ABC", "ModelX", "Tesla");
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals("Seguro no encontrado.", response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroCoche_SeguroIdNull() {
+        ResponseEntity<?> response = seguroController.guardarSeguroCoche(null, "1234ABC", "ModelX", "Tesla");
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios.", response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroCoche_SeguroIdMenorIgualCero() {
+        ResponseEntity<?> response = seguroController.guardarSeguroCoche(0L, "1234ABC", "ModelX", "Tesla");
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios.", response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroCoche_MatriculaNull() {
+        ResponseEntity<?> response = seguroController.guardarSeguroCoche(1L, null, "ModelX", "Tesla");
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios.", response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroCoche_MatriculaBlank() {
+        ResponseEntity<?> response = seguroController.guardarSeguroCoche(1L, "   ", "ModelX", "Tesla");
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios.", response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroCoche_ModeloNull() {
+        ResponseEntity<?> response = seguroController.guardarSeguroCoche(1L, "1234ABC", null, "Tesla");
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios.", response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroCoche_ModeloBlank() {
+        ResponseEntity<?> response = seguroController.guardarSeguroCoche(1L, "1234ABC", "   ", "Tesla");
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios.", response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroCoche_MarcaNull() {
+        ResponseEntity<?> response = seguroController.guardarSeguroCoche(1L, "1234ABC", "ModelX", null);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios.", response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroCoche_MarcaBlank() {
+        ResponseEntity<?> response = seguroController.guardarSeguroCoche(1L, "1234ABC", "ModelX", "   ");
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios.", response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroCoche_Exception() {
+        Seguro seguro = new Seguro("Auto", "Cobertura total", TipoSeguro.COCHE, 1000.0);
+        when(seguroService.obtenerSeguroPorId(1L)).thenReturn(seguro);
+        when(seguroService.guardarSeguroCoche(any(), anyString(), anyString(), anyString()))
+                .thenThrow(new RuntimeException("DB error"));
+
+        ResponseEntity<?> response = seguroController.guardarSeguroCoche(1L, "1234ABC", "ModelX", "Tesla");
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals("Error al guardar el seguro de coche: DB error", response.getBody());
+    }
+
+    // ---------------------- VIDA ----------------------
+
+    @Test
+    void testGuardarSeguroVida_Exitoso() {
+        Seguro seguro = new Seguro("Vida", "Cobertura vida", TipoSeguro.VIDA, 2000.0);
+        SeguroVida vida = new SeguroVida(seguro, 35, "Juan, Ana");
+
+        when(seguroService.obtenerSeguroPorId(2L)).thenReturn(seguro);
+        when(seguroService.guardarSeguroVida(any(), anyInt(), anyString())).thenReturn(vida);
+
+        ResponseEntity<?> response = seguroController.guardarSeguroVida(2L, 35, "Juan, Ana");
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(vida, response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroVida_SeguroNoEncontrado() {
+        when(seguroService.obtenerSeguroPorId(99L)).thenReturn(null);
+
+        ResponseEntity<?> response = seguroController.guardarSeguroVida(99L, 35, "Juan, Ana");
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals("Seguro no encontrado.", response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroVida_SeguroIdNull() {
+        ResponseEntity<?> response = seguroController.guardarSeguroVida(null, 35, "Juan, Ana");
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios.", response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroVida_SeguroIdMenorIgualCero() {
+        ResponseEntity<?> response = seguroController.guardarSeguroVida(0L, 35, "Juan, Ana");
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios.", response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroVida_EdadAseguradoNull() {
+        ResponseEntity<?> response = seguroController.guardarSeguroVida(2L, null, "Juan, Ana");
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios.", response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroVida_EdadAseguradoMenorIgualCero() {
+        ResponseEntity<?> response = seguroController.guardarSeguroVida(2L, 0, "Juan, Ana");
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios.", response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroVida_BeneficiariosNull() {
+        ResponseEntity<?> response = seguroController.guardarSeguroVida(2L, 35, null);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios.", response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroVida_BeneficiariosBlank() {
+        ResponseEntity<?> response = seguroController.guardarSeguroVida(2L, 35, "   ");
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios.", response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroVida_Exception() {
+        Seguro seguro = new Seguro("Vida", "Cobertura vida", TipoSeguro.VIDA, 2000.0);
+        when(seguroService.obtenerSeguroPorId(2L)).thenReturn(seguro);
+        when(seguroService.guardarSeguroVida(any(), anyInt(), anyString()))
+                .thenThrow(new RuntimeException("DB error"));
+
+        ResponseEntity<?> response = seguroController.guardarSeguroVida(2L, 35, "Juan, Ana");
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals("Error al guardar el seguro de vida: DB error", response.getBody());
+    }
+
+    // ---------------------- CASA ----------------------
+
+    @Test
+    void testGuardarSeguroCasa_Exitoso() {
+        Seguro seguro = new Seguro("Casa", "Cobertura casa", TipoSeguro.CASA, 3000.0);
+        SeguroCasa casa = new SeguroCasa(seguro, "Calle Falsa 123", 250000.0, "Piso");
+
+        when(seguroService.obtenerSeguroPorId(3L)).thenReturn(seguro);
+        when(seguroService.guardarSeguroCasa(any(), anyString(), anyDouble(), anyString())).thenReturn(casa);
+
+        ResponseEntity<?> response = seguroController.guardarSeguroCasa(3L, "Calle Falsa 123", 250000.0, "Piso");
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(casa, response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroCasa_SeguroNoEncontrado() {
+        when(seguroService.obtenerSeguroPorId(99L)).thenReturn(null);
+
+        ResponseEntity<?> response = seguroController.guardarSeguroCasa(99L, "Calle Falsa 123", 250000.0, "Piso");
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals("Seguro no encontrado.", response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroCasa_SeguroIdNull() {
+        ResponseEntity<?> response = seguroController.guardarSeguroCasa(null, "Calle Falsa 123", 250000.0, "Piso");
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios.", response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroCasa_SeguroIdMenorIgualCero() {
+        ResponseEntity<?> response = seguroController.guardarSeguroCasa(0L, "Calle Falsa 123", 250000.0, "Piso");
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios.", response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroCasa_DireccionNull() {
+        ResponseEntity<?> response = seguroController.guardarSeguroCasa(3L, null, 250000.0, "Piso");
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios.", response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroCasa_DireccionBlank() {
+        ResponseEntity<?> response = seguroController.guardarSeguroCasa(3L, "   ", 250000.0, "Piso");
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios.", response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroCasa_ValorInmuebleNull() {
+        ResponseEntity<?> response = seguroController.guardarSeguroCasa(3L, "Calle Falsa 123", null, "Piso");
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios.", response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroCasa_ValorInmuebleMenorIgualCero() {
+        ResponseEntity<?> response = seguroController.guardarSeguroCasa(3L, "Calle Falsa 123", 0.0, "Piso");
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios.", response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroCasa_TipoViviendaNull() {
+        ResponseEntity<?> response = seguroController.guardarSeguroCasa(3L, "Calle Falsa 123", 250000.0, null);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios.", response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroCasa_TipoViviendaBlank() {
+        ResponseEntity<?> response = seguroController.guardarSeguroCasa(3L, "Calle Falsa 123", 250000.0, "   ");
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Todos los campos son obligatorios.", response.getBody());
+    }
+
+    @Test
+    void testGuardarSeguroCasa_Exception() {
+        Seguro seguro = new Seguro("Casa", "Cobertura casa", TipoSeguro.CASA, 3000.0);
+        when(seguroService.obtenerSeguroPorId(3L)).thenReturn(seguro);
+        when(seguroService.guardarSeguroCasa(any(), anyString(), anyDouble(), anyString()))
+                .thenThrow(new RuntimeException("DB error"));
+
+        ResponseEntity<?> response = seguroController.guardarSeguroCasa(3L, "Calle Falsa 123", 250000.0, "Piso");
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals("Error al guardar el seguro de casa: DB error", response.getBody());
+    }
 }
