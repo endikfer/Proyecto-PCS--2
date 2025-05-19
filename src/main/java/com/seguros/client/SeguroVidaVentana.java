@@ -70,7 +70,7 @@ public class SeguroVidaVentana {
             String url = client.getBaseUrl() + "/guardarVida"
                     + "?clienteId=" + clienteId
                     + "&seguroId=" + seguroId
-                    + "&edadAsegurado=" + edad
+                    + "&edad=" + edad
                     + "&beneficiarios=" + beneficiarios;
 
             java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder()

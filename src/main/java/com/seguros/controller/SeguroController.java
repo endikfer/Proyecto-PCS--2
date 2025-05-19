@@ -305,6 +305,7 @@ public class SeguroController {
                 return ResponseEntity.badRequest().body("Todos los campos son obligatorios.");
             }
 
+            System.out.println("Petición recibida para guardar seguro de vida con ID: " + seguroId);
             Seguro seguro = seguroService.obtenerSeguroPorId(seguroId);
             if (seguro == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Seguro no encontrado.");

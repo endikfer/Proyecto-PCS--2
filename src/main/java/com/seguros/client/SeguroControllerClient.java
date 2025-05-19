@@ -3,6 +3,8 @@ package com.seguros.client;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
+// import java.net.http.HttpHeaders; // Remove this import if present
+import org.springframework.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Collections;
@@ -10,11 +12,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -182,26 +190,47 @@ public class SeguroControllerClient {
     
     }
 
-    @PostMapping("/guardarVida")
-    public ResponseEntity<String> contratarSeguroVida(
-            @RequestParam Long clienteId,
-            @RequestParam Long seguroId,
-            @RequestParam int edad,
-            @RequestParam String beneficiarios) {
-        try {
-            if (edad <= 0 || beneficiarios == null || beneficiarios.trim().isEmpty()) {
-                return ResponseEntity.badRequest().body("Edad y beneficiarios son obligatorios y válidos.");
-            }
+    @Autowired
+private RestTemplate restTemplate;
 
-            // Aquí iría la lógica para guardar el seguro de vida en la base de datos.
-            // Por ejemplo: seguroService.contratarSeguroVida(clienteId, edad, beneficiarios);
-
-            return ResponseEntity.ok("Seguro de vida contratado exitosamente para el cliente " + clienteId);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al contratar el seguro de vida: " + e.getMessage());
+@PostMapping("/guardarVida")
+public ResponseEntity<String> contratarSeguroVida(
+        @RequestParam Long clienteId,
+        @RequestParam Long seguroId,
+        @RequestParam int edad,
+        @RequestParam String beneficiarios) {
+    try {
+        if (edad <= 0 || beneficiarios == null || beneficiarios.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Edad y beneficiarios son obligatorios y válidos.");
         }
+
+        String url = "http://localhost:8080/api/seguros/guardarVida";
+
+
+        // Construir los parámetros
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("seguroId", seguroId.toString());
+        params.add("edadAsegurado", String.valueOf(edad));
+        params.add("beneficiarios", beneficiarios);
+
+        // Encabezados de la petición
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        // Cuerpo de la solicitud
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+
+        // Realizar la solicitud POST
+        ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+
+        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error al contratar el seguro de vida: " + e.getMessage());
     }
+}
+
 
     @PostMapping("/guardarCoche")
 public ResponseEntity<String> contratarSeguroCoche(
