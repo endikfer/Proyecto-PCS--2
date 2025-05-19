@@ -58,7 +58,7 @@ public class SeguroManager {
         panelSuperior.add(btnPerfil, BorderLayout.WEST);
 
         // Mostrar email del cliente logueado
-        String email = inicioSesionVentana.emailInicioSesion;
+        String email = cliente.getEmail();
         JLabel etiqueta = new JLabel("Bienvenido, " + email + " - Gestión de Seguros", SwingConstants.CENTER);
         etiqueta.setFont(new Font("Arial", Font.BOLD, 24));
         panelSuperior.add(etiqueta, BorderLayout.CENTER);

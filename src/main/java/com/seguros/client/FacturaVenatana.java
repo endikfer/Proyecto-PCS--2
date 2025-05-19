@@ -27,7 +27,6 @@ public class FacturaVenatana {
 
     public FacturaControllerClient FacturaContr = new FacturaControllerClient(HOSTNAME, PORT);
     public void mostrar(String gmail) {
-        gmail =  "user@gmail.com";
         JFrame ventana = new JFrame("Facturas del Cliente");
         ventana.setSize(500, 400);
         ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

@@ -61,6 +61,8 @@ public class SeguroVidaVentana {
                 throw new NumberFormatException("La edad debe ser un número positivo");
             }
 
+            
+
             JOptionPane.showMessageDialog(frame,
                     "Seguro de vida contratado exitosamente!\n" +
                             "Seguro: " + seguro.getNombre() + "\n" +
