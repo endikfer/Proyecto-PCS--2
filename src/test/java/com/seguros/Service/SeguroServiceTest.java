@@ -33,9 +33,15 @@ import java.util.Optional;
 
 import com.seguros.model.Cliente;
 import com.seguros.model.Seguro;
+import com.seguros.model.SeguroCasa;
+import com.seguros.model.SeguroCoche;
+import com.seguros.model.SeguroVida;
 import com.seguros.model.TipoSeguro;
 import com.seguros.repository.SeguroRepository;
+import com.seguros.repository.SeguroVidaRepository;
 import com.seguros.repository.ClienteRepository;
+import com.seguros.repository.SeguroCasaRepository;
+import com.seguros.repository.SeguroCocheRepository;
 
 public class SeguroServiceTest {
 
@@ -48,11 +54,23 @@ public class SeguroServiceTest {
     @InjectMocks
     private SeguroService seguroService;
 
+    @Mock
+    private SeguroCocheRepository seguroCocheRepository;
+
+    @Mock
+    private SeguroVidaRepository seguroVidaRepository;
+
+    @Mock
+    private SeguroCasaRepository seguroCasaRepository;
+
     @BeforeEach
     void setUp() {
         segurorepo = mock(SeguroRepository.class);
         clienterepo = mock(ClienteRepository.class);
-        seguroService = new SeguroService(segurorepo, clienterepo);
+        seguroCocheRepository = mock(SeguroCocheRepository.class);
+        seguroVidaRepository = mock(SeguroVidaRepository.class);
+        seguroCasaRepository = mock(SeguroCasaRepository.class);
+        seguroService = new SeguroService(segurorepo, clienterepo, seguroCocheRepository, seguroCasaRepository, seguroVidaRepository);
     }
 
     @Test
@@ -88,10 +106,10 @@ public class SeguroServiceTest {
 
     @Test
     void testCrearSeguro_RepositorioNoInicializado() {
-        SeguroService servicioSinRepo = new SeguroService(null, clienterepo);
+        SeguroService servicioSinRepo = new SeguroService(null, clienterepo, seguroCocheRepository, seguroCasaRepository, seguroVidaRepository);
 
         Exception ex = assertThrows(IllegalStateException.class,
-                () -> servicioSinRepo.crearSeguro("Seguro de Hogar", // ← usa servicioSinRepo
+                () -> servicioSinRepo.crearSeguro("Seguro de Hogar",
                         "Protección contra incendios",
                         "CASA",
                         1200.0));
@@ -454,5 +472,55 @@ public class SeguroServiceTest {
 
         assertTrue(result.isEmpty());
         verify(segurorepo).findByClienteId(clienteId);
+    }
+
+    @Test
+    void testGuardarSeguroCoche() {
+        Seguro seguro = new Seguro("Auto", "Cobertura total", TipoSeguro.COCHE, 1000.0);
+        SeguroCoche seguroCoche = new SeguroCoche(seguro, "1234ABC", "ModelX", "Tesla");
+
+        when(seguroCocheRepository.save(any(SeguroCoche.class))).thenReturn(seguroCoche);
+
+        SeguroCoche result = seguroService.guardarSeguroCoche(seguro, "1234ABC", "ModelX", "Tesla");
+
+        assertNotNull(result);
+        assertEquals("1234ABC", result.getMatricula());
+        assertEquals("ModelX", result.getModelo());
+        assertEquals("Tesla", result.getMarca());
+        assertEquals(seguro, result.getSeguro());
+        verify(seguroCocheRepository, times(1)).save(any(SeguroCoche.class));
+    }
+
+    @Test
+    void testGuardarSeguroVida() {
+        Seguro seguro = new Seguro("Vida", "Cobertura vida", TipoSeguro.VIDA, 2000.0);
+        SeguroVida seguroVida = new SeguroVida(seguro, 35, "Juan, Ana");
+
+        when(seguroVidaRepository.save(any(SeguroVida.class))).thenReturn(seguroVida);
+
+        SeguroVida result = seguroService.guardarSeguroVida(seguro, 35, "Juan, Ana");
+
+        assertNotNull(result);
+        assertEquals(35, result.getEdadAsegurado());
+        assertEquals("Juan, Ana", result.getBeneficiarios());
+        assertEquals(seguro, result.getSeguro());
+        verify(seguroVidaRepository, times(1)).save(any(SeguroVida.class));
+    }
+
+    @Test
+    void testGuardarSeguroCasa() {
+        Seguro seguro = new Seguro("Casa", "Cobertura casa", TipoSeguro.CASA, 3000.0);
+        SeguroCasa seguroCasa = new SeguroCasa(seguro, "Calle Falsa 123", 250000.0, "Piso");
+
+        when(seguroCasaRepository.save(any(SeguroCasa.class))).thenReturn(seguroCasa);
+
+        SeguroCasa result = seguroService.guardarSeguroCasa(seguro, "Calle Falsa 123", 250000.0, "Piso");
+
+        assertNotNull(result);
+        assertEquals("Calle Falsa 123", result.getDireccion());
+        assertEquals(250000.0, result.getValorInmueble());
+        assertEquals("Piso", result.getTipoVivienda());
+        assertEquals(seguro, result.getSeguro());
+        verify(seguroCasaRepository, times(1)).save(any(SeguroCasa.class));
     }
 }
