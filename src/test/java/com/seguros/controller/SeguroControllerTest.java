@@ -8,6 +8,7 @@ import com.seguros.model.SeguroCasa;
 import com.seguros.model.SeguroCoche;
 import com.seguros.model.SeguroVida;
 import com.seguros.model.TipoSeguro;
+import com.seguros.repository.ClienteRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,10 +42,14 @@ class SeguroControllerTest {
     @InjectMocks
     private SeguroController seguroController;
 
+    @Mock
+    private ClienteRepository clienteRepository;
+
     @BeforeEach
-    @SuppressWarnings("unused")
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        // Asigna el mock al service
+        this.seguroService.clienterepo = clienteRepository;
     }
 
     @Test

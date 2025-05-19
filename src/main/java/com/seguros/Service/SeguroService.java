@@ -32,7 +32,7 @@ public class SeguroService {
     /** Repositorio para acceder a los seguros. */
     @Autowired
     public final SeguroRepository segurorepo;
-    public final ClienteRepository clienterepo;
+    public ClienteRepository clienterepo;
     public final SeguroCocheRepository seguroCocheRepository;
     public final SeguroVidaRepository seguroVidaRepository;
     public final SeguroCasaRepository seguroCasaRepository;

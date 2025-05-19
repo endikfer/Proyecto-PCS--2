@@ -88,14 +88,15 @@ public class SeguroVida {
     }
 
     @Override
-    public String toString() {
-        return "SeguroVida{" +
-                "poliza=" + poliza +
-                ", edadAsegurado=" + edadAsegurado +
-                ", beneficiarios='" + beneficiarios + '\'' +
-                ", seguro=" + (seguro != null ? seguro.getId() : null) +
-                '}';
-    }
+public String toString() {
+    return "SeguroVida{" +
+            "poliza=" + poliza +
+            ", edadAsegurado=" + edadAsegurado +
+            ", beneficiarios='" + beneficiarios + '\'' +
+            ", cliente=" + (cliente != null ? cliente.getId() : "null") +
+            ", seguro=" + (seguro != null ? seguro.getId() : "null") +
+            '}';
+}
 
     @Override
     public boolean equals(Object o) {
