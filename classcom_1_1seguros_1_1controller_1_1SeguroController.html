@@ -129,8 +129,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6676cb179bd023dd6313b1258a9c142e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e7f0964675a6008ae66cfdd34f46907" id="r_a0e7f0964675a6008ae66cfdd34f46907"><td class="memItemLeft" align="right" valign="top">ResponseEntity&lt;?&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1controller_1_1SeguroController.html#a0e7f0964675a6008ae66cfdd34f46907">guardarSeguroCoche</a> ( @RequestParam(&quot;seguroId&quot;) Long seguroId, @RequestParam(&quot;matricula&quot;) String matricula, @RequestParam(&quot;modelo&quot;) String modelo, @RequestParam(&quot;marca&quot;) String marca)</td></tr>
 <tr class="separator:a0e7f0964675a6008ae66cfdd34f46907"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0e3e576c9c8662037927760c6772d0b" id="r_ae0e3e576c9c8662037927760c6772d0b"><td class="memItemLeft" align="right" valign="top">ResponseEntity&lt;?&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1controller_1_1SeguroController.html#ae0e3e576c9c8662037927760c6772d0b">guardarSeguroVida</a> ( @RequestParam(&quot;seguroId&quot;) Long seguroId, @RequestParam(&quot;edadAsegurado&quot;) Integer edadAsegurado, @RequestParam(&quot;beneficiarios&quot;) String beneficiarios)</td></tr>
-<tr class="separator:ae0e3e576c9c8662037927760c6772d0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b6ccb89d2d62d69085757661185b940" id="r_a6b6ccb89d2d62d69085757661185b940"><td class="memItemLeft" align="right" valign="top">ResponseEntity&lt;?&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1controller_1_1SeguroController.html#a6b6ccb89d2d62d69085757661185b940">guardarSeguroVida</a> ( @RequestParam(&quot;clienteId&quot;) Long clienteId, @RequestParam(&quot;seguroId&quot;) Long seguroId, @RequestParam(&quot;edad&quot;) Integer edadAsegurado, @RequestParam(&quot;beneficiarios&quot;) String beneficiarios)</td></tr>
+<tr class="separator:a6b6ccb89d2d62d69085757661185b940"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25f37a69dc1a41cf09aa0444cf8b850f" id="r_a25f37a69dc1a41cf09aa0444cf8b850f"><td class="memItemLeft" align="right" valign="top">ResponseEntity&lt;?&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1seguros_1_1controller_1_1SeguroController.html#a25f37a69dc1a41cf09aa0444cf8b850f">guardarSeguroCasa</a> ( @RequestParam(&quot;seguroId&quot;) Long seguroId, @RequestParam(&quot;direccion&quot;) String direccion, @RequestParam(&quot;valorInmueble&quot;) Double valorInmueble, @RequestParam(&quot;tipoVivienda&quot;) String tipoVivienda)</td></tr>
 <tr class="separator:a25f37a69dc1a41cf09aa0444cf8b850f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -425,8 +425,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ae0e3e576c9c8662037927760c6772d0b" name="ae0e3e576c9c8662037927760c6772d0b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae0e3e576c9c8662037927760c6772d0b">&#9670;&#160;</a></span>guardarSeguroVida()</h2>
+<a id="a6b6ccb89d2d62d69085757661185b940" name="a6b6ccb89d2d62d69085757661185b940"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b6ccb89d2d62d69085757661185b940">&#9670;&#160;</a></span>guardarSeguroVida()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -434,13 +434,19 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">ResponseEntity&lt;?&gt; com.seguros.controller.SeguroController.guardarSeguroVida </td>
           <td>(</td>
+          <td class="paramtype">@RequestParam(&quot;clienteId&quot;) Long&#160;</td>
+          <td class="paramname"><em>clienteId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">@RequestParam(&quot;seguroId&quot;) Long&#160;</td>
           <td class="paramname"><em>seguroId</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">@RequestParam(&quot;edadAsegurado&quot;) Integer&#160;</td>
+          <td class="paramtype">@RequestParam(&quot;edad&quot;) Integer&#160;</td>
           <td class="paramname"><em>edadAsegurado</em>, </td>
         </tr>
         <tr>

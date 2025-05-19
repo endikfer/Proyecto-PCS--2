@@ -8,7 +8,7 @@ var classcom_1_1seguros_1_1controller_1_1SeguroController =
     [ "getSegurosPorCliente", "classcom_1_1seguros_1_1controller_1_1SeguroController.html#a14c4b592495b510c1643cac418f73f68", null ],
     [ "guardarSeguroCasa", "classcom_1_1seguros_1_1controller_1_1SeguroController.html#a25f37a69dc1a41cf09aa0444cf8b850f", null ],
     [ "guardarSeguroCoche", "classcom_1_1seguros_1_1controller_1_1SeguroController.html#a0e7f0964675a6008ae66cfdd34f46907", null ],
-    [ "guardarSeguroVida", "classcom_1_1seguros_1_1controller_1_1SeguroController.html#ae0e3e576c9c8662037927760c6772d0b", null ],
+    [ "guardarSeguroVida", "classcom_1_1seguros_1_1controller_1_1SeguroController.html#a6b6ccb89d2d62d69085757661185b940", null ],
     [ "obtenerSeguroPorNombre", "classcom_1_1seguros_1_1controller_1_1SeguroController.html#a813d9195c2db2f610860c8c87754f700", null ],
     [ "obtenerSegurosPorTipo", "classcom_1_1seguros_1_1controller_1_1SeguroController.html#ae7af519e5331abbfb977857876eb84a8", null ],
     [ "obtenerTodosSeguros", "classcom_1_1seguros_1_1controller_1_1SeguroController.html#a6a9a5fb7b1f2ba8ab16dbcf1dadc7655", null ],

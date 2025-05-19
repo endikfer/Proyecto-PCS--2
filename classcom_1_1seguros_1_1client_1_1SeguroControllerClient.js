@@ -4,7 +4,7 @@ var classcom_1_1seguros_1_1client_1_1SeguroControllerClient =
     [ "SeguroControllerClient", "classcom_1_1seguros_1_1client_1_1SeguroControllerClient.html#a26f9946051eb0128b8188e3cee9e8cf5", null ],
     [ "contratarSeguroCasa", "classcom_1_1seguros_1_1client_1_1SeguroControllerClient.html#aa6d81d576d9d10037c70d5aa0ae21619", null ],
     [ "contratarSeguroCoche", "classcom_1_1seguros_1_1client_1_1SeguroControllerClient.html#abdfc8d9d7e1582916b6d6cfd9ccecf29", null ],
-    [ "contratarSeguroVida", "classcom_1_1seguros_1_1client_1_1SeguroControllerClient.html#afbcbca2a949024460df5085bd4cf2bae", null ],
+    [ "contratarSeguroVida", "classcom_1_1seguros_1_1client_1_1SeguroControllerClient.html#aa9085f9b31c779d7b73dff31cdb8bdf6", null ],
     [ "enviarDuda", "classcom_1_1seguros_1_1client_1_1SeguroControllerClient.html#ae66e8d9d086fae383cc10a26ccc77cb8", null ],
     [ "enviarDuda", "classcom_1_1seguros_1_1client_1_1SeguroControllerClient.html#aca22652fcac9acc490ae2c3475c34d38", null ],
     [ "getBaseUrl", "classcom_1_1seguros_1_1client_1_1SeguroControllerClient.html#acbf927372be434e788bb39f6ce64738a", null ],
