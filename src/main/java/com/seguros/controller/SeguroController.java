@@ -298,7 +298,7 @@ public class SeguroController {
 public ResponseEntity<?> guardarSeguroVida(
         @RequestParam("clienteId") Long clienteId,
         @RequestParam("seguroId") Long seguroId,
-        @RequestParam("edadAsegurado") Integer edadAsegurado,
+        @RequestParam("edad") Integer edadAsegurado,
         @RequestParam("beneficiarios") String beneficiarios) {
     try {
         if (clienteId == null || clienteId <= 0 ||
